@@ -1,8 +1,8 @@
-import types from './types'
+import TYPES from './types'
 import {StateType} from "@/store/state";
 import {MINIMUM_DISPLACEMENT} from '@/global'
 type ValueOf<T> = T[keyof T];
-type Types = ValueOf<typeof types>
+type Types = ValueOf<typeof TYPES>
 type ActionProps = {
   type: Types,
   value: {
@@ -13,14 +13,14 @@ type ActionsType = {
   [key: string]: (state: StateType, action: ActionProps) => void
 }
 const actions: ActionsType = {
-  [types.SET_CURRENT_ACTION]: (state, action) => {
+  [TYPES.SET_CURRENT_ACTION]: (state, action) => {
     state.currentAction = action.value.currentAction
   },
-  [types.SET_SVG_OFFSET]:(state, action)=>{
+  [TYPES.SET_SVG_OFFSET]:(state, action)=>{
     state.svgOffset = action.value
   },
   //
-  [types.SET_NODE_RESIZE_MOVE_ATTRIBUTE]: (state, action) => {
+  [TYPES.SET_NODE_RESIZE_MOVE_ATTRIBUTE]: (state, action) => {
     let {currentAction, schema,svgOffset} = state
     const {id, target, type,offsetX,offsetY} = currentAction
     const {event} = action.value
@@ -106,7 +106,7 @@ const actions: ActionsType = {
       }
     }
   },
-  [types.SET_SCALE_POSITION]:(state,action)=> {
+  [TYPES.SET_SCALE_POSITION]:(state,action)=> {
     const {scalePosition} = state
     const {scale,position} = action.value
     if (scalePosition[scale].includes(position)) {
@@ -115,7 +115,15 @@ const actions: ActionsType = {
     }else{
       scalePosition[scale].push(position)
     }
-    console.log(state.scalePosition)
+  },
+  [TYPES.SET_SVG_CANVAS_STYLE]:(state,action)=>{
+    state.svgStyle = action.value
+  },
+  [TYPES.SET_SCALE_HOVER_LINE]:(state,action)=>{
+    //@ts-ignore
+    const lineGroup = {...action.scaleHoverLine}
+    Object.assign(lineGroup,action.value)
+    state.scaleHoverLine = lineGroup
   }
 
 }

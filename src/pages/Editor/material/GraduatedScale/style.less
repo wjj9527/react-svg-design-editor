@@ -88,13 +88,13 @@
         .line{
           position: absolute;
           display: none;
-          border-left: 1px solid #e06d6d;
+          border-left: 2px solid #e06d6d;
           height: 100%;
           cursor: pointer;
         }
         .sign-line{
           position: absolute;
-          border-left: 1px solid #e06d6d;
+          border-left: 2px solid #e06d6d;
           height: 100%;
           cursor: pointer;
         }
@@ -117,7 +117,8 @@
   }
   .vertical{
     display: flex;
-    flex: 1;
+    flex: 0 0 calc(100% - 25px);
+    overflow: hidden;
     .vertical-scale{
       width: 25px;
       border-left: 1px solid #333333;
@@ -133,7 +134,7 @@
         .line{
           position: absolute;
           display: none;
-          border-top: 1px solid #e06d6d;
+          border-top: 2px solid #e06d6d;
           top: 0;
           left: 0;
           width: 100%;
@@ -141,7 +142,7 @@
         }
         .sign-line{
           position: absolute;
-          border-top: 1px solid #e06d6d;
+          border-top: 2px solid #e06d6d;
           top: 0;
           left: 0;
           width: 100%;

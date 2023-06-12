@@ -48,12 +48,12 @@ const GraduatedScale:React.FC = ({children})=>{
   const scaleYBarRef = useRef(null)
   const [scaleXSize,setScaleXSize] = useState([])
   const [scaleYSize,setScaleYSize] = useState([])
-  const [mouseX,setMouseX] = useState(0)
-  const [mouseY,setMouseY] = useState(0)
+  // const [mouseX,setMouseX] = useState(0)
+  // const [mouseY,setMouseY] = useState(0)
   const [offsetX,setOffsetX] =useState(0)
   const [offsetY,setOffsetY] =useState(0)
   const {state,dispatch} = useContext(StoreContext)
-  const {scalePosition} = state
+  const {scalePosition,scaleHoverLine} = state
   const scaleSizeSetting = ()=>{
     const scaleX = scaleXBarRef.current
     const scaleY = scaleYBarRef.current
@@ -76,20 +76,31 @@ const GraduatedScale:React.FC = ({children})=>{
       setOffsetY(scaleY.getBoundingClientRect().y)
     }
   }
+  //x鼠标移入
   const handleScaleXBarMouseMove = (e:React.MouseEvent)=>{
     const {clientX} = e
-    setMouseX(clientX-offsetX)
-
+    // setMouseX(clientX-offsetX)
+    dispatch({type:TYPES.SET_SCALE_HOVER_LINE,value:{xShow:true,x:clientX-offsetX}})
   }
+  //x鼠标离开
+  const handleScaleXBarMouseLeave = ()=>{
+    dispatch({type:TYPES.SET_SCALE_HOVER_LINE,value:{xShow:false,}})
+  }
+  //x鼠标移入
   const handleScaleYBarMouseMove = (e:React.MouseEvent)=>{
     const {clientY} = e
-    setMouseY(clientY-offsetY)
+    // setMouseY(clientY-offsetY)
+    dispatch({type:TYPES.SET_SCALE_HOVER_LINE,value:{yShow:true,y:clientY-offsetY}})
+  }
+  //y鼠标离开
+  const handleScaleYBarMouseLeave = ()=>{
+    dispatch({type:TYPES.SET_SCALE_HOVER_LINE,value:{yShow:false,}})
   }
   const handleScaleXBarClick = ()=>{
-    dispatch({type:TYPES.SET_SCALE_POSITION,value:{scale:'x',position:mouseX}})
+    dispatch({type:TYPES.SET_SCALE_POSITION,value:{scale:'x',position:scaleHoverLine.x}})
   }
   const handleScaleYBarClick = ()=>{
-    dispatch({type:TYPES.SET_SCALE_POSITION,value:{scale:'y',position:mouseY}})
+    dispatch({type:TYPES.SET_SCALE_POSITION,value:{scale:'y',position:scaleHoverLine.y}})
   }
   useEffect(()=>{
     scaleSizeSetting()
@@ -101,13 +112,17 @@ const GraduatedScale:React.FC = ({children})=>{
   return <div className="graduated-scale">
     <div className="horizontal">
       <div className="visible-btn"/>
-      <div className="horizontal-scale" ref={scaleXBarRef} onMouseMove={handleScaleXBarMouseMove} onClick={handleScaleXBarClick}>
+      <div className="horizontal-scale"
+           ref={scaleXBarRef}
+           onMouseMove={handleScaleXBarMouseMove}
+           onMouseLeave={handleScaleXBarMouseLeave}
+           onClick={handleScaleXBarClick}>
         <div className="scale-x-container">
           {
             scaleXSize.map((_)=><ScaleX key={_} index={_}/>)
           }
-          <div className="line" style={{left:mouseX-1}}/>
-          <div className="scale-hover-text" style={{left:mouseX+4}}>{mouseX}</div>
+          <div className="line" style={{left:scaleHoverLine.x-1}}/>
+          <div className="scale-hover-text" style={{left:scaleHoverLine.x+4}}>{scaleHoverLine.x}</div>
           {
             scalePosition.x.map((item:number)=><div className="sign-line" key={item} style={{left:item-1}}/>)
           }
@@ -116,13 +131,17 @@ const GraduatedScale:React.FC = ({children})=>{
       </div>
     </div>
     <div className="vertical">
-      <div className="vertical-scale" ref={scaleYBarRef} onMouseMove={handleScaleYBarMouseMove} onClick={handleScaleYBarClick}>
+      <div className="vertical-scale"
+           ref={scaleYBarRef}
+           onMouseMove={handleScaleYBarMouseMove}
+           onMouseLeave={handleScaleYBarMouseLeave}
+           onClick={handleScaleYBarClick}>
         <div className="scale-y-container">
           {
             scaleYSize.map((_)=><ScaleY key={_} index={_}/>)
           }
-          <div className="line" style={{top:mouseY-1}}/>
-          <div className="scale-hover-text" style={{top:mouseY+15}}>{mouseY}</div>
+          <div className="line" style={{top:scaleHoverLine.y-1}}/>
+          <div className="scale-hover-text" style={{top:scaleHoverLine.y+15}}>{scaleHoverLine.y}</div>
           {
             scalePosition.y.map((item:number)=><div className="sign-line" key={item} style={{top:item-1}}/>)
           }
