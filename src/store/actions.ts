@@ -20,7 +20,7 @@ const actions: ActionsType = {
     state.svgOffset = action.value
   },
   //
-  [types.SET_NODE_ATTRIBUTE]: (state, action) => {
+  [types.SET_NODE_RESIZE_MOVE_ATTRIBUTE]: (state, action) => {
     let {currentAction, schema,svgOffset} = state
     const {id, target, type,offsetX,offsetY} = currentAction
     const {event} = action.value

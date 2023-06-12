@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {useContext, useRef, useState} from "react";
 import './style.less'
 import {StoreContext, TYPES} from "@/store";
 import Test from '@/pages/Editor/material/nodes/Test'
@@ -11,7 +11,7 @@ const EditorView: React.FC = () => {
   const SVGContainerRef = useRef(null)
   const handleMouseMove = (event:React.MouseEvent)=>{
     if (isCanMove&&currentAction.id) {
-      dispatch({type:TYPES.SET_NODE_ATTRIBUTE,value:{event}})
+      dispatch({type:TYPES.SET_NODE_RESIZE_MOVE_ATTRIBUTE,value:{event}})
     }
   }
   //鼠标按下可以移动
