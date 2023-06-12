@@ -1,4 +1,4 @@
-import React, {useContext, useRef} from "react";
+import React, {useContext, } from "react";
 import {StoreContext, TYPES} from "@/store";
 import "./index.less"
 interface ZoomDraggableProps {
@@ -23,38 +23,41 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({x, y, width, height, id}) 
     dispatch({type:TYPES.SET_CURRENT_ACTION,value:{currentAction}})
   }
 
-  return <g transform={`translate(${x},${y})`}>
-    <rect x="0" y="0"
-          style={{cursor:"move"}}
-          className="resize-draggable-container"
-          onMouseDown={e => handleEvent(e, {target: 'MOVE_CONTENT', type: 'MOVE'})}
-          width={width} height={height} fill="rgba(0,0,0,0)"/>
-    <rect id="resize-left-top" x={-4} y={-4} width="8" height="8" fill="#1677ff"
-          style={{cursor:"nw-resize"}}
-          onMouseDown={e => handleEvent(e, {target: 'LEFT_TOP', type: 'RESIZE'})}/>
-    <rect id="resize-left-center" x={-4} y={height / 2 - 4} width="8" height="8" fill="#1677ff"
-          style={{cursor:"w-resize"}}
-          onMouseDown={e => handleEvent(e, {target: 'LEFT_CENTER', type: 'RESIZE'})}/>
-    <rect id="resize-left-bottom" x="-4" y={height - 4} width="8" height="8" fill="#1677ff"
-          style={{cursor:"sw-resize"}}
-          onMouseDown={e => handleEvent(e, {target: 'LEFT_BOTTOM', type: 'RESIZE'})}/>
-    <rect id="resize-center-top" x={width / 2 - 4} y={-4} width="8" height="8" fill="#1677ff"
-          style={{cursor:"s-resize"}}
-          onMouseDown={e => handleEvent(e, {target: 'CENTER_TOP', type: 'RESIZE'})}/>
-    <rect id="resize-center-bottom" x={width / 2 - 4} y={height - 4} width="8" height="8" fill="#1677ff"
-          style={{cursor:"s-resize"}}
-          onMouseDown={e => handleEvent(e, {target: 'CENTER_BOTTOM', type: 'RESIZE'})}/>
-    <rect id="resize-right-top" x={width - 4} y={-4} width="8" height="8" fill="#1677ff"
-          style={{cursor:"sw-resize"}}
-          onMouseDown={e => handleEvent(e, {target: 'RIGHT_TOP', type: 'RESIZE'})}/>
-    <rect id="resize-right-center" x={width - 4} y={height / 2 - 4} width="8" height="8" fill="#1677ff"
-          style={{cursor:"w-resize"}}
-          onMouseDown={e => handleEvent(e, {target: 'RIGHT_CENTER', type: 'RESIZE'})}/>
-    <rect id="resize-right-bottom" x={width - 4} y={height - 4} width="8" height="8" fill="#1677ff"
-          style={{cursor:"nw-resize"}}
-          onMouseDown={e => handleEvent(e, {target: 'RIGHT_BOTTOM', type: 'RESIZE'})}/>
+  return <g transform={`translate(${x},${y})`} className="element-item">
+    <circle cx={width/2} cy={height-width/2} r={width/2} fill="white"/>
+    <g className="resize-draggable-group">
+      <rect x="0" y="0"
+            style={{cursor:"move"}}
+            className="resize-draggable-container"
+            onMouseDown={e => handleEvent(e, {target: 'MOVE_CONTENT', type: 'MOVE'})}
+            width={width} height={height} fill="rgba(0,0,0,0)"/>
+      <rect id="resize-left-top" x={-4} y={-4} width="8" height="8" fill="#1677ff"
+            style={{cursor:"nw-resize"}}
+            onMouseDown={e => handleEvent(e, {target: 'LEFT_TOP', type: 'RESIZE'})}/>
+      <rect id="resize-left-center" x={-4} y={height / 2 - 4} width="8" height="8" fill="#1677ff"
+            style={{cursor:"w-resize"}}
+            onMouseDown={e => handleEvent(e, {target: 'LEFT_CENTER', type: 'RESIZE'})}/>
+      <rect id="resize-left-bottom" x="-4" y={height - 4} width="8" height="8" fill="#1677ff"
+            style={{cursor:"sw-resize"}}
+            onMouseDown={e => handleEvent(e, {target: 'LEFT_BOTTOM', type: 'RESIZE'})}/>
+      <rect id="resize-center-top" x={width / 2 - 4} y={-4} width="8" height="8" fill="#1677ff"
+            style={{cursor:"s-resize"}}
+            onMouseDown={e => handleEvent(e, {target: 'CENTER_TOP', type: 'RESIZE'})}/>
+      <rect id="resize-center-bottom" x={width / 2 - 4} y={height - 4} width="8" height="8" fill="#1677ff"
+            style={{cursor:"s-resize"}}
+            onMouseDown={e => handleEvent(e, {target: 'CENTER_BOTTOM', type: 'RESIZE'})}/>
+      <rect id="resize-right-top" x={width - 4} y={-4} width="8" height="8" fill="#1677ff"
+            style={{cursor:"sw-resize"}}
+            onMouseDown={e => handleEvent(e, {target: 'RIGHT_TOP', type: 'RESIZE'})}/>
+      <rect id="resize-right-center" x={width - 4} y={height / 2 - 4} width="8" height="8" fill="#1677ff"
+            style={{cursor:"w-resize"}}
+            onMouseDown={e => handleEvent(e, {target: 'RIGHT_CENTER', type: 'RESIZE'})}/>
+      <rect id="resize-right-bottom" x={width - 4} y={height - 4} width="8" height="8" fill="#1677ff"
+            style={{cursor:"nw-resize"}}
+            onMouseDown={e => handleEvent(e, {target: 'RIGHT_BOTTOM', type: 'RESIZE'})}/>
+    </g>
 
-    {/*<circle cx={width/2} cy={height-width/2} r={width/2} fill="white"/>*/}
+
   </g>
 }
 

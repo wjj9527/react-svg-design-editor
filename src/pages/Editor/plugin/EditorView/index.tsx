@@ -31,6 +31,9 @@ const EditorView: React.FC = () => {
   }
 
   return (<div className="editor-view">
+      <div>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi dolorum eius eos est iure officia, optio. Accusantium animi consectetur doloribus, eius hic, necessitatibus omnis quas quia, rem saepe sit velit?
+      </div>
       <GraduatedScale>
         <svg
           ref={SVGContainerRef}

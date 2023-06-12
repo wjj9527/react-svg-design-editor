@@ -2,3 +2,15 @@
   cursor: move;
   outline: 1px dashed #1677ff;
 }
+.element-item{
+  &:hover{
+    .resize-draggable-group{
+      opacity: 1;
+    }
+  }
+  .resize-draggable-group{
+    opacity: 0;
+    transition: .3s ease all;
+  }
+
+}

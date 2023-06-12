@@ -1,0 +1,1 @@
+export const MINIMUM_DISPLACEMENT = 1

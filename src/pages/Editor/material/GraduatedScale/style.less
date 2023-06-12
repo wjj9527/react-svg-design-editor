@@ -63,8 +63,10 @@
     }
   }
   .horizontal{
+    //position: relative;
     display: flex;
     height: 25px;
+
     .visible-btn{
       height: 25px;
       width: 25px;
@@ -74,6 +76,43 @@
     .horizontal-scale{
       display: flex;
       flex: 1;
+      .scale-x-container{
+        position: relative;
+        width: 100%;
+        display: flex;
+        &:hover{
+          .line,.scale-hover-text{
+            display: block;
+          }
+        }
+        .line{
+          position: absolute;
+          display: none;
+          border-left: 1px solid #e06d6d;
+          height: 100%;
+          cursor: pointer;
+        }
+        .sign-line{
+          position: absolute;
+          border-left: 1px solid #e06d6d;
+          height: 100%;
+          cursor: pointer;
+        }
+        .scale-hover-text{
+          position: absolute;
+          display: none;
+          top: 10px;
+          height: 14px;
+          line-height: 14px;
+          border-radius: 1px;
+          font-size: 12px;
+          background: #333333;
+          padding:0 4px;
+          color: #ffffff;
+          width: 35px;
+          text-align: center;
+        }
+      }
     }
   }
   .vertical{
@@ -84,6 +123,46 @@
       border-left: 1px solid #333333;
       border-right: 1px solid #333333;
       height: 100%;
+      .scale-y-container{
+        position: relative;
+        &:hover{
+          .line,.scale-hover-text{
+            display: block;
+          }
+        }
+        .line{
+          position: absolute;
+          display: none;
+          border-top: 1px solid #e06d6d;
+          top: 0;
+          left: 0;
+          width: 100%;
+          cursor: pointer;
+        }
+        .sign-line{
+          position: absolute;
+          border-top: 1px solid #e06d6d;
+          top: 0;
+          left: 0;
+          width: 100%;
+          cursor: pointer;
+        }
+        .scale-hover-text{
+          position: absolute;
+          display: none;
+          height: 14px;
+          line-height: 14px;
+          border-radius: 1px;
+          font-size: 12px;
+          background: #333333;
+          padding:0 4px;
+          color: #ffffff;
+          transform: rotate(270deg);
+          left: -1px;
+          width: 35px;
+          text-align: center;
+        }
+      }
     }
     .view-container{
       flex:1;

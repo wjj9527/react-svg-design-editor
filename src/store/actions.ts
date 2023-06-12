@@ -1,6 +1,6 @@
 import types from './types'
 import {StateType} from "@/store/state";
-
+import {MINIMUM_DISPLACEMENT} from '@/global'
 type ValueOf<T> = T[keyof T];
 type Types = ValueOf<typeof types>
 type ActionProps = {
@@ -35,60 +35,87 @@ const actions: ActionsType = {
       }
       let height
       let width
+      let y
+      let x
+      const setValue = (value:number)=>{
+        const floatNumber = value%MINIMUM_DISPLACEMENT
+        const intNumber = parseInt(String(value / MINIMUM_DISPLACEMENT))
+        const settingValue = intNumber+((floatNumber>MINIMUM_DISPLACEMENT/2)?1:0)
+        return settingValue>0?settingValue:0
+      }
       if (type === 'RESIZE') {
         switch (target) {
           case 'RIGHT_TOP':
-            width = pageX - targetNode.x - svgOffset.x
-            height = targetNode.height + targetNode.y - pageY + svgOffset.y
-            targetNode.width = width>0?width:0
-            targetNode.height = height>0?height:0
-            targetNode.y = pageY - svgOffset.y
+            width = setValue(pageX - targetNode.x - svgOffset.x)
+            height = setValue(targetNode.height + targetNode.y - pageY + svgOffset.y)
+            y = setValue(pageY - svgOffset.y)
+            targetNode.width = width
+            targetNode.height = height
+            targetNode.y = y
             break;
           case 'RIGHT_CENTER':
-            width = pageX - targetNode.x - svgOffset.x
-            targetNode.width = width>0?width:0
+            width = setValue(pageX - targetNode.x - svgOffset.x)
+            targetNode.width = width
             break;
           case 'RIGHT_BOTTOM':
-            width = pageX - targetNode.x - svgOffset.x
-            height = pageY - targetNode.y - svgOffset.y
-            targetNode.width = width>0?width:0
-            targetNode.height = height>0?height:0
+            width = setValue(pageX - targetNode.x - svgOffset.x)
+            height = setValue(pageY - targetNode.y - svgOffset.y)
+            targetNode.width = width
+            targetNode.height = height
             break;
           case 'CENTER_TOP':
-            height = targetNode.height + targetNode.y - pageY + svgOffset.y
-            targetNode.height = height>0?height:0
-            targetNode.y = pageY - svgOffset.y
+            height = setValue(targetNode.height + targetNode.y - pageY + svgOffset.y)
+            y = setValue(pageY - svgOffset.y)
+            targetNode.height = height
+            targetNode.y = y
             break;
           case 'CENTER_BOTTOM':
-            height = pageY - targetNode.y - svgOffset.y
-            targetNode.height = height>0?height:0
+            height = setValue(pageY - targetNode.y - svgOffset.y)
+            targetNode.height = height
             break;
           case 'LEFT_TOP':
-            height = targetNode.height + targetNode.y - pageY + svgOffset.y
-            width = targetNode.width + targetNode.x - pageX + svgOffset.x
-            targetNode.height = height>0?height:0
-            targetNode.y = pageY - svgOffset.y
-            targetNode.width = width>0?width:0
-            targetNode.x = pageX - svgOffset.x
+            height = setValue(targetNode.height + targetNode.y - pageY + svgOffset.y)
+            width = setValue(targetNode.width + targetNode.x - pageX + svgOffset.x)
+            x = setValue(pageX - svgOffset.x)
+            y = setValue(pageY - svgOffset.y)
+            targetNode.height = height
+            targetNode.y = y
+            targetNode.width = width
+            targetNode.x = x
             break;
           case 'LEFT_CENTER':
-            width = targetNode.width + targetNode.x - pageX + svgOffset.x
-            targetNode.width = width>0?width:0
-            targetNode.x = pageX - svgOffset.x
+            width = setValue(targetNode.width + targetNode.x - pageX + svgOffset.x)
+            x = setValue(pageX - svgOffset.x)
+            targetNode.width = width
+            targetNode.x = x
             break;
           case 'LEFT_BOTTOM':
-            width = targetNode.width + targetNode.x - pageX + svgOffset.x
-            height = pageY - targetNode.y -svgOffset.y
-            targetNode.width = width>0?width:0
-            targetNode.x = pageX - svgOffset.x
-            targetNode.height = height>0?height:0
+            width = setValue(targetNode.width + targetNode.x - pageX + svgOffset.x)
+            height = setValue(pageY - targetNode.y -svgOffset.y)
+            x = setValue(pageX - svgOffset.x)
+            targetNode.width = width
+            targetNode.x = x
+            targetNode.height = height
             break;
         }
       }else if(type === 'MOVE'){
-        targetNode.x = pageX-offsetX - svgOffset.x
-        targetNode.y = pageY-offsetY - svgOffset.y
+        x = setValue(pageX-offsetX - svgOffset.x)
+        y = setValue(pageY-offsetY - svgOffset.y)
+        targetNode.x = x
+        targetNode.y = y
       }
     }
+  },
+  [types.SET_SCALE_POSITION]:(state,action)=> {
+    const {scalePosition} = state
+    const {scale,position} = action.value
+    if (scalePosition[scale].includes(position)) {
+      const index = scalePosition[scale].findIndex((item:number)=>item===position)
+      scalePosition[scale].splice(index,1)
+    }else{
+      scalePosition[scale].push(position)
+    }
+    console.log(state.scalePosition)
   }
 
 }

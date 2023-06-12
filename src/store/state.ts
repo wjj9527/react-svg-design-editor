@@ -17,6 +17,11 @@ const state:StateType = {
   svgOffset:{
     x:0,
     y:0
+  },
+  //基线坐标列表
+  scalePosition:{
+    x:[],
+    y:[]
   }
 }
 export default state
