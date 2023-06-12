@@ -40,7 +40,7 @@ const actions: ActionsType = {
       const setValue = (value:number)=>{
         const floatNumber = value%MINIMUM_DISPLACEMENT
         const intNumber = parseInt(String(value / MINIMUM_DISPLACEMENT))
-        const settingValue = intNumber+((floatNumber>MINIMUM_DISPLACEMENT/2)?1:0)
+        const settingValue = intNumber+((floatNumber>MINIMUM_DISPLACEMENT/2)?MINIMUM_DISPLACEMENT:0)
         return settingValue>0?settingValue:0
       }
       if (type === 'RESIZE') {
@@ -104,6 +104,7 @@ const actions: ActionsType = {
         targetNode.x = x
         targetNode.y = y
       }
+      state.schema = {...state.schema}
     }
   },
   [TYPES.SET_SCALE_POSITION]:(state,action)=> {

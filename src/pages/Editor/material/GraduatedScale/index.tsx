@@ -121,10 +121,10 @@ const GraduatedScale:React.FC = ({children})=>{
           {
             scaleXSize.map((_)=><ScaleX key={_} index={_}/>)
           }
-          <div className="line" style={{left:scaleHoverLine.x-1}}/>
-          <div className="scale-hover-text" style={{left:scaleHoverLine.x+4}}>{scaleHoverLine.x}</div>
+          <div className="line" style={{left:(scaleHoverLine.x-1)||0}}/>
+          <div className="scale-hover-text" style={{left:(scaleHoverLine.x+4)||0}}>{scaleHoverLine.x}</div>
           {
-            scalePosition.x.map((item:number)=><div className="sign-line" key={item} style={{left:item-1}}/>)
+            scalePosition.x.map((item:number)=><div className="sign-line" key={item} style={{left:(item-1)||0}}/>)
           }
 
         </div>
@@ -140,10 +140,10 @@ const GraduatedScale:React.FC = ({children})=>{
           {
             scaleYSize.map((_)=><ScaleY key={_} index={_}/>)
           }
-          <div className="line" style={{top:scaleHoverLine.y-1}}/>
-          <div className="scale-hover-text" style={{top:scaleHoverLine.y+15}}>{scaleHoverLine.y}</div>
+          <div className="line" style={{top:(scaleHoverLine.y-1)||0}}/>
+          <div className="scale-hover-text" style={{top:(scaleHoverLine.y+15)||0}}>{scaleHoverLine.y}</div>
           {
-            scalePosition.y.map((item:number)=><div className="sign-line" key={item} style={{top:item-1}}/>)
+            scalePosition.y.map((item:number)=><div className="sign-line" key={item} style={{top:(item-1)||0}}/>)
           }
         </div>
       </div>

@@ -2,7 +2,6 @@ import React, {createContext, useReducer} from "react";
 import stateSource from './state'
 import types from './types'
 import actions from './actions';
-// console.log('actions',actions)
 export const TYPES = types
 //创建一个context
 export const StoreContext = createContext<any>({});
