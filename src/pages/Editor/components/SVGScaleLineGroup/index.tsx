@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {StoreContext} from "@/store";
 const SVGScaleLineGroup:React.FC=()=>{
   const {state,} = useContext(StoreContext)
-  const {scalePosition,svgStyle,scaleHoverLine,schema,currentAction} = state
+  const {scalePosition,svgStyle,scaleHoverLine,schema,currentAction,scaleVisible} = state
   const [xBaseShowPoint,setXBaseShowPoint] = useState([])
   const [yBaseShowPoint,setYBaseShowPoint] = useState([])
   const setBasePointGroup = ()=>{
@@ -59,19 +59,22 @@ const SVGScaleLineGroup:React.FC=()=>{
   useEffect(()=>{
     setBasePointGroup()
   },[schema,currentAction])
-  // setBasePointGroup()
   return <g>
+    {/*x轴标记基线*/}
     {
-      scalePosition.x.map((item:number,index:number)=><line key={index} x1={item} y1="0" x2={item} y2={svgStyle.height} stroke="#e52727" width={5}/>)
+      scaleVisible&&scalePosition.x.map((item:number,index:number)=><line className="sign-line" key={index} x1={item} y1="0" x2={item} y2={svgStyle.height} stroke="#e52727" width={5}/>)
     }
+    {/*y轴编辑基线*/}
     {
-      scalePosition.y.map((item:number,index:number)=><line key={index} x1="0" y1={item} x2={svgStyle.width} y2={item} stroke="#e52727" width={5}/>)
+      scaleVisible&&scalePosition.y.map((item:number,index:number)=><line key={index} x1="0" y1={item} x2={svgStyle.width} y2={item} stroke="#e52727" width={5}/>)
     }
+    {/*x轴查看基线*/}
     {
-      scaleHoverLine.yShow&&<line x1="0" y1={scaleHoverLine.y} x2={svgStyle.width} y2={scaleHoverLine.y} stroke="#e52727" width={5}/>
+      scaleVisible&&scaleHoverLine.yShow&&<line x1="0" y1={scaleHoverLine.y} x2={svgStyle.width} y2={scaleHoverLine.y} stroke="#e52727" width={5}/>
     }
+    {/*y轴查看基线*/}
     {
-      scaleHoverLine.xShow&&<line x1={scaleHoverLine.x} y1="0" x2={scaleHoverLine.x} y2={svgStyle.height} stroke="#e52727" width={5}/>
+      scaleVisible&&scaleHoverLine.xShow&&<line x1={scaleHoverLine.x} y1="0" x2={scaleHoverLine.x} y2={svgStyle.height} stroke="#e52727" width={5}/>
     }
     {/*x轴对齐基线组*/}
     {

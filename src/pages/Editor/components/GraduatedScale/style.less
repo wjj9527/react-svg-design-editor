@@ -3,9 +3,9 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+
   .horizontal-scale{
-    border-top: 1px solid #333333;
-    border-bottom: 1px solid #333333;
+    //border-top: 1px solid #999999;
     overflow: hidden;
   }
   .scale-x{
@@ -18,13 +18,13 @@
       bottom: 4px;
       font-size: 12px;
       height: 12px;
-      color: #999999;
+      color: #aaaaaa;
       user-select: none;
     }
     .scale-5px{
       width: 5px;
       height: 4px;
-      border-right:1px solid #333333 ;
+      border-right:1px solid #999999 ;
 
       &.h{
         height: 8px;
@@ -52,7 +52,7 @@
     .scale-5px{
       width: 5px;
       height: 5px;
-      border-bottom:1px solid #333333 ;
+      border-bottom:1px solid #999999 ;
 
       &.h{
         width: 8px;
@@ -66,7 +66,10 @@
     //position: relative;
     display: flex;
     height: 25px;
-
+    border-bottom: 1px solid #999999;
+    border-top: 1px solid #999999;
+    background: #333333;
+    overflow: hidden;
     .visible-btn{
       display: flex;
       align-items: center;
@@ -74,12 +77,18 @@
       height: 25px;
       width: 25px;
       box-sizing: border-box;
-      border:1px solid #333333;
+      border:1px solid #999999;
+      border-top: none;
       cursor: pointer;
+      color: #999999;
+      &:hover{
+        color: #bbbbbb;
+      }
     }
     .horizontal-scale{
       display: flex;
       flex: 1;
+      //border-top: 1px solid #999999;
       .scale-x-container{
         position: relative;
         width: 100%;
@@ -110,7 +119,7 @@
           line-height: 14px;
           border-radius: 1px;
           font-size: 12px;
-          background: #333333;
+          background: #999999;
           padding:0 4px;
           color: #ffffff;
           width: 35px;
@@ -125,9 +134,10 @@
     overflow: hidden;
     .vertical-scale{
       width: 25px;
-      border-left: 1px solid #333333;
-      border-right: 1px solid #333333;
+      border-left: 1px solid #999999;
+      border-right: 1px solid #999999;
       height: 100%;
+      background: #333333;
       .scale-y-container{
         position: relative;
         &:hover{
@@ -159,7 +169,7 @@
           line-height: 14px;
           border-radius: 1px;
           font-size: 12px;
-          background: #333333;
+          background: #999999;
           padding:0 4px;
           color: #ffffff;
           transform: rotate(270deg);

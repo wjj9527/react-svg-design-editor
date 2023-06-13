@@ -2,8 +2,8 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import './style.less'
 import {StoreContext, TYPES} from "@/store";
 import Test from '@/pages/Editor/material/nodes/Test'
-import GraduatedScale from "@/pages/Editor/material/GraduatedScale";
-import SVGScaleLineGroup from "@/pages/Editor/material/SVGScaleLineGroup";
+import GraduatedScale from "@/pages/Editor/components/GraduatedScale";
+import SVGScaleLineGroup from "@/pages/Editor/components/SVGScaleLineGroup";
 const EditorView: React.FC = () => {
   const {state,dispatch} = useContext(StoreContext)
   const {currentAction} = state
@@ -25,7 +25,7 @@ const EditorView: React.FC = () => {
     }
   }
   //鼠标弹起不可移动
-  const handleMouseUp = (e:React.MouseEvent)=>{
+  const handleMouseUp = ()=>{
     setIsCanMove(false)
     dispatch({type:TYPES.SET_CURRENT_ACTION,value:{currentAction:{}}})
   }
@@ -56,7 +56,7 @@ const EditorView: React.FC = () => {
           >
             <defs>
               <pattern id="pattern_grid" patternUnits="userSpaceOnUse" x="0" y="0" width="10" height="10">
-                <rect width="1" height="1" rx="1" ry="1" fill="#aaaaaa" />
+                <rect width="1" height="1" rx="1" ry="1" fill="#555555" />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#pattern_grid)" />

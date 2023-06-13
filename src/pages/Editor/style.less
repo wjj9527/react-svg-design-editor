@@ -1,8 +1,43 @@
 .page-root{
   position: absolute;
+  display: flex;
+  flex-direction: column;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: aliceblue;
+  background: rgba(11,19,26,1);
+  .header-bar{
+    height: 48px;
+  }
+  .content-view{
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    .left-drawer{
+      flex: 0 0 360px;
+    }
+    .right-drawer{
+      flex: 0 0 360px;
+    }
+    .editor-view-container{
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      .editor-view-box{
+        height: 100%;
+        width: 100%;
+        flex: 1;
+        overflow: hidden;
+        //padding-top: 6px;
+        //background: rgba(11,19,26,1);
+      }
+      .bottom-bar{
+        height: 36px;
+      }
+    }
+  }
 }

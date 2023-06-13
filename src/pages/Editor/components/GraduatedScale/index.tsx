@@ -48,8 +48,6 @@ const GraduatedScale:React.FC = ({children})=>{
   const scaleYBarRef = useRef(null)
   const [scaleXSize,setScaleXSize] = useState([])
   const [scaleYSize,setScaleYSize] = useState([])
-  // const [mouseX,setMouseX] = useState(0)
-  // const [mouseY,setMouseY] = useState(0)
   const [offsetX,setOffsetX] =useState(0)
   const [offsetY,setOffsetY] =useState(0)
   const {state,dispatch} = useContext(StoreContext)
@@ -79,7 +77,6 @@ const GraduatedScale:React.FC = ({children})=>{
   //x鼠标移入
   const handleScaleXBarMouseMove = (e:React.MouseEvent)=>{
     const {clientX} = e
-    // setMouseX(clientX-offsetX)
     dispatch({type:TYPES.SET_SCALE_HOVER_LINE,value:{xShow:true,x:clientX-offsetX}})
   }
   //x鼠标离开
@@ -89,7 +86,6 @@ const GraduatedScale:React.FC = ({children})=>{
   //x鼠标移入
   const handleScaleYBarMouseMove = (e:React.MouseEvent)=>{
     const {clientY} = e
-    // setMouseY(clientY-offsetY)
     dispatch({type:TYPES.SET_SCALE_HOVER_LINE,value:{yShow:true,y:clientY-offsetY}})
   }
   //y鼠标离开
@@ -112,7 +108,9 @@ const GraduatedScale:React.FC = ({children})=>{
   return <div className="graduated-scale">
     <div className="horizontal">
       <div className="visible-btn" onClick={dispatch.bind(this,{type:TYPES.SET_SCALE_VISIBLE})}>
-        <i className="iconfont icon-kejian"/>
+        {
+          scaleVisible?<i className="iconfont icon-bukejian"/>:<i className="iconfont icon-kejian"/>
+        }
       </div>
       {
         scaleVisible&&(
