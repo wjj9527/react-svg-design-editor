@@ -53,7 +53,7 @@ const GraduatedScale:React.FC = ({children})=>{
   const [offsetX,setOffsetX] =useState(0)
   const [offsetY,setOffsetY] =useState(0)
   const {state,dispatch} = useContext(StoreContext)
-  const {scalePosition,scaleHoverLine} = state
+  const {scalePosition,scaleHoverLine,scaleVisible} = state
   const scaleSizeSetting = ()=>{
     const scaleX = scaleXBarRef.current
     const scaleY = scaleYBarRef.current
@@ -111,24 +111,29 @@ const GraduatedScale:React.FC = ({children})=>{
   },[])
   return <div className="graduated-scale">
     <div className="horizontal">
-      <div className="visible-btn"/>
-      <div className="horizontal-scale"
-           ref={scaleXBarRef}
-           onMouseMove={handleScaleXBarMouseMove}
-           onMouseLeave={handleScaleXBarMouseLeave}
-           onClick={handleScaleXBarClick}>
-        <div className="scale-x-container">
-          {
-            scaleXSize.map((_)=><ScaleX key={_} index={_}/>)
-          }
-          <div className="line" style={{left:(scaleHoverLine.x-1)||0}}/>
-          <div className="scale-hover-text" style={{left:(scaleHoverLine.x+4)||0}}>{scaleHoverLine.x}</div>
-          {
-            scalePosition.x.map((item:number)=><div className="sign-line" key={item} style={{left:(item-1)||0}}/>)
-          }
-
-        </div>
+      <div className="visible-btn" onClick={dispatch.bind(this,{type:TYPES.SET_SCALE_VISIBLE})}>
+        <i className="iconfont icon-kejian"/>
       </div>
+      {
+        scaleVisible&&(
+          <div className="horizontal-scale"
+               ref={scaleXBarRef}
+               onMouseMove={handleScaleXBarMouseMove}
+               onMouseLeave={handleScaleXBarMouseLeave}
+               onClick={handleScaleXBarClick}>
+            <div className="scale-x-container">
+              {
+                scaleXSize.map((_)=><ScaleX key={_} index={_}/>)
+              }
+              <div className="line" style={{left:(scaleHoverLine.x-1)||0}}/>
+              <div className="scale-hover-text" style={{left:(scaleHoverLine.x+4)||0}}>{scaleHoverLine.x}</div>
+              {
+                scalePosition.x.map((item:number)=><div className="sign-line" key={item} style={{left:(item-1)||0}}/>)
+              }
+            </div>
+          </div>
+        )
+      }
     </div>
     <div className="vertical">
       <div className="vertical-scale"
@@ -136,16 +141,19 @@ const GraduatedScale:React.FC = ({children})=>{
            onMouseMove={handleScaleYBarMouseMove}
            onMouseLeave={handleScaleYBarMouseLeave}
            onClick={handleScaleYBarClick}>
-        <div className="scale-y-container">
-          {
-            scaleYSize.map((_)=><ScaleY key={_} index={_}/>)
-          }
-          <div className="line" style={{top:(scaleHoverLine.y-1)||0}}/>
-          <div className="scale-hover-text" style={{top:(scaleHoverLine.y+15)||0}}>{scaleHoverLine.y}</div>
-          {
-            scalePosition.y.map((item:number)=><div className="sign-line" key={item} style={{top:(item-1)||0}}/>)
-          }
-        </div>
+        {
+          scaleVisible&&(<div className="scale-y-container">
+            {
+              scaleYSize.map((_)=><ScaleY key={_} index={_}/>)
+            }
+            <div className="line" style={{top:(scaleHoverLine.y-1)||0}}/>
+            <div className="scale-hover-text" style={{top:(scaleHoverLine.y+15)||0}}>{scaleHoverLine.y}</div>
+            {
+              scalePosition.y.map((item:number)=><div className="sign-line" key={item} style={{top:(item-1)||0}}/>)
+            }
+          </div>)
+        }
+
       </div>
       <div className="view-container">
         {children}

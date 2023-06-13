@@ -42,7 +42,8 @@ const state:StateType = {
     y:0,
     xShow:false,
     yShow:false,
-  }
+  },
+  scaleVisible:true
 
 }
 export default state

@@ -125,7 +125,10 @@ const actions: ActionsType = {
     const lineGroup = {...action.scaleHoverLine}
     Object.assign(lineGroup,action.value)
     state.scaleHoverLine = lineGroup
+  },
+  [TYPES.SET_SCALE_VISIBLE]:(state,)=>{
+    state.scaleVisible = !state.scaleVisible
+    console.log(state.scaleVisible)
   }
-
 }
 export default actions
