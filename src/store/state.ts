@@ -16,6 +16,13 @@ const state:StateType = {
         width:100,
         height:100,
         x:100,
+        y:200,
+      },
+      {
+        id:3,
+        width:100,
+        height:100,
+        x:200,
         y:100,
       }
     ]

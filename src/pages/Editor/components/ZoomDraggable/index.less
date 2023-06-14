@@ -14,3 +14,22 @@
   }
 
 }
+
+.block-group-container{
+  .resize-draggable-container{
+    cursor: move;
+    outline: 1px solid #1677ff;
+  }
+  .element-item{
+    &:hover{
+      .resize-draggable-group{
+        opacity: 1;
+      }
+    }
+    .resize-draggable-group{
+      opacity: 1;
+      transition: .3s ease all;
+    }
+
+  }
+}

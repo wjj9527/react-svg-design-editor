@@ -1,6 +1,7 @@
 import TYPES from './types'
 import {StateType} from "@/store/state";
 import {MINIMUM_DISPLACEMENT} from '@/global'
+import createUUID from "@/utils/UUID";
 type ValueOf<T> = T[keyof T];
 type Types = ValueOf<typeof TYPES>
 type ActionProps = {
@@ -28,8 +29,19 @@ const actions: ActionsType = {
     let targetNode = null
     if (id) {
       //获取移动目标
+      console.log(id)
       for (let i = 0; i < schema.itemNodes.length; i++) {
-        if (schema.itemNodes[i].id === id) {
+        if(schema.itemNodes[i].type==='BLOCK_GROUP'){
+          const nodes = schema.itemNodes[i].children
+          console.log(nodes,id)
+          for(let index=0;i<nodes.length;index++){
+            if (nodes[index].id === id) {
+              targetNode = nodes[index]
+              console.log(targetNode)
+              break
+            }
+          }
+        } else if (schema.itemNodes[i].id === id) {
           targetNode = schema.itemNodes[i]
         }
       }
@@ -99,6 +111,7 @@ const actions: ActionsType = {
             break;
         }
       }else if(type === 'MOVE'){
+        // console.log(targetNode,)
         x = setValue(pageX-offsetX - svgOffset.x)
         y = setValue(pageY-offsetY - svgOffset.y)
         targetNode.x = x
@@ -137,6 +150,31 @@ const actions: ActionsType = {
   },
   [TYPES.SET_LEFT_DRAWER_VISIBLE]:(state)=>{
     state.leftDrawerVisible = !state.leftDrawerVisible
+  },
+  [TYPES.SET_BLOCK_ELEMENT_GROUP]:(state,action)=>{
+    const {schema} = state
+    const {x,y,height,width} = action.value
+    const rectMinX = x
+    const rectMaxX = x+width
+    const rectMinY = y
+    const rectMaxY = y+height
+    const passNodes = schema.itemNodes.filter((item:any)=>{
+      const {width,height,y,x} = item
+      return ((x>rectMinX&&x<rectMaxX)||(x+width>rectMinX&&x+width<rectMaxX))
+        &&((y>rectMinY&&y<rectMaxY)||(y+height>rectMinY&&y+height<rectMaxY))
+    })
+    const blockGroup = {
+      id:createUUID(),
+      type:'BLOCK_GROUP',
+      children:passNodes
+    }
+    // schema.itemNodes.findIndex()
+    for(let i=0;i<passNodes.length;i++){
+      const deleteIndex = schema.itemNodes.findIndex((item:any)=>passNodes.id===item.id)
+      schema.itemNodes.splice(deleteIndex,1)
+    }
+    schema.itemNodes.push(blockGroup)
+    console.log(schema)
   }
 }
 export default actions

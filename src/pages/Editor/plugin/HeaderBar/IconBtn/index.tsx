@@ -4,13 +4,19 @@ import {Tooltip} from 'antd'
 interface IProps{
   iconText:string,
   text:string,
-  disabled?:boolean
+  disabled?:boolean,
+  onClick?:()=>void
 }
-const IconBtn:React.FC<IProps> = ({iconText,text,disabled})=>{
+const IconBtn:React.FC<IProps> = ({iconText,text,disabled,onClick})=>{
   const className = classNames('iconfont',iconText,{
     disabled
   })
-  return <div className="btn">
+  const handleClick = ()=>{
+    if (!disabled&&onClick) {
+      onClick()
+    }
+  }
+  return <div className="btn" onClick={handleClick}>
     <Tooltip placement="top" title={text}>
       <i className={className}></i>
     </Tooltip>

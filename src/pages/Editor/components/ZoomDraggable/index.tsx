@@ -31,6 +31,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({x, y, width, height, id}) 
             className="resize-draggable-container"
             onMouseDown={e => handleEvent(e, {target: 'MOVE_CONTENT', type: 'MOVE'})}
             width={width} height={height} fill="rgba(0,0,0,0)"/>
+
       <rect id="resize-left-top" x={-4} y={-4} width="8" height="8" fill="#1677ff"
             style={{cursor:"nw-resize"}}
             onMouseDown={e => handleEvent(e, {target: 'LEFT_TOP', type: 'RESIZE'})}/>
