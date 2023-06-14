@@ -4,9 +4,8 @@ import {StoreContext,TYPES} from "@/store";
 interface ScaleProps {
   index:number
 }
+let pageResize:any = null
 const ScaleX:React.FC<ScaleProps> = ({index})=>{
-
-
   return <div className="scale-x" >
     <div className="scale-text">
       {index*50+50}
@@ -51,7 +50,7 @@ const GraduatedScale:React.FC = ({children})=>{
   const [offsetX,setOffsetX] =useState(0)
   const [offsetY,setOffsetY] =useState(0)
   const {state,dispatch} = useContext(StoreContext)
-  const {scalePosition,scaleHoverLine,scaleVisible} = state
+  const {scalePosition,scaleHoverLine,scaleVisible,pageSelectionVisible,nodeSelectionVisible} = state
   const scaleSizeSetting = ()=>{
     const scaleX = scaleXBarRef.current
     const scaleY = scaleYBarRef.current
@@ -100,11 +99,14 @@ const GraduatedScale:React.FC = ({children})=>{
   }
   useEffect(()=>{
     scaleSizeSetting()
-    window.addEventListener('resize', scaleSizeSetting);
+    if (!pageResize) {
+      pageResize = window.addEventListener('resize', scaleSizeSetting);
+    }
     return ()=>{
       window.removeEventListener('resize', scaleSizeSetting);
+      pageResize = null
     }
-  },[])
+  },[pageSelectionVisible,nodeSelectionVisible])
   return <div className="graduated-scale">
     <div className="horizontal">
       <div className="visible-btn" onClick={dispatch.bind(this,{type:TYPES.SET_SCALE_VISIBLE})}>

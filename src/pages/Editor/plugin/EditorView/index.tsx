@@ -4,9 +4,10 @@ import {StoreContext, TYPES} from "@/store";
 import Test from '@/pages/Editor/material/nodes/Test'
 import GraduatedScale from "@/pages/Editor/components/GraduatedScale";
 import SVGScaleLineGroup from "@/pages/Editor/components/SVGScaleLineGroup";
+let pageResize: any = null
 const EditorView: React.FC = () => {
   const {state,dispatch} = useContext(StoreContext)
-  const {currentAction} = state
+  const {currentAction,pageSelectionVisible,nodeSelectionVisible} = state
   const nodes = state.schema.itemNodes
   const [isCanMove,setIsCanMove] = useState(false)
   const SVGContainerRef = useRef(null)
@@ -38,11 +39,15 @@ const EditorView: React.FC = () => {
   }
   useEffect(()=>{
     svgCanvasSetting()
-    window.addEventListener('resize',svgCanvasSetting)
+    console.log(pageSelectionVisible,nodeSelectionVisible)
+    if (!pageResize) {
+      pageResize = window.addEventListener('resize',svgCanvasSetting)
+    }
     return ()=>{
       window.removeEventListener('resize',svgCanvasSetting)
+      pageResize = null
     }
-  },[])
+  },[pageSelectionVisible,nodeSelectionVisible])
   return (<div className="editor-view" >
       <GraduatedScale>
         <div className="canvas-container" ref={SVGContainerRef}>

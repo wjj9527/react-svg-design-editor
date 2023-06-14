@@ -43,7 +43,13 @@ const state:StateType = {
     xShow:false,
     yShow:false,
   },
-  scaleVisible:true
-
+  //是否显示基线
+  scaleVisible:true,
+  //是否显示页面选择器
+  pageSelectionVisible:true,
+  //是否显示图层选择器
+  nodeSelectionVisible:true,
+  //是否显示左侧抽屉
+  leftDrawerVisible:true,
 }
 export default state

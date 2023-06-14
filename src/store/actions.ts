@@ -128,7 +128,15 @@ const actions: ActionsType = {
   },
   [TYPES.SET_SCALE_VISIBLE]:(state,)=>{
     state.scaleVisible = !state.scaleVisible
-    console.log(state.scaleVisible)
+  },
+  [TYPES.SET_PAGE_SELECTION_VISIBLE]:(state,)=>{
+    state.pageSelectionVisible = !state.pageSelectionVisible
+  },
+  [TYPES.SET_NODE_SELECTION_VISIBLE]:(state,)=>{
+    state.nodeSelectionVisible = !state.nodeSelectionVisible
+  },
+  [TYPES.SET_LEFT_DRAWER_VISIBLE]:(state)=>{
+    state.leftDrawerVisible = !state.leftDrawerVisible
   }
 }
 export default actions
