@@ -150,13 +150,13 @@ const EditorView: React.FC = () => {
     const [baseX,baseY] = [pageX-x,pageY-y]
     let isEmptyBlock = true
     for(let i=0;i<itemNodes.length;i++){
-      console.log(itemNodes[i])
       const {x,y,width,height} = itemNodes[i]
       if((baseX>x&&baseX<x+width)&&(baseY>y&&baseY<y+height)){
         isEmptyBlock = false
         break
       }
     }
+
     //解除默认成组
     if (isEmptyBlock) {
       dispatch({type:TYPES.RELIEVE_DEFAULT_BLOCK_ELEMENT_GROUP})
