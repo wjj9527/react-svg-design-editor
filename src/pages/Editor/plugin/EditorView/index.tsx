@@ -5,6 +5,7 @@ import Test from '@/pages/Editor/material/nodes/Test'
 import GraduatedScale from "@/pages/Editor/components/GraduatedScale";
 import SVGScaleLineGroup from "@/pages/Editor/components/SVGScaleLineGroup";
 import BlockGroup from "@/pages/Editor/material/nodes/BlockGroup";
+import FollowMenu from '@/pages/Editor/components/FollowMenu'
 
 let pageResize: any = null
 type SvgBlockContainerConfig = {
@@ -116,6 +117,7 @@ const EditorView: React.FC = () => {
   }
   //鼠标按下可以移动
   const handleMouseDown = (event:React.MouseEvent)=>{
+    event.preventDefault()
     setIsCanMove(true)
     if (SVGContainerRef.current) {
       //@ts-ignore
@@ -132,6 +134,14 @@ const EditorView: React.FC = () => {
         setSvgStartActionBasePoint({x,y})
       }
     }
+    dispatch({
+      type:TYPES.SET_FOLLOW_MENU_CONFIG,
+      value:{
+        visible:false,
+        x:0,
+        y:0
+      }
+    })
   }
   //鼠标弹起不可移动
   const handleMouseUp = ()=>{
@@ -139,7 +149,13 @@ const EditorView: React.FC = () => {
     if (Object.keys(currentAction).length) {
       dispatch({type:TYPES.SET_CURRENT_ACTION,value:{currentAction:{}}})
     }else{//此处进行划块区域内的元素判断
-      dispatch({type:TYPES.SET_BLOCK_ELEMENT_GROUP,value:svgBlockContainerConfig})
+      dispatch({type:TYPES.SET_BLOCK_ELEMENT_GROUP,value:{...svgBlockContainerConfig}})
+      setSvgBlockContainerConfig({
+        x:0,
+        y:0,
+        height:0,
+        width:0
+      })
     }
 
   }
@@ -170,6 +186,7 @@ const EditorView: React.FC = () => {
     }
   },[pageSelectionVisible,nodeSelectionVisible])
   return (<div className="editor-view" >
+      <FollowMenu/>
       <GraduatedScale>
         <div className="canvas-container" ref={SVGContainerRef}>
           <svg

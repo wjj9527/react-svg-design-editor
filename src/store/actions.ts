@@ -117,7 +117,7 @@ const actions: ActionsType = {
         targetNode.x = x
         targetNode.y = y
       }
-      state.schema = {...state.schema}
+      state.schema = JSON.parse(JSON.stringify(state.schema))
     }
   },
   [TYPES.SET_SCALE_POSITION]:(state,action)=> {
@@ -174,7 +174,9 @@ const actions: ActionsType = {
       schema.itemNodes.splice(deleteIndex,1)
     }
     schema.itemNodes.push(blockGroup)
-    console.log(schema)
+  },
+  [TYPES.SET_FOLLOW_MENU_CONFIG]:(state,action)=>{
+    state.followMenuConfig = {...action.value}
   }
 }
 export default actions

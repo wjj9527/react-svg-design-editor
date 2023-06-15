@@ -58,5 +58,12 @@ const state:StateType = {
   nodeSelectionVisible:true,
   //是否显示左侧抽屉
   leftDrawerVisible:true,
+  //跟随弹窗信息
+  followMenuConfig:{
+    x:0,
+    y:0,
+    visible:false
+  }
+
 }
 export default state
