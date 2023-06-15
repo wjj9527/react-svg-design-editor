@@ -181,7 +181,6 @@ const actions: ActionsType = {
         isGroup:false,
         itemNodes:passNodes
       }
-      // schema.itemNodes.findIndex()
       for(let i=0;i<passNodes.length;i++){
         const deleteIndex = schema.itemNodes.findIndex((item:any)=>passNodes[i].id===item.id)
         schema.itemNodes.splice(deleteIndex,1)
