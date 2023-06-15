@@ -8,6 +8,7 @@ interface BlockGroupProps{
 }
 const BlockGroup:React.FC<BlockGroupProps>=({id,itemNodes})=>{
   const {state,dispatch} = useContext(StoreContext)
+  const {svgOffset} = state
   const [fillRectSetting,setFillRectSetting] = useState({
     x:0,
     y:0,
@@ -26,7 +27,24 @@ const BlockGroup:React.FC<BlockGroupProps>=({id,itemNodes})=>{
       }
     })
   }
-
+  //选中需要移动的节点操作
+  const handleEvent = (e: React.MouseEvent) => {
+    const target = 'GROUP_RECT'
+    const type = 'MOVE'
+    // itemNodes
+    const {pageX,pageY} = e
+    //@ts-ignore
+    const {bottom,height,left,right,top,width,x,y} = e.target.getBoundingClientRect()
+    //当前鼠标点位与边框偏移量
+    const [offsetX,offsetY]  = [pageX-x,pageY-y]
+    console.log(itemNodes,pageX-svgOffset.x,pageY-svgOffset.y)
+    const itemOffsetArray = itemNodes.map(item=>{
+      const {id,x,y} = item
+      return {id,x:x-(pageX-svgOffset.x),y:y-(pageY-svgOffset.y)}
+    })
+    const currentAction = {target, type,id,bottom,height,left,right,top,width,x,y,offsetX,offsetY,itemOffsetArray}
+    dispatch({type:TYPES.SET_CURRENT_ACTION,value:{currentAction}})
+  }
   useEffect(()=>{
     //g标签无法进行事件处理，必须用dom填充进行事件降级
     let x: number | null=null
@@ -61,7 +79,12 @@ const BlockGroup:React.FC<BlockGroupProps>=({id,itemNodes})=>{
 
   },[itemNodes])
   return itemNodes.length?<g className="block-group-container">
-    <rect className="fill" fill="rgba(255,255,255,.1)" {...fillRectSetting}  onContextMenu={handleContextMenu}/>
+    <rect
+      className="fill"
+      fill="rgba(255,255,255,.1)"
+      {...fillRectSetting}
+      onMouseDown={handleEvent}
+      onContextMenu={handleContextMenu}/>
     {itemNodes.map(item=><Test key={item.id} {...item}/>)}
   </g>:<></>
 }

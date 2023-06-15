@@ -52,7 +52,6 @@ const actions: ActionsType = {
         const settingValue = intNumber+((floatNumber>MINIMUM_DISPLACEMENT/2)?MINIMUM_DISPLACEMENT:0)
         return settingValue>0?settingValue:0
       }
-      console.log('move')
       if (type === 'RESIZE') {
         switch (target) {
           case 'RIGHT_TOP':
@@ -108,12 +107,26 @@ const actions: ActionsType = {
             targetNode.height = height
             break;
         }
-      }else if(type === 'MOVE'){
-        // console.log(targetNode,)
+      }else if(type === 'MOVE'&&target==='MOVE_CONTENT'){
+
         x = setValue(pageX-offsetX - svgOffset.x)
         y = setValue(pageY-offsetY - svgOffset.y)
         targetNode.x = x
         targetNode.y = y
+      }else if(type === 'MOVE'&&target==='GROUP_RECT'){
+        const node = schema.itemNodes.find((item:any)=>item.id===id).itemNodes
+        const {itemOffsetArray} = currentAction
+        //根据偏移量计算实际需要偏差值
+        for(let i=0;i<node.length;i++){
+          for(let j=0;j<itemOffsetArray.length;j++){
+            if (itemOffsetArray[j].id === node[i].id) {
+              const {x,y} = itemOffsetArray[j]
+              node[i].x = setValue(pageX - svgOffset.x +x)
+              node[i].y = setValue(pageY - svgOffset.y +y)
+              break
+            }
+          }
+        }
       }
       state.schema = JSON.parse(JSON.stringify(state.schema))
     }
@@ -175,7 +188,6 @@ const actions: ActionsType = {
       }
       schema.itemNodes.push(blockGroup)
     }
-    console.log(schema)
   },
   [TYPES.SET_FOLLOW_MENU_CONFIG]:(state,action)=>{
     state.followMenuConfig = {...action.value}
@@ -197,7 +209,6 @@ const actions: ActionsType = {
     const {id,data} = action.value
     const {element} = findElementById(id,state.schema)
     Object.assign(element,data)
-    console.log(state.schema)
   }
 }
 export default actions
