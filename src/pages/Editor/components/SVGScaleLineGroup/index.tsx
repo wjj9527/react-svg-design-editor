@@ -8,7 +8,18 @@ const SVGScaleLineGroup:React.FC=()=>{
   const setBasePointGroup = ()=>{
     const xBasePointGroup: number[] = []
     const yBasePointGroup: number[] = []
-    schema.itemNodes.forEach((item:any)=>{
+    //打散block-group
+    let flatNodesArray: any[] = []
+    for(let i=0;i<schema.itemNodes.length;i++){
+      if (schema.itemNodes[i].type === 'BLOCK_GROUP') {
+        flatNodesArray = [...flatNodesArray,...schema.itemNodes[i].itemNodes]
+      }else{
+        flatNodesArray.push(schema.itemNodes[i])
+      }
+    }
+
+    //保存除了当前元素所有的标记基线坐标
+    flatNodesArray.forEach((item:any)=>{
       const {x,y,height,width,id} = item
       if (id !== currentAction.id) {
         xBasePointGroup.push(x)
@@ -18,9 +29,9 @@ const SVGScaleLineGroup:React.FC=()=>{
         yBasePointGroup.push(parseInt(y+height))
         yBasePointGroup.push(parseInt(y+height/2))
       }
-      // console.log(xBasePointGroup)
     })
-    const targetNode = schema.itemNodes.find((item:any)=>item.id===currentAction.id)
+
+    const targetNode = flatNodesArray.find((item:any)=>item.id===currentAction.id)
     if (!!targetNode) {
       const {x,y,height,width} = targetNode
       const [xs,xm,xe,ys,ym,ye] = [x,parseInt(x+width/2),x+width,y,parseInt(y+height/2),parseInt(y+height)]

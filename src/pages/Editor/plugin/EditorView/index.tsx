@@ -142,11 +142,32 @@ const EditorView: React.FC = () => {
         y:0
       }
     })
+
+    //判断当前区域是否存在组或者元素
+    const itemNodes = state.schema.itemNodes
+    const {pageX,pageY} = event
+    const {x,y} = svgOffset
+    const [baseX,baseY] = [pageX-x,pageY-y]
+    let isEmptyBlock = true
+    for(let i=0;i<itemNodes.length;i++){
+      console.log(itemNodes[i])
+      const {x,y,width,height} = itemNodes[i]
+      if((baseX>x&&baseX<x+width)&&(baseY>y&&baseY<y+height)){
+        isEmptyBlock = false
+        break
+      }
+    }
+    //解除默认成组
+    if (isEmptyBlock) {
+      dispatch({type:TYPES.RELIEVE_DEFAULT_BLOCK_ELEMENT_GROUP})
+    }
+
   }
   //鼠标弹起不可移动
   const handleMouseUp = ()=>{
     setIsCanMove(false)
     if (Object.keys(currentAction).length) {
+      // dispatch({type:TYPES.RELIEVE_DEFAULT_BLOCK_ELEMENT_GROUP})
       dispatch({type:TYPES.SET_CURRENT_ACTION,value:{currentAction:{}}})
     }else{//此处进行划块区域内的元素判断
       dispatch({type:TYPES.SET_BLOCK_ELEMENT_GROUP,value:{...svgBlockContainerConfig}})
@@ -156,6 +177,7 @@ const EditorView: React.FC = () => {
         height:0,
         width:0
       })
+
     }
 
   }
@@ -196,6 +218,7 @@ const EditorView: React.FC = () => {
             onMouseMove={handleMouseMove}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
+            onContextMenu={(e)=>e.preventDefault()}
           >
             <defs>
               <pattern id="pattern_grid" patternUnits="userSpaceOnUse" x="0" y="0" width="10" height="10">

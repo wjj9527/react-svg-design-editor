@@ -2,6 +2,7 @@ import TYPES from './types'
 import {StateType} from "@/store/state";
 import {MINIMUM_DISPLACEMENT} from '@/global'
 import createUUID from "@/utils/UUID";
+import {findElementById} from "@/utils/findElementById";
 type ValueOf<T> = T[keyof T];
 type Types = ValueOf<typeof TYPES>
 type ActionProps = {
@@ -29,16 +30,12 @@ const actions: ActionsType = {
     let targetNode = null
     if (id) {
       //获取移动目标
-      console.log(id)
       for (let i = 0; i < schema.itemNodes.length; i++) {
         if(schema.itemNodes[i].type==='BLOCK_GROUP'){
-          const nodes = schema.itemNodes[i].children
-          console.log(nodes,id)
-          for(let index=0;i<nodes.length;index++){
+          const nodes = schema.itemNodes[i].itemNodes
+          for(let index=0;index<nodes.length;index++){
             if (nodes[index].id === id) {
               targetNode = nodes[index]
-              console.log(targetNode)
-              break
             }
           }
         } else if (schema.itemNodes[i].id === id) {
@@ -55,6 +52,7 @@ const actions: ActionsType = {
         const settingValue = intNumber+((floatNumber>MINIMUM_DISPLACEMENT/2)?MINIMUM_DISPLACEMENT:0)
         return settingValue>0?settingValue:0
       }
+      console.log('move')
       if (type === 'RESIZE') {
         switch (target) {
           case 'RIGHT_TOP':
@@ -163,20 +161,43 @@ const actions: ActionsType = {
       return ((x>rectMinX&&x<rectMaxX)||(x+width>rectMinX&&x+width<rectMaxX))
         &&((y>rectMinY&&y<rectMaxY)||(y+height>rectMinY&&y+height<rectMaxY))
     })
-    const blockGroup = {
-      id:createUUID(),
-      type:'BLOCK_GROUP',
-      children:passNodes
+    if (passNodes.length > 1) {
+      const blockGroup = {
+        id:createUUID(),
+        type:'BLOCK_GROUP',
+        isGroup:false,
+        itemNodes:passNodes
+      }
+      // schema.itemNodes.findIndex()
+      for(let i=0;i<passNodes.length;i++){
+        const deleteIndex = schema.itemNodes.findIndex((item:any)=>passNodes[i].id===item.id)
+        schema.itemNodes.splice(deleteIndex,1)
+      }
+      schema.itemNodes.push(blockGroup)
     }
-    // schema.itemNodes.findIndex()
-    for(let i=0;i<passNodes.length;i++){
-      const deleteIndex = schema.itemNodes.findIndex((item:any)=>passNodes.id===item.id)
-      schema.itemNodes.splice(deleteIndex,1)
-    }
-    schema.itemNodes.push(blockGroup)
+    console.log(schema)
   },
   [TYPES.SET_FOLLOW_MENU_CONFIG]:(state,action)=>{
     state.followMenuConfig = {...action.value}
+  },
+  [TYPES.RELIEVE_DEFAULT_BLOCK_ELEMENT_GROUP]:(state,)=>{
+    const {schema} = state
+    let itemNodes = [...schema.itemNodes]
+    const blockArray = itemNodes.filter((item:any)=>(item.type==='BLOCK_GROUP'&&!item.isGroup))
+    const nodesFlatArray = blockArray.map((item:any)=>item.itemNodes).flat(Infinity)
+    const deleteIDArray = blockArray.map((item:any)=>item.id)
+    for(let i=0;i<deleteIDArray.length;i++){
+      const deleteIndex = itemNodes.findIndex((item:any)=>item.id===deleteIDArray[i])
+      itemNodes.splice(deleteIndex,1)
+    }
+    itemNodes = [...itemNodes,...nodesFlatArray]
+    schema.itemNodes = itemNodes
+  },
+  [TYPES.SET_ELEMENT_NODE_DATA_BY_ID]:(state,action)=>{
+    const {id,data} = action.value
+    const {element} = findElementById(id,state.schema)
+    Object.assign(element,data)
+    console.log(state.schema)
   }
 }
 export default actions
