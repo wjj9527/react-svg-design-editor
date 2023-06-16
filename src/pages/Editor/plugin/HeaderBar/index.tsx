@@ -1,7 +1,8 @@
 import React, {useContext} from "react";
 import './style.less'
 import {StoreContext,TYPES} from "@/store";
-import IconBtn from "./IconBtn";
+import IconBtn from "@/pages/Editor/components/IconBtn";
+import {Button} from 'antd'
 const HeaderBar:React.FC = ()=>{
   const {state,dispatch} = useContext(StoreContext)
 
@@ -47,7 +48,9 @@ const HeaderBar:React.FC = ()=>{
       </div>
     </div>
     <div className="right-content">
-      11
+      <Button size="small" type="primary" onClick={dispatch.bind(this,{type:TYPES.SET_RIGHT_DRAWER_VISIBLE})}>
+        <span className="btn-text">配置</span>
+      </Button>
     </div>
   </div>
 }

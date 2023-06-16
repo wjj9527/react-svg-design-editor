@@ -4,6 +4,7 @@ import EditorView from "@/pages/Editor/plugin/EditorView";
 import HeaderBar from "@/pages/Editor/plugin/HeaderBar";
 import LeftDrawer from "@/pages/Editor/plugin/LeftDrawer";
 import BottomBar from '@/pages/Editor/plugin/BottomBar'
+import RightDrawer from "@/pages/Editor/plugin/RightDrawer";
 import { DndProvider,} from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import {Store, } from "@/store";
@@ -20,9 +21,7 @@ const Editor:React.FC=()=> {
             </div>
             <BottomBar/>
           </div>
-          <div className="right-drawer">
-
-          </div>
+          <RightDrawer/>
         </div>
       </div>
     </DndProvider>

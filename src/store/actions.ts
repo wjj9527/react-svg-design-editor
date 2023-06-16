@@ -108,7 +108,6 @@ const actions: ActionsType = {
             break;
         }
       }else if(type === 'MOVE'&&target==='MOVE_CONTENT'){
-
         x = setValue(pageX-offsetX - svgOffset.x)
         y = setValue(pageY-offsetY - svgOffset.y)
         targetNode.x = x
@@ -208,6 +207,9 @@ const actions: ActionsType = {
     const {id,data} = action.value
     const {element} = findElementById(id,state.schema)
     Object.assign(element,data)
+  },
+  [TYPES.SET_RIGHT_DRAWER_VISIBLE]:(state)=>{
+    state.rightDrawerVisible = !state.rightDrawerVisible
   }
 }
 export default actions

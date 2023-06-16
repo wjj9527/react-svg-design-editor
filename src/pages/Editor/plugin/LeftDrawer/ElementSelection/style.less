@@ -1,0 +1,43 @@
+.element-selection{
+  display: flex;
+
+  .selection-content{
+    height: 100%;
+    width: 100%;
+    background: rgba(18,28,36,1);
+  }
+  .selection-bar{
+    width: 48px;
+    background: rgba(18,28,36,1);
+    border-right: 1px solid #111111;
+    .selection-item{
+      height: 48px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      justify-content: center;
+      border-left: 2px solid transparent;
+      border-right: 2px solid transparent;
+      transition: .3s ease all;
+      .iconfont{
+        color: #FFFFFF;
+        font-size: 22px;
+        transition: .3s ease all;
+      }
+      &:hover{
+        background: rgba(11,19,26,1);
+        border-left: 2px solid #1677ff;
+        .iconfont{
+          color: #1677ff;
+        }
+      }
+      &.active{
+        background: rgba(11,19,26,1);
+        border-left: 2px solid #1677ff;
+        .iconfont{
+          color: #1677ff;
+        }
+      }
+    }
+  }
+}

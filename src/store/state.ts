@@ -24,6 +24,13 @@ const state:StateType = {
         height:100,
         x:200,
         y:100,
+      },
+      {
+        id:4,
+        width:100,
+        height:100,
+        x:200,
+        y:200,
       }
     ]
   },
@@ -63,7 +70,8 @@ const state:StateType = {
     x:0,
     y:0,
     visible:false
-  }
-
+  },
+  //是否显示右侧配置弹窗
+  rightDrawerVisible:false
 }
 export default state

@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import {Tooltip} from 'antd'
+import './style.less'
 interface IProps{
   iconText:string,
   text:string,

@@ -1,8 +1,18 @@
 import React from "react";
-
+import './style.less'
+import ElementCollapse from '@/pages/Editor/components/ElementCollapse'
 const ElementSelection:React.FC = ()=>{
   return <div className="element-selection">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, animi aperiam eaque earum magnam nostrum sequi. A alias debitis dicta eaque facere fugit, illo optio provident, reprehenderit repudiandae sint vel.
+    <div className="selection-bar">
+      <div className="selection-item">
+        <i className="iconfont icon-xitongzujian"/>
+      </div>
+    </div>
+    <div className="selection-content">
+      <ElementCollapse title="测试"><div>11</div></ElementCollapse>
+      <ElementCollapse title="测试"><div>11</div></ElementCollapse>
+      <ElementCollapse title="测试"><div>11</div></ElementCollapse>
+    </div>
   </div>
 }
 export default ElementSelection

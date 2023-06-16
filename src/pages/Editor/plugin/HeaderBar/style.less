@@ -48,33 +48,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      .btn{
-        height: 32px;
-        width: 32px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        .iconfont{
-          font-size: 18px;
-          color: #ffffff;
-          &.disabled{
-            color: #999999;
-          }
-        }
-        &:hover{
-          .iconfont{
-            font-size: 18px;
-            color: #1677ff;
-            &.disabled{
-              color: #999999;
-            }
-          }
-        }
-      }
+      
     }
   }
   .right-content{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     width: 220px;
+    padding-right: 24px;
+    .btn-text{
+      font-size: 12px;
+    }
   }
 }
