@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import './style.less'
 import {StoreContext, TYPES} from "@/store";
-import Test from '@/pages/Editor/material/nodes/Test'
 import GraduatedScale from "@/pages/Editor/components/GraduatedScale";
 import SVGScaleLineGroup from "@/pages/Editor/components/SVGScaleLineGroup";
 import BlockGroup from "@/pages/Editor/material/nodes/BlockGroup";
@@ -179,9 +178,7 @@ const EditorView: React.FC = () => {
         height:0,
         width:0
       })
-
     }
-
   }
   //设置画布属性
   const svgCanvasSetting = ()=>{
@@ -196,7 +193,10 @@ const EditorView: React.FC = () => {
       if (item.type === 'BLOCK_GROUP') {
         return <BlockGroup key={item.id} {...item}/>
       }else{
-        return <Test key={item.id} {...item}/>
+        const {type} = item
+        // @ts-ignore
+        const Element = elementComponents[type]||(()=><></>)
+        return <Element key={item.id} {...item}/>
       }
     })
   }
@@ -204,17 +204,16 @@ const EditorView: React.FC = () => {
   const [{ }, drop] = useDrop({
     accept: 'ELEMENT',
     drop: (item,monitor) => {
-      console.log(svgOffset)
       // @ts-ignore
       const {type} = item
       // @ts-ignore
       const value = {...elementDefaultValues[type]}
+      const {width,height} = value
       //@ts-ignore
       let {x,y} = monitor.getClientOffset()
       // @ts-ignore
-      const {left,top} = SVGContainerRef.current.getBoundingClientRect()
-      Object.assign(value,{x:x-left,y:y-top},)
-
+      const {left,top,} = SVGContainerRef.current.getBoundingClientRect()
+      Object.assign(value,{x:x-left-width/2,y:y-top-height/2},)
       dispatch({type:TYPES.CREATE_NEW_NODE_TO_SCHEMA,value})
     },
   });

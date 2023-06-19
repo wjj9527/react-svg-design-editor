@@ -1,5 +1,6 @@
 import React from "react";
 import ZoomDraggable from "@/pages/Editor/components/ZoomDraggable";
+import {Button} from "antd";
 interface TextProps{
   x:number,
   y:number,
@@ -9,7 +10,7 @@ interface TextProps{
 }
 const Text:React.FC<TextProps>=(props)=>{
   return <ZoomDraggable  {...props}>
-    <div>测试</div>
+    <Button>测试</Button>
   </ZoomDraggable>
 }
 

@@ -1,0 +1,39 @@
+.setting-wrapper{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+
+  .setting-menu{
+    display: flex;
+    height: 44px;
+    background: rgba(27,39,45,1);
+    .setting-menu-item{
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #7f7e7e;
+      font-size: 14px;
+      user-select: none;
+      cursor: pointer;
+      border-bottom: 4px solid transparent;
+      border-top: 4px solid transparent;
+      transition: .3s ease all;
+      &:hover{
+        background: rgba(18,28,36,1);
+        color: #ffffff;
+        border-bottom: 4px solid #ffffff;
+      }
+      &.active{
+        border-bottom: 4px solid #1677ff;
+        color: #1677ff;
+      }
+    }
+  }
+  .setting-content{
+    flex: 1;
+    height: calc(100% - 44px);
+    overflow: auto;
+  }
+}

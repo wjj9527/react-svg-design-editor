@@ -1,8 +1,14 @@
 .resize-draggable-container{
   cursor: move;
   outline: 1px dashed #1677ff;
+
 }
 .element-item{
+  &.active{
+    .resize-draggable-group{
+      opacity: 1;
+    }
+  }
   &:hover{
     .resize-draggable-group{
       opacity: 1;

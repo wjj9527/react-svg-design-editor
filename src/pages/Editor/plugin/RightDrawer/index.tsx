@@ -1,14 +1,22 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import './style.less'
 import {StoreContext} from "@/store";
+import {findElementById} from "@/utils/findElementById";
+import SettingWrapper from '@/pages/Editor/components/SettingWrapper'
 const RightDrawer:React.FC = ()=>{
   const {state} = useContext(StoreContext)
-  const {rightDrawerVisible} = state
-  return rightDrawerVisible?(
-    <div className="right-drawer">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquid atque commodi consequatur cumque ducimus ea illo iure modi mollitia nam obcaecati quia quod saepe, ullam unde, veritatis voluptatem! Aspernatur.
-    </div>
-  ):<></>
+  const {rightDrawerVisible,schema,activeKey} = state
+  const getActiveElementSource = ()=>{
+    const {element} = findElementById(activeKey,schema)
+    console.log(element)
+  }
+  useEffect(()=>{
+    getActiveElementSource()
+  },[schema,activeKey])
+  const renderElement = (<div className="right-drawer">
+    <SettingWrapper/>
+  </div>)
+  return rightDrawerVisible?renderElement:<></>
 }
 
 export default RightDrawer

@@ -213,8 +213,14 @@ const actions: ActionsType = {
   },
   [TYPES.CREATE_NEW_NODE_TO_SCHEMA]:(state,action)=>{
     const value = {...action.value}
-    Object.assign(value,{id:createUUID()})
+    const id = createUUID()
+    Object.assign(value,{id})
     state.schema.itemNodes.push(value)
+    //新增element设置为active
+    state.activeKey = id
+  },
+  [TYPES.SET_ACTIVE_KEY]:(state,action)=>{
+    state.activeKey = action.value.id
   }
 }
 export default actions

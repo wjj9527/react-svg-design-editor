@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import Test from "@/pages/Editor/material/nodes/Test";
 import './style.less'
 import {StoreContext, TYPES} from "@/store";
+import {elementComponents,elementDefaultValues} from "@/pages/Editor/material";
 interface BlockGroupProps{
   id:string
   itemNodes:any[]
@@ -37,7 +38,6 @@ const BlockGroup:React.FC<BlockGroupProps>=({id,itemNodes})=>{
     const {bottom,height,left,right,top,width,x,y} = e.target.getBoundingClientRect()
     //当前鼠标点位与边框偏移量
     const [offsetX,offsetY]  = [pageX-x,pageY-y]
-    console.log(itemNodes,pageX-svgOffset.x,pageY-svgOffset.y)
     const itemOffsetArray = itemNodes.map(item=>{
       const {id,x,y} = item
       return {id,x:x-(pageX-svgOffset.x),y:y-(pageY-svgOffset.y)}
@@ -78,6 +78,14 @@ const BlockGroup:React.FC<BlockGroupProps>=({id,itemNodes})=>{
     dispatch({type:TYPES.SET_ELEMENT_NODE_DATA_BY_ID,value:{id,data:{x,y,width,height}}})
 
   },[itemNodes])
+  const renderNodes = ()=>{
+    return itemNodes.map(item=>{
+      const {type} = item
+      // @ts-ignore
+      const Element = elementComponents[type]
+      return <Element key={item.id} {...item} />
+    })
+  }
   return itemNodes.length?<g className="block-group-container">
     <rect
       className="fill"
@@ -85,7 +93,7 @@ const BlockGroup:React.FC<BlockGroupProps>=({id,itemNodes})=>{
       {...fillRectSetting}
       onMouseDown={handleEvent}
       onContextMenu={handleContextMenu}/>
-    {itemNodes.map(item=><Test key={item.id} {...item}/>)}
+    {renderNodes()}
   </g>:<></>
 }
 

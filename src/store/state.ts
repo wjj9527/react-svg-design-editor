@@ -3,39 +3,12 @@ const state:StateType = {
   schema:{
     type:'root',
     id:0,
-    itemNodes:[
-      {
-        id:1,
-        width:100,
-        height:100,
-        x:100,
-        y:100,
-      },
-      {
-        id:2,
-        width:100,
-        height:100,
-        x:100,
-        y:200,
-      },
-      {
-        id:3,
-        width:100,
-        height:100,
-        x:200,
-        y:100,
-      },
-      {
-        id:4,
-        width:100,
-        height:100,
-        x:200,
-        y:200,
-      }
-    ]
+    itemNodes:[]
   },
   //当前选中节点信息(resize drag)
   currentAction:{},
+  //当前选中ID
+  activeKey:0,
   //画布偏移量
   svgOffset:{
     x:0,
@@ -60,9 +33,9 @@ const state:StateType = {
   //是否显示基线
   scaleVisible:true,
   //是否显示页面选择器
-  pageSelectionVisible:true,
+  pageSelectionVisible:false,
   //是否显示图层选择器
-  nodeSelectionVisible:true,
+  nodeSelectionVisible:false,
   //是否显示左侧抽屉
   leftDrawerVisible:true,
   //跟随弹窗信息
@@ -72,6 +45,6 @@ const state:StateType = {
     visible:false
   },
   //是否显示右侧配置弹窗
-  rightDrawerVisible:false
+  rightDrawerVisible:true
 }
 export default state
