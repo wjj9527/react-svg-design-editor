@@ -6,6 +6,8 @@ import GraduatedScale from "@/pages/Editor/components/GraduatedScale";
 import SVGScaleLineGroup from "@/pages/Editor/components/SVGScaleLineGroup";
 import BlockGroup from "@/pages/Editor/material/nodes/BlockGroup";
 import FollowMenu from '@/pages/Editor/components/FollowMenu'
+import {elementComponents,elementDefaultValues} from "@/pages/Editor/material";
+import {useDrop} from "react-dnd";
 
 let pageResize: any = null
 type SvgBlockContainerConfig = {
@@ -181,6 +183,7 @@ const EditorView: React.FC = () => {
     }
 
   }
+  //设置画布属性
   const svgCanvasSetting = ()=>{
     if (SVGContainerRef.current) {
       //@ts-ignore
@@ -197,6 +200,24 @@ const EditorView: React.FC = () => {
       }
     })
   }
+  // @ts-ignore
+  const [{ }, drop] = useDrop({
+    accept: 'ELEMENT',
+    drop: (item,monitor) => {
+      console.log(svgOffset)
+      // @ts-ignore
+      const {type} = item
+      // @ts-ignore
+      const value = {...elementDefaultValues[type]}
+      //@ts-ignore
+      let {x,y} = monitor.getClientOffset()
+      // @ts-ignore
+      const {left,top} = SVGContainerRef.current.getBoundingClientRect()
+      Object.assign(value,{x:x-left,y:y-top},)
+
+      dispatch({type:TYPES.CREATE_NEW_NODE_TO_SCHEMA,value})
+    },
+  });
   useEffect(()=>{
     svgCanvasSetting()
     if (!pageResize) {
@@ -211,33 +232,35 @@ const EditorView: React.FC = () => {
       <FollowMenu/>
       <GraduatedScale>
         <div className="canvas-container" ref={SVGContainerRef}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="100%" height="100%"
-            style={{overflow:'hidden'}}
-            onMouseMove={handleMouseMove}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onContextMenu={(e)=>e.preventDefault()}
-          >
-            <defs>
-              <pattern id="pattern_grid" patternUnits="userSpaceOnUse" x="0" y="0" width="10" height="10">
-                <rect width="1" height="1" rx="1" ry="1" fill="#555555" />
-              </pattern>
-            </defs>
-            {/*区间划块(选中，非操作)*/}
+          <div className="droppable-container" ref={drop}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="100%" height="100%"
+              style={{overflow:'hidden'}}
+              onMouseMove={handleMouseMove}
+              onMouseDown={handleMouseDown}
+              onMouseUp={handleMouseUp}
+              onContextMenu={(e)=>e.preventDefault()}
+            >
+              <defs>
+                <pattern id="pattern_grid" patternUnits="userSpaceOnUse" x="0" y="0" width="10" height="10">
+                  <rect width="1" height="1" rx="1" ry="1" fill="#555555" />
+                </pattern>
+              </defs>
+              {/*区间划块(选中，非操作)*/}
 
-            <rect width="100%" height="100%" fill="url(#pattern_grid)" />
-            {/*scale基线*/}
-            <SVGScaleLineGroup/>
-            {/*element物料*/}
-            {
-              renderNodes()
-            }
-            <g className="svg-block-container">
-              <rect  {...svgBlockContainerConfig} fill="rgba(176, 91, 252, 0.2)" />
-            </g>
-          </svg>
+              <rect width="100%" height="100%" fill="url(#pattern_grid)" />
+              {/*scale基线*/}
+              <SVGScaleLineGroup/>
+              {/*element物料*/}
+              {
+                renderNodes()
+              }
+              <g className="svg-block-container">
+                <rect  {...svgBlockContainerConfig} fill="rgba(176, 91, 252, 0.2)" />
+              </g>
+            </svg>
+          </div>
         </div>
       </GraduatedScale>
     </div>

@@ -210,6 +210,11 @@ const actions: ActionsType = {
   },
   [TYPES.SET_RIGHT_DRAWER_VISIBLE]:(state)=>{
     state.rightDrawerVisible = !state.rightDrawerVisible
+  },
+  [TYPES.CREATE_NEW_NODE_TO_SCHEMA]:(state,action)=>{
+    const value = {...action.value}
+    Object.assign(value,{id:createUUID()})
+    state.schema.itemNodes.push(value)
   }
 }
 export default actions

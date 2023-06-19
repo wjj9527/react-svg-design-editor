@@ -7,7 +7,7 @@ interface ZoomDraggableProps {
   width: number,
   height: number,
   id: string,
-  zoom?: string | number
+  ratio?: string | number
 }
 
 const ZoomDraggable: React.FC<ZoomDraggableProps> = ({x, y, width, height, id}) => {

@@ -1,6 +1,33 @@
 .element-selection{
   display: flex;
-
+  .element-item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex:  0 0 50%;
+    color: #ffffff;
+    cursor: pointer;
+    transition: .3s ease all;
+    .icon-content{
+      height: 60px;
+      .iconfont{
+        font-size: 44px;
+      }
+    }
+    .item-text{
+      font-size: 12px;
+      user-select: none;
+    }
+    &:hover{
+      color: #1677ff;
+      background: rgb(11, 24, 33);
+    }
+  }
+  .item-group-content{
+    display: flex;
+    flex-wrap: wrap;
+  }
   .selection-content{
     height: 100%;
     width: 100%;
@@ -11,7 +38,7 @@
     background: rgba(18,28,36,1);
     border-right: 1px solid #111111;
     .selection-item{
-      height: 48px;
+      height: 40px;
       display: flex;
       align-items: center;
       cursor: pointer;
@@ -41,3 +68,4 @@
     }
   }
 }
+
