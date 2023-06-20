@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'antd';
 import ZoomDraggable from '@/pages/Editor/components/ZoomDraggable';
 interface NormalBtnProps {
   x: number;
@@ -14,7 +15,7 @@ const NormalBtn: React.FC<NormalBtnProps> = (props) => {
   const { text } = attribute;
   return (
     <ZoomDraggable {...props}>
-      <div style={{ ...style, height, width }}>{text}</div>
+      <Button>{text}</Button>
     </ZoomDraggable>
   );
 };

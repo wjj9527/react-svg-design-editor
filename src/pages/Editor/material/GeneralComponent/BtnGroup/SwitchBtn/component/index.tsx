@@ -1,5 +1,6 @@
 import React from 'react';
 import ZoomDraggable from '@/pages/Editor/components/ZoomDraggable';
+import { Switch } from 'antd';
 interface TextProps {
   x: number;
   y: number;
@@ -7,16 +8,16 @@ interface TextProps {
   height: number;
   id: string;
 }
-const Text: React.FC<TextProps> = (props) => {
+const SwitchBtn: React.FC<TextProps> = (props) => {
   //@ts-ignore
   const { height, width, data } = props;
   const { style, attribute } = data;
   const { text } = attribute;
   return (
     <ZoomDraggable {...props}>
-      <div style={{ ...style, height, width }}>{text}</div>
+      <Switch checked />
     </ZoomDraggable>
   );
 };
 
-export default Text;
+export default SwitchBtn;
