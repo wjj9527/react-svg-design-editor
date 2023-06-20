@@ -5,8 +5,12 @@ export default defineConfig({
     type: 'none',
   },
   routes: [
-    { path: '/', component: '@/pages/index',redirect:'/editor' },
+    { path: '/', component: '@/pages/index', redirect: '/editor' },
     { path: '/editor', component: '@/pages/Editor' },
   ],
   fastRefresh: {},
+  devServer: {
+    host: '0.0.0.0',
+    port: 3000,
+  },
 });
