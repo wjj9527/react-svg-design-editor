@@ -1,18 +1,18 @@
-.graduated-scale{
+.graduated-scale {
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
 
-  .horizontal-scale{
+  .horizontal-scale {
     //border-top: 1px solid #999999;
     overflow: hidden;
   }
-  .scale-x{
+  .scale-x {
     position: relative;
     display: flex;
     cursor: pointer;
-    .scale-text{
+    .scale-text {
       position: absolute;
       right: 4px;
       bottom: 4px;
@@ -21,25 +21,25 @@
       color: #aaaaaa;
       user-select: none;
     }
-    .scale-5px{
+    .scale-5px {
       width: 5px;
       height: 4px;
-      border-right:1px solid #999999 ;
+      border-right: 1px solid #999999;
 
-      &.h{
+      &.h {
         height: 8px;
       }
-      &:last-child{
+      &:last-child {
         height: 25px;
       }
     }
   }
-  .scale-y{
+  .scale-y {
     position: relative;
     display: flex;
     flex-direction: column;
     cursor: pointer;
-    .scale-text{
+    .scale-text {
       position: absolute;
       right: 2px;
       bottom: 8px;
@@ -47,71 +47,73 @@
       height: 12px;
       color: #999999;
       user-select: none;
-      transform:rotate(270deg);
+      transform: rotate(270deg);
     }
-    .scale-5px{
+    .scale-5px {
       width: 5px;
       height: 5px;
-      border-bottom:1px solid #999999 ;
+      border-bottom: 1px solid #999999;
 
-      &.h{
+      &.h {
         width: 8px;
       }
-      &:last-child{
+      &:last-child {
         width: 25px;
       }
     }
   }
-  .horizontal{
+  .horizontal {
     //position: relative;
     display: flex;
     height: 25px;
     border-bottom: 1px solid #999999;
     border-top: 1px solid #999999;
-    background: rgba(18,28,36,1);
+    background: rgba(18, 28, 36, 1);
     overflow: hidden;
-    .visible-btn{
+    .visible-btn {
       display: flex;
       align-items: center;
       justify-content: center;
       height: 25px;
       width: 25px;
       box-sizing: border-box;
-      border:1px solid #999999;
+      border: 1px solid #999999;
       border-top: none;
       cursor: pointer;
       color: #999999;
-      &:hover{
+      overflow: hidden;
+      &:hover {
         color: #bbbbbb;
       }
     }
-    .horizontal-scale{
+    .horizontal-scale {
       display: flex;
       flex: 1;
-      //border-top: 1px solid #999999;
-      .scale-x-container{
+      height: 25px;
+      .scale-x-container {
         position: relative;
         width: 100%;
         display: flex;
-        &:hover{
-          .line,.scale-hover-text{
+        &:hover {
+          .line,
+          .scale-hover-text {
             display: block;
           }
         }
-        .line{
+        .line {
           position: absolute;
           display: none;
           border-left: 2px solid #e06d6d;
           height: 100%;
           cursor: pointer;
         }
-        .sign-line{
+        .sign-line {
           position: absolute;
           border-left: 2px solid #e06d6d;
           height: 100%;
           cursor: pointer;
         }
-        .scale-hover-text{
+        .scale-hover-text {
           position: absolute;
           display: none;
           top: 10px;
@@ -120,7 +122,7 @@
           border-radius: 1px;
           font-size: 12px;
           background: #999999;
-          padding:0 4px;
+          padding: 0 4px;
           color: #ffffff;
           width: 35px;
           text-align: center;
@@ -128,24 +130,26 @@
       }
     }
   }
-  .vertical{
+  .vertical {
     display: flex;
     flex: 0 0 calc(100% - 25px);
     overflow: hidden;
-    .vertical-scale{
+    .vertical-scale {
+      box-sizing: border-box;
       width: 25px;
       border-left: 1px solid #999999;
       border-right: 1px solid #999999;
       height: 100%;
-      background: rgba(18,28,36,1);
-      .scale-y-container{
+      background: rgba(18, 28, 36, 1);
+      .scale-y-container {
         position: relative;
-        &:hover{
-          .line,.scale-hover-text{
+        &:hover {
+          .line,
+          .scale-hover-text {
             display: block;
           }
         }
-        .line{
+        .line {
           position: absolute;
           display: none;
           border-top: 2px solid #e06d6d;
@@ -154,7 +158,7 @@
           width: 100%;
           cursor: pointer;
         }
-        .sign-line{
+        .sign-line {
           position: absolute;
           border-top: 2px solid #e06d6d;
           top: 0;
@@ -162,7 +166,7 @@
           width: 100%;
           cursor: pointer;
         }
-        .scale-hover-text{
+        .scale-hover-text {
           position: absolute;
           display: none;
           height: 14px;
@@ -170,17 +174,17 @@
           border-radius: 1px;
           font-size: 12px;
           background: #999999;
-          padding:0 4px;
+          padding: 0 4px;
           color: #ffffff;
           transform: rotate(270deg);
-          left: -1px;
+          left: -6px;
           width: 35px;
           text-align: center;
         }
       }
     }
-    .view-container{
-      flex:1;
+    .view-container {
+      flex: 1;
     }
   }
 }

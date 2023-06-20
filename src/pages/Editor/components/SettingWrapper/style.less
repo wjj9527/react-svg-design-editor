@@ -49,6 +49,19 @@
       }
       .content {
         flex: 1;
+        &.inline-block {
+          display: flex;
+          .mini-inline {
+            flex: 1;
+            display: flex;
+            .mini-label {
+              line-height: 32px;
+              width: 32px;
+              font-size: 12px;
+              color: #ffffff;
+            }
+          }
+        }
         .fill {
           width: 100%;
         }

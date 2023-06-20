@@ -4,11 +4,11 @@ export default {
   x: 100,
   y: 100,
   ratio: null,
-  type: 'Text',
-  label: '文本',
+  type: 'TextInput',
+  label: '输入框',
   data: {
     attribute: {
-      text: '文本',
+      text: '输入框',
     },
     style: {
       lineHeight: 1,

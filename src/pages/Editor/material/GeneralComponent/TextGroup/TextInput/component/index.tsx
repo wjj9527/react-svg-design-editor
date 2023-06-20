@@ -1,5 +1,6 @@
 import React from 'react';
 import ZoomDraggable from '@/pages/Editor/components/ZoomDraggable';
+import { Input } from 'antd';
 interface TextProps {
   x: number;
   y: number;
@@ -14,7 +15,7 @@ const Text: React.FC<TextProps> = (props) => {
   const { text } = attribute;
   return (
     <ZoomDraggable {...props}>
-      <div style={{ ...style, height, width }}>{text}</div>
+      <Input />
     </ZoomDraggable>
   );
 };

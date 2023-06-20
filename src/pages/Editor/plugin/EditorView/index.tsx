@@ -50,7 +50,6 @@ const EditorView: React.FC = () => {
   const handleMouseMove = (event: React.MouseEvent) => {
     const isElementHandle = !!Object.keys(currentAction).length;
     if (isCanMove && isElementHandle) {
-      console.log(11);
       dispatch({
         type: TYPES.SET_NODE_RESIZE_MOVE_ATTRIBUTE,
         value: { event },
