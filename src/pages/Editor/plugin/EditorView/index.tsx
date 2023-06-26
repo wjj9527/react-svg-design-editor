@@ -5,11 +5,15 @@ import GraduatedScale from '@/pages/Editor/components/GraduatedScale';
 import SVGScaleLineGroup from '@/pages/Editor/components/SVGScaleLineGroup';
 import BlockGroup from '@/pages/Editor/material/nodes/BlockGroup';
 import FollowMenu from '@/pages/Editor/components/FollowMenu';
+import PipeLine from '@/pages/Editor/material/GeneralComponent/GraphGroup/PipeLine/component';
+import signPipeLineDot from '@/pages/Editor/plugin/EditorView/signPipeLineDot';
+import SignMaskDot from '@/pages/Editor/components/SignMaskDot';
 import {
   elementComponents,
   elementDefaultValues,
 } from '@/pages/Editor/material';
 import { useDrop } from 'react-dnd';
+import createUUID from '@/utils/UUID';
 
 let pageResize: any = null;
 type SvgBlockContainerConfig = {
@@ -33,6 +37,7 @@ const EditorView: React.FC = () => {
   const nodes = state.schema.itemNodes;
   const [isCanMove, setIsCanMove] = useState(false);
   const SVGContainerRef = useRef(null);
+  const [maskArray, setMaskArray] = useState([]);
   //划组容器信息
   const [svgBlockContainerConfig, setSvgBlockContainerConfig] =
     useState<SvgBlockContainerConfig>({
@@ -160,12 +165,25 @@ const EditorView: React.FC = () => {
     //判断当前区域是否存在组或者元素
     const itemNodes = state.schema.itemNodes;
     const { pageX, pageY } = event;
-    const { x, y } = svgOffset;
-    const [baseX, baseY] = [pageX - x, pageY - y];
+    // @ts-ignore
+    const { left, top } = SVGContainerRef.current.getBoundingClientRect();
+    const [baseX, baseY] = [pageX - left, pageY - top];
     let isEmptyBlock = true;
+    let blockConfig = {
+      id: null,
+      type: null,
+      path: [],
+      stokeWidth: 10,
+    };
     for (let i = 0; i < itemNodes.length; i++) {
-      const { x, y, width, height } = itemNodes[i];
+      const { x, y, width, height, id, type, path, stokeWidth } = itemNodes[i];
       if (baseX > x && baseX < x + width && baseY > y && baseY < y + height) {
+        blockConfig = {
+          id,
+          type,
+          path,
+          stokeWidth,
+        };
         isEmptyBlock = false;
         break;
       }
@@ -175,12 +193,17 @@ const EditorView: React.FC = () => {
     if (isEmptyBlock) {
       dispatch({ type: TYPES.RELIEVE_DEFAULT_BLOCK_ELEMENT_GROUP });
     }
+
+    //判断当前区域是否有管道
+    if (!isEmptyBlock && blockConfig.type === 'PipeLine') {
+      // @ts-ignore
+      setMaskArray(signPipeLineDot(nodes, baseX, baseY, maskArray, dispatch));
+    }
   };
   //鼠标弹起不可移动
   const handleMouseUp = () => {
     setIsCanMove(false);
     if (Object.keys(currentAction).length) {
-      // dispatch({type:TYPES.RELIEVE_DEFAULT_BLOCK_ELEMENT_GROUP})
       dispatch({
         type: TYPES.SET_CURRENT_ACTION,
         value: { currentAction: {} },
@@ -229,17 +252,44 @@ const EditorView: React.FC = () => {
     drop: (item, monitor) => {
       // @ts-ignore
       const { type } = item;
-      // @ts-ignore
-      const value = { ...elementDefaultValues[type] };
-      const { width, height } = value;
       //@ts-ignore
       let { x, y } = monitor.getClientOffset();
       // @ts-ignore
       const { left, top } = SVGContainerRef.current.getBoundingClientRect();
-      Object.assign(value, {
-        x: x - left - width / 2,
-        y: y - top - height / 2,
-      });
+      // @ts-ignore
+      const value = { ...elementDefaultValues[type] };
+      const { width, height, stokeWidth } = value;
+      if (type !== 'PipeLine') {
+        Object.assign(value, {
+          x: x - left - width / 2,
+          y: y - top - height / 2,
+        });
+      } else {
+        const id = createUUID();
+        const start = {
+          type: 'M',
+          x: x - left - stokeWidth / 2,
+          y: y - top - 80,
+          dotId: createUUID(),
+          groupId: id,
+        };
+        const end = {
+          type: 'L',
+          x: x - left - stokeWidth / 2,
+          y: y - top + 50,
+          dotId: createUUID(),
+          groupId: id,
+        };
+        Object.assign(value, {
+          path: [start, end],
+          x: x - left - stokeWidth / 2,
+          y: y - top - 50,
+          id,
+        });
+        // @ts-ignore
+        setMaskArray([...maskArray, start, end]);
+      }
+
       dispatch({ type: TYPES.CREATE_NEW_NODE_TO_SCHEMA, value });
     },
   });
@@ -269,6 +319,7 @@ const EditorView: React.FC = () => {
               onMouseUp={handleMouseUp}
               onContextMenu={(e) => e.preventDefault()}
             >
+              {/*<PipeLine/>*/}
               <defs>
                 <pattern
                   id="pattern_grid"
@@ -281,7 +332,6 @@ const EditorView: React.FC = () => {
                   <rect width="1" height="1" rx="1" ry="1" fill="#555555" />
                 </pattern>
               </defs>
-              {/*区间划块(选中，非操作)*/}
 
               <rect width="100%" height="100%" fill="url(#pattern_grid)" />
               {/*scale基线*/}
@@ -294,6 +344,10 @@ const EditorView: React.FC = () => {
                   fill="rgba(176, 91, 252, 0.2)"
                 />
               </g>
+              {/*区间划块(选中，非操作)*/}
+              {maskArray.map((item: any, index) => (
+                <SignMaskDot key={index} x={item.x} y={item.y} id={'1'} />
+              ))}
             </svg>
           </div>
         </div>

@@ -244,7 +244,7 @@ const actions: ActionsType = {
   },
   [TYPES.CREATE_NEW_NODE_TO_SCHEMA]: (state, action) => {
     const value = { ...action.value };
-    const id = createUUID();
+    const id = value.id || createUUID();
     Object.assign(value, { id });
     state.schema.itemNodes.push(value);
     //新增element设置为active
@@ -262,6 +262,14 @@ const actions: ActionsType = {
     } else {
       Object.assign(element, data);
     }
+  },
+  [TYPES.INSERT_NEW_NODE_TO_PIPE_LINE_GROUP]: (state, action) => {
+    const { schema } = state;
+    const { id, startId, node } = action.value;
+    const { element } = findElementById(id, schema);
+    const { path } = element;
+    const insertIndex = path.findIndex((item: any) => item.dotId === startId);
+    path.splice(insertIndex, 0, node);
   },
 };
 export default actions;
