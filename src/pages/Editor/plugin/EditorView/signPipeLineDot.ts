@@ -8,7 +8,6 @@ const signPipeLineDot = (
   maskArray: [],
   dispatch: any,
 ) => {
-  // const {dispatch} = useContext(StoreContext)
   let dot = [...maskArray];
   //获取所有管道
   const allPipeLineNodes = nodes.filter(
@@ -18,13 +17,9 @@ const signPipeLineDot = (
   let y = null;
   for (let item of allPipeLineNodes) {
     const { path, stokeWidth, id } = item;
-    let [startId, endId] = [null, null];
+    let startId = null;
     for (let i = 0; i < path.length - 1; i++) {
-      // @ts-ignore
-      startId = path[i].id;
-      endId = path[i + 1].id;
       const [x1, y1] = [path[i].x, path[i].y];
-      // @ts-ignore
       const [x2, y2] = [path[i + 1].x, path[i + 1].y];
       //有斜度
       if (x1 !== x2 && y1 !== y2) {
@@ -64,14 +59,18 @@ const signPipeLineDot = (
           y = y1;
         }
       }
+      if (x !== null && y !== null) {
+        startId = path[i].dotId;
+        break;
+      }
     }
-    if (x !== null && y !== null) {
+    if (startId) {
       const node = { type: 'L', x, y, dotId: createUUID(), groupId: id };
       // 此处在schema中插入当前点
       if (dispatch) {
         dispatch({
           type: TYPES.INSERT_NEW_NODE_TO_PIPE_LINE_GROUP,
-          value: { id, startId, endId, node },
+          value: { id, startId, node },
         });
       }
       // @ts-ignore

@@ -53,15 +53,26 @@ const EditorView: React.FC = () => {
       y: 0,
     });
   const handleMouseMove = (event: React.MouseEvent) => {
+    const { pageX, pageY } = event;
     const isElementHandle = !!Object.keys(currentAction).length;
     if (isCanMove && isElementHandle) {
       dispatch({
         type: TYPES.SET_NODE_RESIZE_MOVE_ATTRIBUTE,
         value: { event },
       });
+      // console.log(currentAction)
+      const { dotId, target, offsetX, offsetY } = currentAction;
+      if (target === 'SIGN_MASK_DOT') {
+        const maskArr = [...maskArray];
+        const dot = maskArr.find((item: any) => item.dotId === dotId);
+        // @ts-ignore
+        dot.x = pageX - svgOffset.x - offsetX;
+        // @ts-ignore
+        dot.y = pageY - svgOffset.y - offsetY;
+      }
     } else if (isCanMove) {
       //划组操作 千万不要动！！！！！
-      const { pageX, pageY } = event;
+
       const config = { ...svgBlockContainerConfig };
       const { x, y } = config;
       const baseY = pageY - svgOffset.y;
@@ -193,11 +204,22 @@ const EditorView: React.FC = () => {
     if (isEmptyBlock) {
       dispatch({ type: TYPES.RELIEVE_DEFAULT_BLOCK_ELEMENT_GROUP });
     }
-
+    console.log(!isEmptyBlock && blockConfig.type === 'PipeLine');
     //判断当前区域是否有管道
     if (!isEmptyBlock && blockConfig.type === 'PipeLine') {
-      // @ts-ignore
-      setMaskArray(signPipeLineDot(nodes, baseX, baseY, maskArray, dispatch));
+      // signMask区域不做打点操作，避免重复
+      let isSignMaskDotBlock = false;
+      maskArray.forEach((item) => {
+        // @ts-ignore
+        const { x, y } = item;
+        if (x + 8 > baseX && x - 8 < baseX && y + 8 > baseY && y - 8 < baseY) {
+          isSignMaskDotBlock = true;
+        }
+      });
+      if (!isSignMaskDotBlock) {
+        // @ts-ignore
+        setMaskArray(signPipeLineDot(nodes, baseX, baseY, maskArray, dispatch));
+      }
     }
   };
   //鼠标弹起不可移动
@@ -346,7 +368,13 @@ const EditorView: React.FC = () => {
               </g>
               {/*区间划块(选中，非操作)*/}
               {maskArray.map((item: any, index) => (
-                <SignMaskDot key={index} x={item.x} y={item.y} id={'1'} />
+                <SignMaskDot
+                  key={index}
+                  x={item.x}
+                  y={item.y}
+                  id={item.groupId}
+                  dotId={item.dotId}
+                />
               ))}
             </svg>
           </div>
