@@ -1,19 +1,14 @@
 import React, { useContext } from 'react';
-import PositionAndSizeSetting from '@/pages/Editor/components/PositionAndSizeSetting';
-import { Input, InputNumber, Select } from 'antd';
+import { InputNumber, Switch, Slider } from 'antd';
 import { StoreContext, TYPES } from '@/store';
 import { findElementById } from '@/utils/findElementById';
-import {
-  fontFamilyOptions,
-  fontWeightOptions,
-  textAlignOption,
-} from './params';
+import TitleBlock from '@/pages/Editor/components/TitleBlock';
 
 const StyleBlock: React.FC = () => {
   const { state, dispatch } = useContext(StoreContext);
   const { schema, activeKey } = state;
   const { element } = findElementById(activeKey, schema);
-  const { style, attribute } = element.data;
+  const { line, animation, pipe, background } = element.data;
   const setNodeAttribute = (
     val: string | number,
     module: string,
@@ -25,112 +20,133 @@ const StyleBlock: React.FC = () => {
   };
   return (
     <div className="setting-container">
-      <PositionAndSizeSetting />
-      <div className="inline-block-item">
-        <div className="label">文字内容</div>
-        <div className="content">
-          <Input
-            placeholder="请输入"
-            value={attribute.text}
-            onInput={(e: any) =>
-              setNodeAttribute(e.target.value, 'attribute', 'text')
-            }
-          />
+      <TitleBlock title="线条">
+        <div className="inline-block-item">
+          <div className="label">实线 / 虚线</div>
+          <div className="content">
+            <Switch checked={line.type !== 'solid'} />
+          </div>
         </div>
-      </div>
-      <div className="inline-block-item">
-        <div className="label">字体</div>
-        <div className="content">
-          <Select
-            placeholder="请输入"
-            className="fill"
-            onChange={(value) => setNodeAttribute(value, 'style', 'fontFamily')}
-            options={fontFamilyOptions}
-            value={style.fontFamily}
-          />
+        <div className="inline-block-item">
+          <div className="label">线条颜色</div>
+          <div className="content">
+            <input type="color" value={line.color} />
+          </div>
         </div>
-      </div>
-      <div className="inline-block-item">
-        <div className="label">字号</div>
-        <div className="content">
-          <InputNumber
-            placeholder="请输入"
-            className="fill"
-            onChange={(value) => setNodeAttribute(value, 'style', 'fontSize')}
-            value={style.fontSize}
-          />
+        <div className="inline-block-item">
+          <div className="label">线条透明度</div>
+          <div className="content">
+            <Slider defaultValue={30} />
+          </div>
         </div>
-      </div>
-      <div className="inline-block-item">
-        <div className="label">颜色</div>
-        <div className="content">
-          <input
-            type="color"
-            value={style.color}
-            onChange={(e) => setNodeAttribute(e.target.value, 'style', 'color')}
-          />
+        <div className="inline-block-item">
+          <div className="label">线宽</div>
+          <div className="content">
+            <InputNumber
+              className="fill"
+              placeholder="请输入"
+              value={line.width}
+            />
+          </div>
         </div>
-      </div>
-      <div className="inline-block-item">
-        <div className="label">字体粗细</div>
-        <div className="content">
-          <Select
-            placeholder="请输入"
-            className="fill"
-            onChange={(value) => setNodeAttribute(value, 'style', 'fontWeight')}
-            options={fontWeightOptions}
-            value={style.fontWeight}
-          />
+        <div className="inline-block-item">
+          <div className="label">虚线线长</div>
+          <div className="content">
+            <InputNumber
+              className="fill"
+              placeholder="请输入"
+              value={line.dashedLength}
+            />
+          </div>
         </div>
-      </div>
-      <div className="inline-block-item">
-        <div className="label">文本间距</div>
-        <div className="content">
-          <InputNumber
-            placeholder="请输入"
-            className="fill"
-            onChange={(value) =>
-              setNodeAttribute(value, 'style', 'letterSpacing')
-            }
-            value={style.letterSpacing}
-          />
+        <div className="inline-block-item">
+          <div className="label">虚线间隔</div>
+          <div className="content">
+            <InputNumber
+              className="fill"
+              placeholder="请输入"
+              value={line.dashedInterval}
+            />
+          </div>
         </div>
-      </div>
-      <div className="inline-block-item">
-        <div className="label">行高</div>
-        <div className="content">
-          <InputNumber
-            placeholder="请输入"
-            className="fill"
-            onChange={(value) => setNodeAttribute(value, 'style', 'lineHeight')}
-            value={style.lineHeight}
-          />
+      </TitleBlock>
+      <TitleBlock title="动画">
+        <div className="inline-block-item">
+          <div className="label">流动</div>
+          <div className="content">
+            <Switch checked={animation.flow} />
+          </div>
         </div>
-      </div>
-      <div className="inline-block-item">
-        <div className="label">背景颜色</div>
-        <div className="content">
-          <input
-            type="color"
-            value={style.backgroundColor}
-            onChange={(e) =>
-              setNodeAttribute(e.target.value, 'style', 'backgroundColor')
-            }
-          />
+        <div className="inline-block-item">
+          <div className="label">流动速度</div>
+          <div className="content">
+            <InputNumber
+              className="fill"
+              placeholder="请输入"
+              value={animation.flowVelocity}
+            />
+          </div>
         </div>
-      </div>
-      <div className="inline-block-item">
-        <div className="label">对齐方式</div>
-        <div className="content">
-          <Select
-            placeholder="请输入"
-            className="fill"
-            onChange={(value) => setNodeAttribute(value, 'style', 'textAlign')}
-            options={textAlignOption}
-            value={style.textAlign}
-          />
+      </TitleBlock>
+      <TitleBlock title="管道">
+        <div className="inline-block-item">
+          <div className="label">是否显示</div>
+          <div className="content">
+            <Switch checked={pipe.visible} />
+          </div>
         </div>
-      </div>
+        <div className="inline-block-item">
+          <div className="label">管道颜色</div>
+          <div className="content">
+            <input type="color" value={pipe.color} />
+          </div>
+        </div>
+        <div className="inline-block-item">
+          <div className="label">管道透明度</div>
+          <div className="content">
+            <Slider defaultValue={30} />
+          </div>
+        </div>
+        <div className="inline-block-item">
+          <div className="label">管道宽度</div>
+          <div className="content">
+            <InputNumber
+              className="fill"
+              placeholder="请输入"
+              value={pipe.width}
+            />
+          </div>
+        </div>
+      </TitleBlock>
+      <TitleBlock title="背景">
+        <div className="inline-block-item">
+          <div className="label">是否显示</div>
+          <div className="content">
+            <Switch />
+          </div>
+        </div>
+        <div className="inline-block-item">
+          <div className="label">背景颜色</div>
+          <div className="content">
+            <input
+              type="color"
+              // value={style.color}
+            />
+          </div>
+        </div>
+        <div className="inline-block-item">
+          <div className="label">背景透明度</div>
+          <div className="content">
+            <Slider defaultValue={30} />
+          </div>
+        </div>
+        <div className="inline-block-item">
+          <div className="label">背景宽度</div>
+          <div className="content">
+            <InputNumber className="fill" placeholder="请输入" />
+          </div>
+        </div>
+      </TitleBlock>
     </div>
   );
 };

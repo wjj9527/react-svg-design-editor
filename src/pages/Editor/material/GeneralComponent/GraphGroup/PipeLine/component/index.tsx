@@ -14,6 +14,12 @@ interface Props {
   x: number;
   y: number;
   id: string;
+  data: {
+    line: any;
+    animation: any;
+    pipe: any;
+    background: any;
+  };
 }
 //获取圆心切点坐标与斜率
 const getEndpoint = (
@@ -66,9 +72,14 @@ const isPointOnLine = (
   // 判断点是否在直线上
   return Math.abs(y3 - (k * x3 + b)) < Number.EPSILON;
 };
-const PipeLine: React.FC<Props> = ({ path, stokeWidth, id }) => {
+const PipeLine: React.FC<Props> = ({ path, stokeWidth, id, data }) => {
   const { state, dispatch } = useContext(StoreContext);
   const { schema, activeKey } = state;
+  const { line, animation, pipe, background } = data;
+  const animationStyle = animation.flow
+    ? { animation: `path-animation ${animation.flowVelocity}s linear infinite` }
+    : {};
+
   let dStr = '';
   for (let i = 0; i < path.length; i++) {
     const { x, y, type } = path[i];
@@ -136,40 +147,66 @@ const PipeLine: React.FC<Props> = ({ path, stokeWidth, id }) => {
       value: { id, data: { x, y, width, height } },
     });
   }, [schema]);
+
   return (
     <g style={{ border: '1px solid red' }}>
-      <path
-        stroke="rgba(250,250,250,.2)"
-        strokeWidth={stokeWidth}
-        fill="none"
-        d={dStr}
-      />
-      <path
-        stroke="rgba(250,250,250,.2)"
-        strokeWidth={20}
-        fill="none"
-        d={dStr}
-      />
-      <path stroke="#122C45" strokeWidth="15" fill="none" d={dStr} />
-      {/*选中出现*/}
-      {activeKey === id && (
+      <defs>
+        <filter
+          className="blurs-filter"
+          x="-1"
+          y="-1"
+          filterUnits="userSpaceOnUse"
+          id={`filter-blurs-${id}`}
+        >
+          <feGaussianBlur stdDeviation="3.6" result="offset-blur" />
+          <feComposite
+            operator="out"
+            in="SourceGraphic"
+            in2="offset-blur"
+            result="inverse"
+          />
+          <feFlood floodColor={pipe.color} result="color" />
+          <feMorphology operator="dilate" radius="4" />
+          <feComposite operator="in" in="color" in2="inverse" result="shadow" />
+        </filter>
+      </defs>
+      {background.visible && (
         <path
-          stroke="rgba(250,250,250,.2)"
-          strokeWidth={20}
+          stroke={background.color}
+          strokeWidth={background.width}
+          style={{ opacity: background.opacity }}
           fill="none"
           d={dStr}
         />
       )}
+      {/*选中出现*/}
+      {activeKey === id && (
+        <path
+          stroke="rgba(250,250,250,.2)"
+          strokeWidth={stokeWidth + 4}
+          fill="none"
+          d={dStr}
+        />
+      )}
+      {pipe.visible && (
+        <path
+          stroke="#122C45"
+          style={{ opacity: pipe.opacity }}
+          strokeWidth={pipe.width}
+          fill="none"
+          d={dStr}
+          filter={`url(#filter-blurs-${id})`}
+        />
+      )}
       <path
         className="path"
-        style={{ animation: `path-animation 25s linear infinite` }}
-        stroke="rgba(90,255,57,.5)"
-        strokeWidth="2"
-        strokeDasharray="40,50"
+        style={animationStyle}
+        stroke={line.color}
+        strokeWidth={line.width}
+        strokeDasharray={`${line.dashedLength} ${line.dashedInterval}`}
         strokeDashoffset="1000"
         fill="none"
         d={dStr}
-        markerEnd="url(#marker-dash)"
       />
     </g>
   );

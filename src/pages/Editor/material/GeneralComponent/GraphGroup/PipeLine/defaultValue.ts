@@ -16,18 +16,29 @@ export default {
   type: 'PipeLine',
   label: '管道',
   data: {
-    attribute: {
-      text: '文本',
+    line: {
+      type: 'solid',
+      color: '#3dfd46',
+      opacity: 1,
+      width: 5,
+      dashedLength: 40,
+      dashedInterval: 50,
     },
-    style: {
-      lineHeight: 1,
-      fontSize: 14,
-      color: '#ffffff',
-      fontWeight: 'normal',
-      fontFamily: '微软雅黑',
-      letterSpacing: 0,
-      backgroundColor: '#4444FF',
-      textAlign: 'center',
+    animation: {
+      flow: true,
+      flowVelocity: 25,
+    },
+    pipe: {
+      visible: true,
+      color: '#3dfd46',
+      opacity: 1,
+      width: 20,
+    },
+    background: {
+      visible: true,
+      color: '#122C45',
+      opacity: 1,
+      width: 20,
     },
   },
 };
