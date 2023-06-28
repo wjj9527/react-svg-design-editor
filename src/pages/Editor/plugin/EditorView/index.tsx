@@ -218,8 +218,8 @@ const EditorView: React.FC = () => {
       });
       if (!isSignMaskDotBlock) {
         if (isKeydownCtrlKey) {
-          // @ts-ignore
           setMaskArray(
+            // @ts-ignore
             signPipeLineDot(nodes, baseX, baseY, maskArray, dispatch),
           );
         }
@@ -252,8 +252,8 @@ const EditorView: React.FC = () => {
   //设置画布属性
   const svgCanvasSetting = () => {
     if (SVGContainerRef.current) {
-      //@ts-ignore
       const { left, top, width, height } =
+        //@ts-ignore
         SVGContainerRef.current.getBoundingClientRect();
       dispatch({
         type: TYPES.SET_SVG_CANVAS_STYLE,
