@@ -1,50 +1,51 @@
-export type StateType = any
-const state:StateType = {
-  schema:{
-    type:'root',
-    id:0,
-    itemNodes:[]
+export type StateType = any;
+const state: StateType = {
+  schema: {
+    type: 'root',
+    id: 0,
+    itemNodes: [],
   },
   //当前选中节点信息(resize drag)
-  currentAction:{},
+  currentAction: {},
   //当前选中ID
-  activeKey:0,
+  activeKey: 0,
   //画布偏移量
-  svgOffset:{
-    x:0,
-    y:0
+  svgOffset: {
+    x: 0,
+    y: 0,
   },
   //画布长宽信息
-  svgStyle:{
-    height:0,
-    width:0
+  svgStyle: {
+    height: 0,
+    width: 0,
   },
   //基线坐标列表
-  scalePosition:{
-    x:[],
-    y:[]
+  scalePosition: {
+    x: [],
+    y: [],
   },
-  scaleHoverLine:{
-    x:0,
-    y:0,
-    xShow:false,
-    yShow:false,
+  scaleHoverLine: {
+    x: 0,
+    y: 0,
+    xShow: false,
+    yShow: false,
   },
   //是否显示基线
-  scaleVisible:true,
+  scaleVisible: true,
   //是否显示页面选择器
-  pageSelectionVisible:false,
+  pageSelectionVisible: false,
   //是否显示图层选择器
-  nodeSelectionVisible:false,
+  nodeSelectionVisible: false,
   //是否显示左侧抽屉
-  leftDrawerVisible:true,
+  leftDrawerVisible: true,
   //跟随弹窗信息
-  followMenuConfig:{
-    x:0,
-    y:0,
-    visible:false
+  followMenuConfig: {
+    x: 0,
+    y: 0,
+    visible: false,
   },
   //是否显示右侧配置弹窗
-  rightDrawerVisible:true
-}
-export default state
+  rightDrawerVisible: true,
+  isKeydownCtrlKey: false,
+};
+export default state;

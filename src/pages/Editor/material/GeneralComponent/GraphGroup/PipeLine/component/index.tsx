@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-
 import { StoreContext, TYPES } from '@/store';
 import './style.less';
 type PathItem = {
@@ -8,6 +7,7 @@ type PathItem = {
   y: number;
   id?: string;
 };
+
 interface Props {
   path: PathItem[];
   stokeWidth: number;
@@ -15,7 +15,7 @@ interface Props {
   y: number;
   id: string;
 }
-
+//获取圆心切点坐标与斜率
 const getEndpoint = (
   x1: number,
   y1: number,
@@ -34,6 +34,7 @@ const getEndpoint = (
   const endpointY = y1 + (l2 * v2y) / v2Length;
   return { x: endpointX, y: endpointY, slope1: slope1, slope2: slope2 };
 };
+//计算直线交点
 const getIntersectionPoint = (
   x1: number,
   y1: number,
@@ -46,24 +47,45 @@ const getIntersectionPoint = (
   const y = k1 * (x - x1) + y1;
   return { x: x, y: y };
 };
+//判断点是否在线上
+const isPointOnLine = (
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  x3: number,
+  y3: number,
+) => {
+  // 如果 x2 - x1 = 0，则直线垂直于 x 轴，斜率不存在
+  if (x2 - x1 === 0) {
+    return x3 === x1 && y3 >= Math.min(y1, y2) && y3 <= Math.max(y1, y2);
+  }
+  // 否则，求出直线的斜率 k 和截距 b
+  const k = (y2 - y1) / (x2 - x1);
+  const b = y1 - k * x1;
+  // 判断点是否在直线上
+  return Math.abs(y3 - (k * x3 + b)) < Number.EPSILON;
+};
 const PipeLine: React.FC<Props> = ({ path, stokeWidth, id }) => {
   const { state, dispatch } = useContext(StoreContext);
-  const { schema } = state;
+  const { schema, activeKey } = state;
   let dStr = '';
   for (let i = 0; i < path.length; i++) {
     const { x, y, type } = path[i];
-
     if (i !== 0 && i !== path.length - 1) {
       const startX = path[i - 1].x;
       const startY = path[i - 1].y;
       const endX = path[i + 1].x;
       const endY = path[i + 1].y;
+      const isOnLine = isPointOnLine(startX, startY, endX, endY, x, y);
       if (
         (startX === endX && startX === x) ||
-        (startY === endY && startY === y)
+        (startY === endY && startY === y) ||
+        isOnLine
       ) {
         dStr += `${type} ${x} ${y} `;
       } else {
+        //交点贝塞尔曲线计算
         let p1 = getEndpoint(x, y, startX, startY, -0.01);
         let p2 = getEndpoint(x, y, endX, endY, 0.01);
         let p3 = getIntersectionPoint(
@@ -128,14 +150,16 @@ const PipeLine: React.FC<Props> = ({ path, stokeWidth, id }) => {
         fill="none"
         d={dStr}
       />
-      <path
-        stroke="#122C45"
-        stroke-width="15"
-        fill="none"
-        z-level="3"
-        d={dStr}
-        filter="url(#filter-blurs-v0-828896131)"
-      />
+      <path stroke="#122C45" strokeWidth="15" fill="none" d={dStr} />
+      {/*选中出现*/}
+      {activeKey === id && (
+        <path
+          stroke="rgba(250,250,250,.2)"
+          strokeWidth={20}
+          fill="none"
+          d={dStr}
+        />
+      )}
       <path
         className="path"
         style={{ animation: `path-animation 25s linear infinite` }}

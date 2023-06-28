@@ -33,6 +33,7 @@ const EditorView: React.FC = () => {
     pageSelectionVisible,
     nodeSelectionVisible,
     svgOffset,
+    isKeydownCtrlKey,
   } = state;
   const nodes = state.schema.itemNodes;
   const [isCanMove, setIsCanMove] = useState(false);
@@ -204,7 +205,6 @@ const EditorView: React.FC = () => {
     if (isEmptyBlock) {
       dispatch({ type: TYPES.RELIEVE_DEFAULT_BLOCK_ELEMENT_GROUP });
     }
-    console.log(!isEmptyBlock && blockConfig.type === 'PipeLine');
     //判断当前区域是否有管道
     if (!isEmptyBlock && blockConfig.type === 'PipeLine') {
       // signMask区域不做打点操作，避免重复
@@ -217,8 +217,13 @@ const EditorView: React.FC = () => {
         }
       });
       if (!isSignMaskDotBlock) {
-        // @ts-ignore
-        setMaskArray(signPipeLineDot(nodes, baseX, baseY, maskArray, dispatch));
+        if (isKeydownCtrlKey) {
+          // @ts-ignore
+          setMaskArray(
+            signPipeLineDot(nodes, baseX, baseY, maskArray, dispatch),
+          );
+        }
+        dispatch({ type: TYPES.SET_ACTIVE_KEY, value: { id: blockConfig.id } });
       }
     }
   };
@@ -311,7 +316,6 @@ const EditorView: React.FC = () => {
         // @ts-ignore
         setMaskArray([...maskArray, start, end]);
       }
-
       dispatch({ type: TYPES.CREATE_NEW_NODE_TO_SCHEMA, value });
     },
   });

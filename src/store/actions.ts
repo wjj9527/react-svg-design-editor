@@ -150,26 +150,6 @@ const actions: ActionsType = {
         );
         node.x = pageX - svgOffset.x - offsetX;
         node.y = pageY - svgOffset.y - offsetY;
-        // const [x1,y1] = [node.x,node.y]
-        // const [x2,y2] = [path[nodeIndex-1].x,path[nodeIndex-1].y]
-        // function getEndpoint(x1, y1, x2, y2, l2) {
-        //   const v1x = x2 - x1;
-        //   const v1y = y2 - y1;
-        //   const v2x = y1 - y2;
-        //   const v2y = x2 - x1;
-        //   const v2Length = Math.sqrt(v2x * v2x + v2y * v2y);
-        //   const slope1 = v1y / v1x; // 直线l1的斜率
-        //   const slope2 = -v1x / v1y; // 直线l2的斜率
-        //   const endpointX = x1 + l2 * v2x / v2Length;
-        //   const endpointY = y1 + l2 * v2y / v2Length;
-        //   return {x: endpointX, y: endpointY, slope1: slope1, slope2: slope2};
-        // }
-        // function getIntersectionPoint(x1, y1, k1, x2, y2, k2) {
-        //   const x = (k1 * x1 - y1 - k2 * x2 + y2) / (k1 - k2);
-        //   const y = k1 * (x - x1) + y1;
-        //   return {x: x, y: y};
-        // }
-        // console.log(getEndpoint(x1, y1, x2, y2, 5))
       }
       state.schema = JSON.parse(JSON.stringify(state.schema));
     }
@@ -298,9 +278,10 @@ const actions: ActionsType = {
     const { path } = element;
     const insertIndex =
       path.findIndex((item: any) => item.dotId === startId) + 1;
-    console.log(insertIndex);
     path.splice(insertIndex, 0, node);
-    console.log(path);
+  },
+  [TYPES.SET_IS_KEYDOWN_CTRL_KEY_STATUS]: (state, action) => {
+    state.isKeydownCtrlKey = action.value.status;
   },
 };
 export default actions;
