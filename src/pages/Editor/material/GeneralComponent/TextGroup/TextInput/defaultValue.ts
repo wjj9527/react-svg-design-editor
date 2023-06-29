@@ -6,6 +6,7 @@ export default {
   ratio: null,
   type: 'TextInput',
   label: '输入框',
+  icon: 'icon-shurukuang',
   data: {
     attribute: {
       text: '输入框',

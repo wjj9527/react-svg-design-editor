@@ -175,7 +175,9 @@ const EditorView: React.FC = () => {
     });
 
     //判断当前区域是否存在组或者元素
-    const itemNodes = state.schema.itemNodes;
+    const itemNodes = JSON.parse(
+      JSON.stringify(state.schema.itemNodes.reverse()),
+    );
     const { pageX, pageY } = event;
     // @ts-ignore
     const { left, top } = SVGContainerRef.current.getBoundingClientRect();
@@ -217,25 +219,38 @@ const EditorView: React.FC = () => {
         }
       });
       if (!isSignMaskDotBlock) {
-        if (isKeydownCtrlKey) {
-          setMaskArray(
-            // @ts-ignore
-            signPipeLineDot(nodes, baseX, baseY, maskArray, dispatch),
-          );
-        }
-        dispatch({ type: TYPES.SET_ACTIVE_KEY, value: { id: blockConfig.id } });
-
-        const currentAction = {
-          target: 'PIPE_LINE',
-          type: 'MOVE',
-          id: blockConfig.id,
-          pageX,
-          pageY,
-          baseX,
-          baseY,
-          cachePath: JSON.parse(JSON.stringify(blockConfig.path)),
-        };
-        dispatch({ type: TYPES.SET_CURRENT_ACTION, value: { currentAction } });
+        const checkHandle = dispatch.bind(this, {
+          type: TYPES.SET_ACTIVE_KEY,
+          value: { id: blockConfig.id },
+        });
+        const activeHandle = dispatch.bind(this, {
+          type: TYPES.SET_CURRENT_ACTION,
+          value: {
+            currentAction: {
+              target: 'PIPE_LINE',
+              type: 'MOVE',
+              id: blockConfig.id,
+              pageX,
+              pageY,
+              baseX,
+              baseY,
+              cachePath: JSON.parse(JSON.stringify(blockConfig.path)),
+            },
+          },
+        });
+        setMaskArray(
+          // @ts-ignore
+          signPipeLineDot(
+            nodes,
+            baseX,
+            baseY,
+            maskArray,
+            dispatch,
+            isKeydownCtrlKey,
+            checkHandle,
+            activeHandle,
+          ),
+        );
       }
     }
   };

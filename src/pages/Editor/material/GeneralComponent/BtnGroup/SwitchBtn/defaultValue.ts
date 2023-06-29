@@ -6,6 +6,7 @@ export default {
   ratio: null,
   type: 'SwitchBtn',
   label: '开关按钮',
+  icon: 'icon-kaiguananniu',
   data: {
     attribute: {
       text: '文本',

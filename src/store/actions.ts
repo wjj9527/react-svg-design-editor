@@ -219,6 +219,7 @@ const actions: ActionsType = {
       const blockGroup = {
         id: createUUID(),
         type: 'BLOCK_GROUP',
+        label: '组合',
         isGroup: false,
         itemNodes: passNodes,
       };
@@ -251,6 +252,7 @@ const actions: ActionsType = {
       itemNodes.splice(deleteIndex, 1);
     }
     itemNodes = [...itemNodes, ...nodesFlatArray];
+    console.log(itemNodes);
     schema.itemNodes = itemNodes;
   },
   //更具id设置节点信息

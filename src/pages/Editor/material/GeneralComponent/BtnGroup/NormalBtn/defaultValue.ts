@@ -6,6 +6,7 @@ export default {
   ratio: null,
   type: 'NormalBtn',
   label: '按钮',
+  icon: 'icon-anniu',
   data: {
     attribute: {
       text: '文本',

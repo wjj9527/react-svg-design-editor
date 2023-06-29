@@ -158,7 +158,7 @@ const GraduatedScale: React.FC = ({ children }) => {
                 className="scale-hover-text"
                 style={{ left: scaleHoverLine.x + 4 || 0 }}
               >
-                {parseInt(scaleHoverLine.x)}
+                {parseInt(scaleHoverLine.x).toString()}
               </div>
               {scalePosition.x.map((item: number) => (
                 <div
@@ -192,7 +192,7 @@ const GraduatedScale: React.FC = ({ children }) => {
                 className="scale-hover-text"
                 style={{ top: scaleHoverLine.y + 15 || 0 }}
               >
-                {parseInt(scaleHoverLine.y)}
+                {parseInt(scaleHoverLine.y).toString()}
               </div>
               {scalePosition.y.map((item: number) => (
                 <div

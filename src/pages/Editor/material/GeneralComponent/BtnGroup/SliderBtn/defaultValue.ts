@@ -6,6 +6,7 @@ export default {
   ratio: null,
   type: 'SliderBtn',
   label: '划块按钮',
+  icon: 'icon-huakuaianniu',
   data: {
     attribute: {
       text: '文本',

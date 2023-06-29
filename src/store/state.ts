@@ -35,7 +35,7 @@ const state: StateType = {
   //是否显示页面选择器
   pageSelectionVisible: false,
   //是否显示图层选择器
-  nodeSelectionVisible: false,
+  nodeSelectionVisible: true,
   //是否显示左侧抽屉
   leftDrawerVisible: true,
   //跟随弹窗信息

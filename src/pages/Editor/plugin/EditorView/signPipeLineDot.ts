@@ -7,6 +7,9 @@ const signPipeLineDot = (
   baseY: number,
   maskArray: [],
   dispatch: any,
+  isKeydownCtrlKey: boolean,
+  checkHandle: any,
+  activeHandle: any,
 ) => {
   let dot = [...maskArray];
   //获取所有管道
@@ -66,15 +69,21 @@ const signPipeLineDot = (
     }
     if (startId) {
       const node = { type: 'L', x, y, dotId: createUUID(), groupId: id };
+      // 打点操作
       // 此处在schema中插入当前点
-      if (dispatch) {
+      if (dispatch && isKeydownCtrlKey) {
         dispatch({
           type: TYPES.INSERT_NEW_NODE_TO_PIPE_LINE_GROUP,
           value: { id, startId, node },
         });
+        // @ts-ignore
+        dot.push(node);
       }
-      // @ts-ignore
-      dot.push(node);
+      //选中移动操作
+      if (!isKeydownCtrlKey) {
+        activeHandle();
+        checkHandle();
+      }
       break;
     }
   }

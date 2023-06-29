@@ -6,6 +6,7 @@ export default {
   ratio: null,
   type: 'Text',
   label: '文本',
+  icon: 'icon-wenben1',
   data: {
     attribute: {
       text: '文本',

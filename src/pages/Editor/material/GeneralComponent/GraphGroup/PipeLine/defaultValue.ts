@@ -15,6 +15,7 @@ export default {
   ratio: null,
   type: 'PipeLine',
   label: '管道',
+  icon: 'icon-guandao',
   data: {
     line: {
       type: 'dashed',
