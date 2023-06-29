@@ -11,13 +11,13 @@ export default {
       y: 0,
     },
   ],
-  stokeWidth: 10,
+  stokeWidth: 20,
   ratio: null,
   type: 'PipeLine',
   label: '管道',
   data: {
     line: {
-      type: 'solid',
+      type: 'dashed',
       color: '#3dfd46',
       opacity: 1,
       width: 5,

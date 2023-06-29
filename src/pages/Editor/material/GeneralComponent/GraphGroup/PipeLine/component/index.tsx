@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { StoreContext, TYPES } from '@/store';
 import './style.less';
+
 type PathItem = {
   type: string;
   x: number;
@@ -21,6 +22,7 @@ interface Props {
     background: any;
   };
 }
+
 //获取圆心切点坐标与斜率
 const getEndpoint = (
   x1: number,
@@ -77,8 +79,13 @@ const PipeLine: React.FC<Props> = ({ path, stokeWidth, id, data }) => {
   const { schema, activeKey } = state;
   const { line, animation, pipe, background } = data;
   const animationStyle = animation.flow
-    ? { animation: `path-animation ${animation.flowVelocity}s linear infinite` }
-    : {};
+    ? {
+        animation: `path-animation ${animation.flowVelocity}s linear infinite`,
+        opacity: line.opacity,
+      }
+    : {
+        opacity: line.opacity,
+      };
 
   let dStr = '';
   for (let i = 0; i < path.length; i++) {
@@ -183,7 +190,7 @@ const PipeLine: React.FC<Props> = ({ path, stokeWidth, id, data }) => {
       {activeKey === id && (
         <path
           stroke="rgba(250,250,250,.2)"
-          strokeWidth={stokeWidth + 4}
+          strokeWidth={stokeWidth + 8}
           fill="none"
           d={dStr}
         />
@@ -198,16 +205,27 @@ const PipeLine: React.FC<Props> = ({ path, stokeWidth, id, data }) => {
           filter={`url(#filter-blurs-${id})`}
         />
       )}
-      <path
-        className="path"
-        style={animationStyle}
-        stroke={line.color}
-        strokeWidth={line.width}
-        strokeDasharray={`${line.dashedLength} ${line.dashedInterval}`}
-        strokeDashoffset="1000"
-        fill="none"
-        d={dStr}
-      />
+      {line.type === 'dashed' ? (
+        <path
+          className="path"
+          style={animationStyle}
+          stroke={line.color}
+          strokeWidth={line.width}
+          strokeDasharray={`${line.dashedLength} ${line.dashedInterval}`}
+          strokeDashoffset="1000"
+          fill="none"
+          d={dStr}
+        />
+      ) : (
+        <path
+          className="path"
+          style={animationStyle}
+          stroke={line.color}
+          strokeWidth={line.width}
+          fill="none"
+          d={dStr}
+        />
+      )}
     </g>
   );
 };

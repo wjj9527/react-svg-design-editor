@@ -15,7 +15,6 @@ import {
 import { useDrop } from 'react-dnd';
 import createUUID from '@/utils/UUID';
 
-let pageResize: any = null;
 type SvgBlockContainerConfig = {
   x: number;
   y: number;
@@ -34,6 +33,7 @@ const EditorView: React.FC = () => {
     nodeSelectionVisible,
     svgOffset,
     isKeydownCtrlKey,
+    isPipeLineMove,
   } = state;
   const nodes = state.schema.itemNodes;
   const [isCanMove, setIsCanMove] = useState(false);
@@ -73,7 +73,6 @@ const EditorView: React.FC = () => {
       }
     } else if (isCanMove) {
       //划组操作 千万不要动！！！！！
-
       const config = { ...svgBlockContainerConfig };
       const { x, y } = config;
       const baseY = pageY - svgOffset.y;
@@ -88,6 +87,7 @@ const EditorView: React.FC = () => {
           setSvgBlockContainerConfig(config);
         } else if (height < 0 && width < 0) {
           const sx = baseX;
+
           const sy = baseY;
           const height = svgStartActionBasePoint.y - baseY;
           const width = svgStartActionBasePoint.x - baseX;
@@ -224,12 +224,25 @@ const EditorView: React.FC = () => {
           );
         }
         dispatch({ type: TYPES.SET_ACTIVE_KEY, value: { id: blockConfig.id } });
+
+        const currentAction = {
+          target: 'PIPE_LINE',
+          type: 'MOVE',
+          id: blockConfig.id,
+          pageX,
+          pageY,
+          baseX,
+          baseY,
+          cachePath: JSON.parse(JSON.stringify(blockConfig.path)),
+        };
+        dispatch({ type: TYPES.SET_CURRENT_ACTION, value: { currentAction } });
       }
     }
   };
   //鼠标弹起不可移动
   const handleMouseUp = () => {
     setIsCanMove(false);
+    dispatch({ type: TYPES.STOP_PIPE_LINE_MOVE });
     if (Object.keys(currentAction).length) {
       dispatch({
         type: TYPES.SET_CURRENT_ACTION,
@@ -321,14 +334,20 @@ const EditorView: React.FC = () => {
   });
   useEffect(() => {
     svgCanvasSetting();
-    if (!pageResize) {
-      pageResize = window.addEventListener('resize', svgCanvasSetting);
-    }
+    window.addEventListener('resize', svgCanvasSetting);
     return () => {
       window.removeEventListener('resize', svgCanvasSetting);
-      pageResize = null;
     };
   }, [pageSelectionVisible, nodeSelectionVisible]);
+  useEffect(() => {
+    if (isPipeLineMove) {
+      const paths = nodes
+        .filter((item: any) => item.type === 'PipeLine')
+        .map((item: any) => item.path)
+        .flat();
+      setMaskArray(paths);
+    }
+  }, [isPipeLineMove, nodes]);
   return (
     <div className="editor-view">
       <FollowMenu />
@@ -371,15 +390,16 @@ const EditorView: React.FC = () => {
                 />
               </g>
               {/*区间划块(选中，非操作)*/}
-              {maskArray.map((item: any, index) => (
-                <SignMaskDot
-                  key={index}
-                  x={item.x}
-                  y={item.y}
-                  id={item.groupId}
-                  dotId={item.dotId}
-                />
-              ))}
+              {!isPipeLineMove &&
+                maskArray.map((item: any, index) => (
+                  <SignMaskDot
+                    key={index}
+                    x={item.x}
+                    y={item.y}
+                    id={item.groupId}
+                    dotId={item.dotId}
+                  />
+                ))}
             </svg>
           </div>
         </div>

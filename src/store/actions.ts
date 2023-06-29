@@ -150,6 +150,18 @@ const actions: ActionsType = {
         );
         node.x = pageX - svgOffset.x - offsetX;
         node.y = pageY - svgOffset.y - offsetY;
+      } else if (type === 'MOVE' && target === 'PIPE_LINE') {
+        const { baseX, baseY, cachePath } = currentAction;
+        const offsetX = pageX - baseX - svgOffset.x;
+        const offsetY = pageY - baseY - svgOffset.y;
+        let path = JSON.parse(JSON.stringify(cachePath));
+        path = path.map((item: any) => {
+          item.x = item.x + offsetX;
+          item.y = item.y + offsetY;
+          return item;
+        });
+        targetNode.path = path;
+        state.isPipeLineMove = true;
       }
       state.schema = JSON.parse(JSON.stringify(state.schema));
     }
@@ -282,6 +294,9 @@ const actions: ActionsType = {
   },
   [TYPES.SET_IS_KEYDOWN_CTRL_KEY_STATUS]: (state, action) => {
     state.isKeydownCtrlKey = action.value.status;
+  },
+  [TYPES.STOP_PIPE_LINE_MOVE]: (state) => {
+    state.isPipeLineMove = false;
   },
 };
 export default actions;

@@ -46,6 +46,9 @@ const state: StateType = {
   },
   //是否显示右侧配置弹窗
   rightDrawerVisible: true,
+  //判断当前是否ctrl按下（全局）
   isKeydownCtrlKey: false,
+  //当前是否管道移动
+  isPipeLineMove: false,
 };
 export default state;
