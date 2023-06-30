@@ -6,8 +6,8 @@ const FollowMenu: React.FC = () => {
   const { state } = useContext(StoreContext);
   const { visible, x, y } = state.followMenuConfig;
   const menuRef = useRef(null);
-  const [pointX, setPointX] = useState(0);
-  const [pointY, setPointY] = useState(0);
+  const [pointX, setPointX] = useState(-200);
+  const [pointY, setPointY] = useState(-500);
   useEffect(() => {
     if (visible) {
       if (menuRef.current) {
@@ -25,6 +25,9 @@ const FollowMenu: React.FC = () => {
             : screenHeight - clientHeight,
         );
       }
+    } else {
+      setPointX(-200);
+      setPointY(-500);
     }
   }, [visible]);
   return visible ? (

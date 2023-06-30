@@ -3,7 +3,7 @@ import './style.less';
 import { StoreContext, TYPES } from '@/store';
 import GraduatedScale from '@/pages/Editor/components/GraduatedScale';
 import SVGScaleLineGroup from '@/pages/Editor/components/SVGScaleLineGroup';
-import BlockGroup from '@/pages/Editor/material/nodes/BlockGroup';
+import BlockGroup from '@/pages/Editor/components/BlockGroup';
 import FollowMenu from '@/pages/Editor/components/FollowMenu';
 import PipeLine from '@/pages/Editor/material/GeneralComponent/GraphGroup/PipeLine/component';
 import signPipeLineDot from '@/pages/Editor/plugin/EditorView/signPipeLineDot';
@@ -25,6 +25,9 @@ type SvgStartActionBasePoint = {
   x: number;
   y: number;
 };
+let mouseX = 0;
+let mouseY = 0;
+let activeKeyCache = '';
 const EditorView: React.FC = () => {
   const { state, dispatch } = useContext(StoreContext);
   const {
@@ -34,6 +37,9 @@ const EditorView: React.FC = () => {
     svgOffset,
     isKeydownCtrlKey,
     isPipeLineMove,
+    isPipeLineNodePaste,
+    copyNodeCache,
+    activeKey,
   } = state;
   const nodes = state.schema.itemNodes;
   const [isCanMove, setIsCanMove] = useState(false);
@@ -56,6 +62,9 @@ const EditorView: React.FC = () => {
   const handleMouseMove = (event: React.MouseEvent) => {
     const { pageX, pageY } = event;
     const isElementHandle = !!Object.keys(currentAction).length;
+    //记录鼠标在屏幕中的位置用于节点插入
+    mouseX = pageX;
+    mouseY = pageY;
     if (isCanMove && isElementHandle) {
       dispatch({
         type: TYPES.SET_NODE_RESIZE_MOVE_ATTRIBUTE,
@@ -175,9 +184,7 @@ const EditorView: React.FC = () => {
     });
 
     //判断当前区域是否存在组或者元素
-    const itemNodes = JSON.parse(
-      JSON.stringify(state.schema.itemNodes.reverse()),
-    );
+    const itemNodes = state.schema.itemNodes;
     const { pageX, pageY } = event;
     // @ts-ignore
     const { left, top } = SVGContainerRef.current.getBoundingClientRect();
@@ -189,7 +196,7 @@ const EditorView: React.FC = () => {
       path: [],
       stokeWidth: 10,
     };
-    for (let i = 0; i < itemNodes.length; i++) {
+    for (let i = itemNodes.length - 1; i >= 0; i--) {
       const { x, y, width, height, id, type, path, stokeWidth } = itemNodes[i];
       if (baseX > x && baseX < x + width && baseY > y && baseY < y + height) {
         blockConfig = {
@@ -239,11 +246,11 @@ const EditorView: React.FC = () => {
           },
         });
         setMaskArray(
-          // @ts-ignore
           signPipeLineDot(
             nodes,
             baseX,
             baseY,
+            // @ts-ignore
             maskArray,
             dispatch,
             isKeydownCtrlKey,
@@ -347,22 +354,56 @@ const EditorView: React.FC = () => {
       dispatch({ type: TYPES.CREATE_NEW_NODE_TO_SCHEMA, value });
     },
   });
+  const keydownEvent = (event: React.KeyboardEvent) => {
+    console.log(event.key);
+    //删除操作
+    if (event.key === 'Delete') {
+      dispatch({ type: TYPES.DELETE_NODE_BY_ID });
+    }
+    if (event.ctrlKey) {
+      //节点复制
+      if (event.key === 'c') {
+        dispatch({
+          type: TYPES.SET_COPY_NODE_CACHE,
+          value: { id: activeKeyCache },
+        });
+      }
+      //节点粘贴
+      if (event.key === 'v') {
+        const { left, top } =
+          //@ts-ignore
+          SVGContainerRef.current.getBoundingClientRect();
+        const x = mouseX - left;
+        const y = mouseY - top;
+        dispatch({ type: TYPES.INSET_NODE_TO_TREE, value: { x, y } });
+      }
+    }
+  };
   useEffect(() => {
     svgCanvasSetting();
     window.addEventListener('resize', svgCanvasSetting);
+    // @ts-ignore
+    window.addEventListener('keydown', keydownEvent);
     return () => {
       window.removeEventListener('resize', svgCanvasSetting);
+      // @ts-ignore
+      window.removeEventListener('keydown', keydownEvent);
     };
   }, [pageSelectionVisible, nodeSelectionVisible]);
   useEffect(() => {
-    if (isPipeLineMove) {
+    if (isPipeLineMove || isPipeLineNodePaste) {
       const paths = nodes
         .filter((item: any) => item.type === 'PipeLine')
         .map((item: any) => item.path)
         .flat();
       setMaskArray(paths);
+      dispatch({ type: TYPES.STOP_PIPE_LINE_PASTE });
     }
-  }, [isPipeLineMove, nodes]);
+  }, [isPipeLineMove, nodes, isPipeLineNodePaste]);
+  //单独做处理，全局事件无法获取hooks内部属性，但是可以更改，使用全局变量
+  useEffect(() => {
+    activeKeyCache = activeKey;
+  }, [activeKey]);
   return (
     <div className="editor-view">
       <FollowMenu />

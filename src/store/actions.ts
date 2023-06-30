@@ -3,6 +3,7 @@ import { StateType } from '@/store/state';
 import { MINIMUM_DISPLACEMENT } from '@/global';
 import createUUID from '@/utils/UUID';
 import { findElementById } from '@/utils/findElementById';
+
 type ValueOf<T> = T[keyof T];
 type Types = ValueOf<typeof TYPES>;
 type ActionProps = {
@@ -252,7 +253,6 @@ const actions: ActionsType = {
       itemNodes.splice(deleteIndex, 1);
     }
     itemNodes = [...itemNodes, ...nodesFlatArray];
-    console.log(itemNodes);
     schema.itemNodes = itemNodes;
   },
   //更具id设置节点信息
@@ -299,6 +299,105 @@ const actions: ActionsType = {
   },
   [TYPES.STOP_PIPE_LINE_MOVE]: (state) => {
     state.isPipeLineMove = false;
+  },
+  [TYPES.SET_COPY_NODE_CACHE]: (state, action) => {
+    const { schema } = state;
+    const { id } = action.value;
+    const { element } = findElementById(id, schema);
+    const cacheNode = JSON.parse(JSON.stringify(element));
+    cacheNode.id = createUUID();
+    if (cacheNode.itemNodes) {
+      cacheNode.itemNodes = cacheNode.itemNodes.map((item: any) => {
+        const id = createUUID();
+        Object.assign(item, { id });
+        return item;
+      });
+    }
+    if (cacheNode.path) {
+      cacheNode.path = cacheNode.path.map((item: any) => {
+        const groupId = cacheNode.id;
+        const dotId = createUUID();
+        Object.assign(item, { groupId, dotId });
+        return item;
+      });
+    }
+    state.copyNodeCache = cacheNode;
+  },
+  [TYPES.STOP_PIPE_LINE_PASTE]: (state) => {
+    state.isPipeLineNodePaste = false;
+  },
+  //粘贴节点操作
+  [TYPES.INSET_NODE_TO_TREE]: (state, action) => {
+    const { x, y } = action.value || {};
+    const { schema, copyNodeCache } = state;
+    //没有复制缓存则不能进行复制
+    if (!Object.keys(copyNodeCache).length) {
+      return;
+    }
+    const refreshCacheNode = () => {
+      const cacheNode = JSON.parse(JSON.stringify(copyNodeCache));
+      cacheNode.id = createUUID();
+      if (cacheNode.itemNodes) {
+        cacheNode.itemNodes = cacheNode.itemNodes.map((item: any) => {
+          const id = createUUID();
+          Object.assign(item, { id });
+          return item;
+        });
+      }
+      if (cacheNode.path) {
+        cacheNode.path = cacheNode.path.map((item: any) => {
+          const groupId = cacheNode.id;
+          const dotId = createUUID();
+          Object.assign(item, { groupId, dotId });
+          return item;
+        });
+      }
+      state.copyNodeCache = cacheNode;
+    };
+    if (copyNodeCache.type === 'PipeLine') {
+      //管道粘贴
+      copyNodeCache.x += 20;
+      copyNodeCache.y += 20;
+      copyNodeCache.path = copyNodeCache.path.map((item: any) => {
+        const groupId = copyNodeCache.id;
+        const dotId = createUUID();
+        const { x, y } = item;
+        Object.assign(item, { groupId, dotId, x: x + 20, y: y + 20 });
+        return item;
+      });
+      state.isPipeLineNodePaste = true;
+      schema.itemNodes.push({ ...copyNodeCache });
+      state.activeKey = copyNodeCache.id;
+      refreshCacheNode();
+    } else if (x && y) {
+      copyNodeCache.x = x;
+      copyNodeCache.y = y;
+      schema.itemNodes.push({ ...copyNodeCache });
+      state.activeKey = copyNodeCache.id;
+      refreshCacheNode();
+    } else {
+      copyNodeCache.x += 20;
+      copyNodeCache.y += 20;
+      schema.itemNodes.push({ ...copyNodeCache });
+      state.activeKey = copyNodeCache.id;
+      refreshCacheNode();
+    }
+  },
+  //删除节点
+  [TYPES.DELETE_NODE_BY_ID]: (state) => {
+    const { schema, activeKey } = state;
+    if (activeKey === '0') {
+      return;
+    }
+    const { parent } = findElementById(activeKey, schema);
+    const deleteIndex = parent.itemNodes.findIndex(
+      (item: any) => item.id === activeKey,
+    );
+    if (deleteIndex !== -1) {
+      state.activeKey = '0';
+      state.isPipeLineNodePaste = true;
+      parent.itemNodes.splice(deleteIndex, 1);
+    }
   },
 };
 export default actions;

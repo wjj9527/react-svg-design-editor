@@ -2,13 +2,13 @@ export type StateType = any;
 const state: StateType = {
   schema: {
     type: 'root',
-    id: 0,
+    id: '0',
     itemNodes: [],
   },
   //当前选中节点信息(resize drag)
   currentAction: {},
   //当前选中ID
-  activeKey: 0,
+  activeKey: '0',
   //画布偏移量
   svgOffset: {
     x: 0,
@@ -50,5 +50,7 @@ const state: StateType = {
   isKeydownCtrlKey: false,
   //当前是否管道移动
   isPipeLineMove: false,
+  copyNodeCache: {},
+  isPipeLineNodePaste: false,
 };
 export default state;

@@ -8,19 +8,10 @@ import RightDrawer from '@/pages/Editor/plugin/RightDrawer';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Store, StoreContext, TYPES } from '@/store';
-import { ConfigProvider, Modal, theme } from 'antd';
+import { ConfigProvider, Modal, message } from 'antd';
 
 const Editor: React.FC = () => {
   const { state, dispatch } = useContext(StoreContext);
-  const [modal, contextHolder] = Modal.useModal();
-  const confirm = () => {
-    modal.confirm({
-      title: '提示',
-      content: '是否删除',
-      okText: '确认',
-      cancelText: '取消',
-    });
-  };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.ctrlKey && !state.isKeydownCtrlKey) {
       dispatch({
@@ -45,7 +36,6 @@ const Editor: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
     // @ts-ignore
     window.addEventListener('keyup', handleKeyUp);
-    confirm();
     return () => {
       // @ts-ignore
       window.removeEventListener('keydown', handleKeyDown);
@@ -67,14 +57,13 @@ const Editor: React.FC = () => {
           colorFillSecondary: 'rgba(255,255,255,0.06)',
           colorFillTertiary: 'rgba(255,255,255,0.04)',
           colorFillQuaternary: 'rgba(255,255,255,0.02)',
-          colorBgElevated: 'rgba(18,28,36,1)',
+          colorBgElevated: 'rgb(31,45,56)',
           colorBgMask: 'rgba(0,0,0,0)',
         },
       }}
     >
       <DndProvider backend={HTML5Backend}>
         <div className="editor-container page-root">
-          {contextHolder}
           <HeaderBar />
           <div className="content-view">
             <LeftDrawer />
