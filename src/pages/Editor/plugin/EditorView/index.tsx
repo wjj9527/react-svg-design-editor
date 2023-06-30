@@ -355,7 +355,6 @@ const EditorView: React.FC = () => {
     },
   });
   const keydownEvent = (event: React.KeyboardEvent) => {
-    console.log(event.key);
     //删除操作
     if (event.key === 'Delete') {
       dispatch({ type: TYPES.DELETE_NODE_BY_ID });
