@@ -29,11 +29,17 @@ const FollowMenu: React.FC = () => {
     messageApi.success('删除成功');
     hiddenFollowMenu();
   };
-
   //元素复制操作
   const elementCopyHandle = () => {
     dispatch({ type: TYPES.SET_COPY_NODE_CACHE, value: { id: activeKey } });
     messageApi.success('复制成功');
+    hiddenFollowMenu();
+  };
+  //元素位置变化
+  const elementIndexChange = (
+    actionType: 'moveUp' | 'moveDown' | 'top' | 'bottom',
+  ) => {
+    dispatch({ type: TYPES.ELEMENT_INDEX_CHANGE, value: { actionType } });
     hiddenFollowMenu();
   };
   useEffect(() => {
@@ -66,10 +72,30 @@ const FollowMenu: React.FC = () => {
     >
       {messageHolder}
       <div className="group">
-        <div className="menu-group-item">置顶</div>
-        <div className="menu-group-item">置底</div>
-        <div className="menu-group-item">上移一层</div>
-        <div className="menu-group-item">下移一层</div>
+        <div
+          className="menu-group-item"
+          onClick={elementIndexChange.bind(this, 'top')}
+        >
+          置顶
+        </div>
+        <div
+          className="menu-group-item"
+          onClick={elementIndexChange.bind(this, 'bottom')}
+        >
+          置底
+        </div>
+        <div
+          className="menu-group-item"
+          onClick={elementIndexChange.bind(this, 'moveUp')}
+        >
+          上移一层
+        </div>
+        <div
+          className="menu-group-item"
+          onClick={elementIndexChange.bind(this, 'moveDown')}
+        >
+          下移一层
+        </div>
       </div>
       <div className="group">
         <div className="menu-group-item">锁定</div>

@@ -413,5 +413,50 @@ const actions: ActionsType = {
     const { isGroup } = element;
     element.isGroup = !isGroup;
   },
+  [TYPES.ELEMENT_INDEX_CHANGE]: (state, action) => {
+    const { schema, activeKey } = state;
+    const { parent } = findElementById(activeKey, schema);
+    const { actionType } = action.value;
+    const { itemNodes } = parent;
+    const targetIndex = itemNodes.findIndex(
+      (item: any) => item.id === activeKey,
+    );
+    switch (actionType) {
+      case 'moveUp':
+        if (targetIndex !== itemNodes.index) {
+          [itemNodes[targetIndex], itemNodes[targetIndex + 1]] = [
+            itemNodes[targetIndex + 1],
+            itemNodes[targetIndex],
+          ];
+        }
+        break;
+      case 'moveDown':
+        if (targetIndex !== 0) {
+          [itemNodes[targetIndex], itemNodes[targetIndex - 1]] = [
+            itemNodes[targetIndex - 1],
+            itemNodes[targetIndex],
+          ];
+        }
+        break;
+      case 'top':
+        if (targetIndex !== itemNodes.index) {
+          const id = createUUID();
+          const insertNode = { ...itemNodes[targetIndex], id };
+          state.activeKey = id;
+          itemNodes.push(insertNode);
+          itemNodes.splice(targetIndex, 1);
+          console.log(insertNode, itemNodes);
+        }
+        break;
+      case 'bottom':
+        if (targetIndex !== 0) {
+          const id = createUUID();
+          const insertNode = { ...itemNodes[targetIndex], id };
+          state.activeKey = id;
+          itemNodes.unshift(insertNode);
+          itemNodes.splice(targetIndex + 1, 1);
+        }
+    }
+  },
 };
 export default actions;

@@ -21,14 +21,21 @@ const HeaderBar: React.FC = () => {
     dispatch({ type: TYPES.SET_COPY_NODE_CACHE, value: { id: activeKey } });
     messageApi.success('复制成功');
   };
+  //黏贴操作
   const elementPasteHandle = () => {
     dispatch({ type: TYPES.INSET_NODE_TO_TREE });
   };
+  //删除操作
   const elementDeleteHandle = () => {
     dispatch({ type: TYPES.DELETE_NODE_BY_ID });
     messageApi.success('删除成功');
   };
-
+  //元素位置变化
+  const elementIndexChange = (
+    actionType: 'moveUp' | 'moveDown' | 'top' | 'bottom',
+  ) => {
+    dispatch({ type: TYPES.ELEMENT_INDEX_CHANGE, value: { actionType } });
+  };
   return (
     <div className="header-bar">
       {messageHolder}
@@ -63,12 +70,28 @@ const HeaderBar: React.FC = () => {
           />
         </div>
         <div className="btn-group">
-          <IconBtn iconText="icon-zhiding" text="置顶" />
-          <IconBtn iconText="icon-zhidi" text="置底" />
+          <IconBtn
+            iconText="icon-zhiding"
+            text="置顶"
+            onClick={elementIndexChange.bind(this, 'top')}
+          />
+          <IconBtn
+            iconText="icon-zhidi"
+            text="置底"
+            onClick={elementIndexChange.bind(this, 'bottom')}
+          />
         </div>
         <div className="btn-group">
-          <IconBtn iconText="icon-shangyiyiceng" text="上移一层" />
-          <IconBtn iconText="icon-xiayiyiceng" text="下移一层" />
+          <IconBtn
+            iconText="icon-shangyiyiceng"
+            text="上移一层"
+            onClick={elementIndexChange.bind(this, 'moveUp')}
+          />
+          <IconBtn
+            iconText="icon-xiayiyiceng"
+            text="下移一层"
+            onClick={elementIndexChange.bind(this, 'moveDown')}
+          />
         </div>
         <div className="btn-group">
           <IconBtn

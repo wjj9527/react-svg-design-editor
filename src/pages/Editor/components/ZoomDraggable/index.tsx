@@ -51,7 +51,19 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
     //设置当前element为active
     dispatch({ type: TYPES.SET_ACTIVE_KEY, value: { id } });
   };
-
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    dispatch({
+      type: TYPES.SET_FOLLOW_MENU_CONFIG,
+      value: {
+        visible: true,
+        x: e.pageX,
+        y: e.pageY,
+        id,
+      },
+    });
+  };
   return (
     <g
       transform={`translate(${x},${y})`}
@@ -66,6 +78,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
           y="0"
           style={{ cursor: 'move' }}
           className={`resize-draggable-container `}
+          onContextMenu={handleContextMenu}
           onMouseDown={(e) =>
             handleEvent(e, { target: 'MOVE_CONTENT', type: 'MOVE' })
           }
