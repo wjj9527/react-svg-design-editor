@@ -1,41 +1,47 @@
-.resize-draggable-container{
+.resize-draggable-container {
   cursor: move;
   outline: 1px dashed #1677ff;
-
-}
-.element-item{
-  &.active{
-    .resize-draggable-group{
-      opacity: 1;
-    }
-  }
-  &:hover{
-    .resize-draggable-group{
-      opacity: 1;
-    }
-  }
-  .resize-draggable-group{
-    opacity: 0;
-    transition: .3s ease all;
-  }
-
 }
 
-.block-group-container{
-  .resize-draggable-container{
+.element-item {
+  .resize-draggable-container {
     cursor: move;
-    outline: 1px solid #1677ff;
+    outline: 1px dashed #1677ff;
   }
-  .element-item{
-    &:hover{
-      .resize-draggable-group{
+  &.active {
+    .resize-draggable-group {
+      opacity: 1;
+    }
+  }
+  &:hover {
+    .resize-draggable-group {
+      opacity: 1;
+    }
+  }
+  .resize-draggable-group {
+    opacity: 0;
+    transition: 0.3s ease all;
+  }
+}
+.block-group-container {
+  .resize-draggable-container {
+    cursor: move;
+    outline: 1px solid #fcfdfd;
+  }
+  .element-item {
+    &.active {
+      .resize-draggable-container {
+        outline: 1px solid #1677ff;
+      }
+    }
+    &:hover {
+      .resize-draggable-group {
         opacity: 1;
       }
     }
-    .resize-draggable-group{
+    .resize-draggable-group {
       opacity: 1;
-      transition: .3s ease all;
+      transition: 0.3s ease all;
     }
-
   }
 }
