@@ -26,12 +26,18 @@
 .block-group-container {
   .resize-draggable-container {
     cursor: move;
-    outline: 1px solid #fcfdfd;
+    outline: 1px solid #ffffff;
   }
   .element-item {
+    .resize-rect {
+      opacity: 0;
+    }
     &.active {
       .resize-draggable-container {
-        outline: 1px solid #1677ff;
+        outline: 1px dashed #1677ff;
+      }
+      .resize-rect {
+        opacity: 1;
       }
     }
     &:hover {

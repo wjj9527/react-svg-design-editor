@@ -74,7 +74,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
           fill="rgba(0,0,0,0)"
         />
         <rect
-          id="resize-left-top"
+          className="resize-left-top resize-rect"
           x={-4}
           y={-4}
           width="8"
@@ -86,7 +86,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
           }
         />
         <rect
-          id="resize-left-center"
+          className="resize-left-center resize-rect"
           x={-4}
           y={height / 2 - 4}
           width="8"
@@ -98,7 +98,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
           }
         />
         <rect
-          id="resize-left-bottom"
+          className="resize-left-bottom resize-rect"
           x="-4"
           y={height - 4}
           width="8"
@@ -110,7 +110,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
           }
         />
         <rect
-          id="resize-center-top"
+          className="resize-center-top resize-rect"
           x={width / 2 - 4}
           y={-4}
           width="8"
@@ -122,7 +122,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
           }
         />
         <rect
-          id="resize-center-bottom"
+          className="resize-center-bottom resize-rect"
           x={width / 2 - 4}
           y={height - 4}
           width="8"
@@ -134,7 +134,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
           }
         />
         <rect
-          id="resize-right-top"
+          className="resize-right-top resize-rect"
           x={width - 4}
           y={-4}
           width="8"
@@ -146,7 +146,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
           }
         />
         <rect
-          id="resize-right-center"
+          className="resize-right-center resize-rect"
           x={width - 4}
           y={height / 2 - 4}
           width="8"
@@ -158,7 +158,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
           }
         />
         <rect
-          id="resize-right-bottom"
+          className="resize-right-bottom resize-rect"
           x={width - 4}
           y={height - 4}
           width="8"

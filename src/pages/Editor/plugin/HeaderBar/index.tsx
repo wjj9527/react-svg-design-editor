@@ -3,10 +3,19 @@ import './style.less';
 import { StoreContext, TYPES } from '@/store';
 import IconBtn from '@/pages/Editor/components/IconBtn';
 import { Button, message } from 'antd';
+import { findElementById } from '@/utils/findElementById';
+
 const HeaderBar: React.FC = () => {
   const { state, dispatch } = useContext(StoreContext);
-  const { activeKey, copyNodeCache } = state;
+  const { activeKey, copyNodeCache, schema } = state;
   const [messageApi, messageHolder] = message.useMessage();
+  const { element } = findElementById(activeKey, schema);
+  const { type, isGroup } = element;
+  //成组，取消成组操作
+  const elementGroupConfigSetting = () => {
+    dispatch({ type: TYPES.SET_GROUP_BLOCK, value: { id: activeKey } });
+    messageApi.success('操作成功');
+  };
   //元素复制操作
   const elementCopyHandle = () => {
     dispatch({ type: TYPES.SET_COPY_NODE_CACHE, value: { id: activeKey } });
@@ -19,6 +28,7 @@ const HeaderBar: React.FC = () => {
     dispatch({ type: TYPES.DELETE_NODE_BY_ID });
     messageApi.success('删除成功');
   };
+
   return (
     <div className="header-bar">
       {messageHolder}
@@ -61,8 +71,18 @@ const HeaderBar: React.FC = () => {
           <IconBtn iconText="icon-xiayiyiceng" text="下移一层" />
         </div>
         <div className="btn-group">
-          <IconBtn iconText="icon-bianzu" text="编组" />
-          <IconBtn iconText="icon-jiezu" text="取消编组" />
+          <IconBtn
+            iconText="icon-bianzu"
+            text="编组"
+            onClick={elementGroupConfigSetting}
+            disabled={!(type === 'BLOCK_GROUP' && !isGroup)}
+          />
+          <IconBtn
+            iconText="icon-jiezu"
+            text="取消编组"
+            onClick={elementGroupConfigSetting}
+            disabled={!(type === 'BLOCK_GROUP' && isGroup)}
+          />
         </div>
         <div className="btn-group">
           <IconBtn iconText="icon-zuoduiqi" text="左对齐" />
