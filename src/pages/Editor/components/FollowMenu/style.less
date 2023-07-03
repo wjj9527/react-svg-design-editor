@@ -1,27 +1,39 @@
-.follow-menu{
+.follow-menu {
   position: fixed;
   top: 100px;
   left: 800px;
   z-index: 10000;
-  background: rgba(34,36,42,1);
+  background: rgba(34, 36, 42, 1);
   color: #ffffff;
   cursor: pointer;
   width: 120px;
   border-radius: 4px;
   box-shadow: 0 2px 2px 1px #1c1c1c;
-  .menu-group-item{
+
+  .group {
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ffffff;
+    padding-top: 8px;
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    &:first-child {
+      padding-top: 0;
+    }
+  }
+  .menu-group-item {
     font-size: 12px;
     height: 24px;
     line-height: 24px;
     border-left: 2px solid transparent;
     margin: 8px 0;
     padding-left: 16px;
-    transition: .3s ease all;
-    &:hover{
+    transition: 0.3s ease all;
+    &:hover {
       border-left: 2px solid #1677ff;
       background: rgba(210, 225, 246, 0.1);
       color: #1677ff;
     }
   }
-
 }

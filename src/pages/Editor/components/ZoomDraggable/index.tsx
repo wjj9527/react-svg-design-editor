@@ -27,8 +27,8 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
     { target, type }: { target: string; type: string },
   ) => {
     const { pageX, pageY } = e;
-    //@ts-ignore
     const { bottom, height, left, right, top, width, x, y } =
+      //@ts-ignore
       e.target.getBoundingClientRect();
     //当前鼠标点位与边框偏移量
     const [offsetX, offsetY] = [pageX - x, pageY - y];

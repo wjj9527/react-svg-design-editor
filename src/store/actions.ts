@@ -399,5 +399,12 @@ const actions: ActionsType = {
       parent.itemNodes.splice(deleteIndex, 1);
     }
   },
+  [TYPES.SET_GROUP_BLOCK]: (state, action) => {
+    const { schema } = state;
+    const { id } = action.value;
+    const { element } = findElementById(id, schema);
+    const { isGroup } = element;
+    element.isGroup = !isGroup;
+  },
 };
 export default actions;

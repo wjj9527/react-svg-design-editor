@@ -308,6 +308,7 @@ const EditorView: React.FC = () => {
       }
     });
   };
+  //组件拖入操作
   // @ts-ignore
   const [{}, drop] = useDrop({
     accept: 'ELEMENT',

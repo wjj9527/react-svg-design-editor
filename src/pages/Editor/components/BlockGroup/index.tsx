@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import './style.less';
 import { StoreContext, TYPES } from '@/store';
 import { elementComponents } from '@/pages/Editor/material';
+import classNames from 'classnames';
 interface BlockGroupProps {
   id: string;
   itemNodes: any[];
+  isGroup: boolean;
 }
-const BlockGroup: React.FC<BlockGroupProps> = ({ id, itemNodes }) => {
+const BlockGroup: React.FC<BlockGroupProps> = ({ id, itemNodes, isGroup }) => {
   const { state, dispatch } = useContext(StoreContext);
   const { svgOffset } = state;
   const [fillRectSetting, setFillRectSetting] = useState({
@@ -24,6 +26,9 @@ const BlockGroup: React.FC<BlockGroupProps> = ({ id, itemNodes }) => {
         visible: true,
         x: e.pageX,
         y: e.pageY,
+        id,
+        type: 'BlockGroup',
+        isGroup,
       },
     });
   };
@@ -33,8 +38,9 @@ const BlockGroup: React.FC<BlockGroupProps> = ({ id, itemNodes }) => {
     const type = 'MOVE';
     // itemNodes
     const { pageX, pageY } = e;
-    //@ts-ignore
+
     const { bottom, height, left, right, top, width, x, y } =
+      //@ts-ignore
       e.target.getBoundingClientRect();
     //当前鼠标点位与边框偏移量
     const [offsetX, offsetY] = [pageX - x, pageY - y];
@@ -105,8 +111,8 @@ const BlockGroup: React.FC<BlockGroupProps> = ({ id, itemNodes }) => {
   return itemNodes.length ? (
     <g className="block-group-container">
       <rect
-        className="fill "
-        fill="rgba(255,255,255,.1)"
+        className={classNames('fill', { 'is-group': isGroup })}
+        fill="rgba(255,255,255,0.05)"
         {...fillRectSetting}
         onMouseDown={handleEvent}
         onContextMenu={handleContextMenu}
