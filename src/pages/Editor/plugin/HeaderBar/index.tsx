@@ -17,6 +17,7 @@ const HeaderBar: React.FC = () => {
   };
   const elementDeleteHandle = () => {
     dispatch({ type: TYPES.DELETE_NODE_BY_ID });
+    messageApi.success('删除成功');
   };
   return (
     <div className="header-bar">

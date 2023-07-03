@@ -1,11 +1,14 @@
 .block-group-container {
   height: 100%;
   width: 100%;
+  outline: 1px solid #92ff16;
+  &.is-group {
+    outline: 1px solid #b6cbd5;
+  }
+  &.active {
+    outline: 1px solid #1677ff;
+  }
   .fill {
     cursor: move;
-    outline: 1px solid #92ff16;
-    &.is-group {
-      outline: 1px solid #b6cbd5;
-    }
   }
 }

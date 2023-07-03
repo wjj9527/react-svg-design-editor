@@ -212,6 +212,7 @@ const EditorView: React.FC = () => {
 
     //解除默认成组
     if (isEmptyBlock) {
+      dispatch({ type: TYPES.SET_ACTIVE_KEY, value: { id: '0' } });
       dispatch({ type: TYPES.RELIEVE_DEFAULT_BLOCK_ELEMENT_GROUP });
     }
     //判断当前区域是否有管道

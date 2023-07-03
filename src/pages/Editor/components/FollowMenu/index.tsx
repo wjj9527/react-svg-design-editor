@@ -5,7 +5,8 @@ import { StoreContext, TYPES } from '@/store';
 
 const FollowMenu: React.FC = () => {
   const { state, dispatch } = useContext(StoreContext);
-  const { visible, x, y, id, type, isGroup } = state.followMenuConfig;
+  const { activeKey, followMenuConfig } = state;
+  const { visible, x, y, id, type, isGroup } = followMenuConfig;
   const [messageApi, messageHolder] = message.useMessage();
   const menuRef = useRef(null);
   const [pointX, setPointX] = useState(-200);
@@ -21,7 +22,19 @@ const FollowMenu: React.FC = () => {
   const elementGroupConfigSetting = () => {
     dispatch({ type: TYPES.SET_GROUP_BLOCK, value: { id } });
     messageApi.success('操作成功');
-    setTimeout(hiddenFollowMenu, 300);
+    hiddenFollowMenu();
+  };
+  const elementDeleteHandle = () => {
+    dispatch({ type: TYPES.DELETE_NODE_BY_ID });
+    messageApi.success('删除成功');
+    hiddenFollowMenu();
+  };
+
+  //元素复制操作
+  const elementCopyHandle = () => {
+    dispatch({ type: TYPES.SET_COPY_NODE_CACHE, value: { id: activeKey } });
+    messageApi.success('复制成功');
+    hiddenFollowMenu();
   };
   useEffect(() => {
     if (visible) {
@@ -60,16 +73,18 @@ const FollowMenu: React.FC = () => {
       </div>
       <div className="group">
         <div className="menu-group-item">锁定</div>
-        <div className="menu-group-item">拷贝</div>
-        <div className="menu-group-item">删除</div>
+        <div className="menu-group-item" onClick={elementCopyHandle}>
+          拷贝
+        </div>
+        <div className="menu-group-item" onClick={elementDeleteHandle}>
+          删除
+        </div>
         {/*{type}*/}
         {type === 'BlockGroup' && (
           <div className="menu-group-item" onClick={elementGroupConfigSetting}>
             {!isGroup ? '成组' : '取消成组'}
           </div>
         )}
-
-        {/*<div className="menu-group-item">取消成组</div>*/}
       </div>
     </div>
   );

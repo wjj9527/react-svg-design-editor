@@ -354,34 +354,41 @@ const actions: ActionsType = {
       }
       state.copyNodeCache = cacheNode;
     };
+    const isExistXY = !!x && !!y;
+    console.log(isExistXY);
+    if (copyNodeCache.type === 'BLOCK_GROUP') {
+      const offsetX = copyNodeCache.x - x;
+      const offsetY = copyNodeCache.y - y;
+      copyNodeCache.itemNodes = copyNodeCache.itemNodes.map((item: any) => {
+        let { x, y } = item;
+        x = isExistXY ? x - offsetX : x + 20;
+        y = isExistXY ? y - offsetY : y + 20;
+        Object.assign(item, { x, y });
+        return item;
+      });
+    }
     if (copyNodeCache.type === 'PipeLine') {
       //管道粘贴
-      copyNodeCache.x += 20;
-      copyNodeCache.y += 20;
+      const offsetX = copyNodeCache.x - x;
+      const offsetY = copyNodeCache.y - y;
       copyNodeCache.path = copyNodeCache.path.map((item: any) => {
         const groupId = copyNodeCache.id;
         const dotId = createUUID();
-        const { x, y } = item;
-        Object.assign(item, { groupId, dotId, x: x + 20, y: y + 20 });
+        let { x, y } = item;
+        x = isExistXY ? x - offsetX : x + 20;
+        y = isExistXY ? y - offsetY : y + 20;
+        Object.assign(item, { groupId, dotId, x, y });
         return item;
       });
       state.isPipeLineNodePaste = true;
-      schema.itemNodes.push({ ...copyNodeCache });
       state.activeKey = copyNodeCache.id;
-      refreshCacheNode();
-    } else if (x && y) {
-      copyNodeCache.x = x;
-      copyNodeCache.y = y;
-      schema.itemNodes.push({ ...copyNodeCache });
-      state.activeKey = copyNodeCache.id;
-      refreshCacheNode();
-    } else {
-      copyNodeCache.x += 20;
-      copyNodeCache.y += 20;
-      schema.itemNodes.push({ ...copyNodeCache });
-      state.activeKey = copyNodeCache.id;
-      refreshCacheNode();
     }
+
+    copyNodeCache.x = isExistXY ? x : copyNodeCache.x + 20;
+    copyNodeCache.y = isExistXY ? y : copyNodeCache.y + 20;
+    schema.itemNodes.push({ ...copyNodeCache });
+    state.activeKey = copyNodeCache.id;
+    refreshCacheNode();
   },
   //删除节点
   [TYPES.DELETE_NODE_BY_ID]: (state) => {

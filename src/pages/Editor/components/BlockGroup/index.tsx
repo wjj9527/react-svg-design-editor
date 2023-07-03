@@ -10,7 +10,7 @@ interface BlockGroupProps {
 }
 const BlockGroup: React.FC<BlockGroupProps> = ({ id, itemNodes, isGroup }) => {
   const { state, dispatch } = useContext(StoreContext);
-  const { svgOffset } = state;
+  const { svgOffset, activeKey } = state;
   const [fillRectSetting, setFillRectSetting] = useState({
     x: 0,
     y: 0,
@@ -65,6 +65,7 @@ const BlockGroup: React.FC<BlockGroupProps> = ({ id, itemNodes, isGroup }) => {
       itemOffsetArray,
     };
     dispatch({ type: TYPES.SET_CURRENT_ACTION, value: { currentAction } });
+    dispatch({ type: TYPES.SET_ACTIVE_KEY, value: { id } });
   };
   useEffect(() => {
     //g标签无法进行事件处理，必须用dom填充进行事件降级
@@ -109,10 +110,15 @@ const BlockGroup: React.FC<BlockGroupProps> = ({ id, itemNodes, isGroup }) => {
     });
   };
   return itemNodes.length ? (
-    <g className="block-group-container">
+    <g
+      className={classNames('block-group-container', {
+        'is-group': isGroup,
+        active: id === activeKey,
+      })}
+    >
       <rect
-        className={classNames('fill', { 'is-group': isGroup })}
-        fill="rgba(255,255,255,0.05)"
+        className="fill"
+        fill="rgba(255,255,255,0)"
         {...fillRectSetting}
         onMouseDown={handleEvent}
         onContextMenu={handleContextMenu}
