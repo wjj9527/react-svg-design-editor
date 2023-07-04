@@ -52,5 +52,7 @@ const state: StateType = {
   isPipeLineMove: false,
   copyNodeCache: {},
   isPipeLineNodePaste: false,
+  isPipeLineVisible: false,
+  isPipeLineLock: false,
 };
 export default state;

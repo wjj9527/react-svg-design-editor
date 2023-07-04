@@ -6,6 +6,8 @@ interface NormalBtnProps {
   y: number;
   width: number;
   height: number;
+  lock: boolean;
+  visible: boolean;
   id: string;
 }
 const NormalBtn: React.FC<NormalBtnProps> = (props) => {

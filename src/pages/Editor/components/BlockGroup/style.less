@@ -9,6 +9,17 @@
   &.active {
     outline: 1px solid #1677ff;
   }
+  &.hidden {
+    display: none;
+  }
+  &.lock {
+    .fill {
+      display: none;
+    }
+    .resize-draggable-group {
+      display: none;
+    }
+  }
   .fill {
     cursor: move;
   }

@@ -6,9 +6,17 @@ import classNames from 'classnames';
 interface BlockGroupProps {
   id: string;
   itemNodes: any[];
+  lock: boolean;
+  visible: boolean;
   isGroup: boolean;
 }
-const BlockGroup: React.FC<BlockGroupProps> = ({ id, itemNodes, isGroup }) => {
+const BlockGroup: React.FC<BlockGroupProps> = ({
+  id,
+  itemNodes,
+  isGroup,
+  visible,
+  lock,
+}) => {
   const { state, dispatch } = useContext(StoreContext);
   const { svgOffset, activeKey } = state;
   const [fillRectSetting, setFillRectSetting] = useState({
@@ -114,6 +122,8 @@ const BlockGroup: React.FC<BlockGroupProps> = ({ id, itemNodes, isGroup }) => {
       className={classNames('block-group-container', {
         'is-group': isGroup,
         active: id === activeKey,
+        lock,
+        hidden: !visible,
       })}
     >
       <rect

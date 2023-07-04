@@ -1,12 +1,15 @@
 import React, { useContext } from 'react';
 import { StoreContext, TYPES } from '@/store';
-import './index.less';
+import './style.less';
+import classNames from 'classnames';
 interface ZoomDraggableProps {
   x: number;
   y: number;
   width: number;
   height: number;
   id: string;
+  visible: boolean;
+  lock: boolean;
   ratio?: string | number;
   children: React.ReactElement;
 }
@@ -17,6 +20,8 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
   width,
   height,
   id,
+  lock,
+  visible,
   children,
 }) => {
   const { state, dispatch } = useContext(StoreContext);
@@ -64,11 +69,13 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
       },
     });
   };
+  const classNameList = classNames(`element-item`, {
+    active: activeKey === id,
+    hidden: !visible,
+    lock,
+  });
   return (
-    <g
-      transform={`translate(${x},${y})`}
-      className={`element-item ${id === activeKey ? 'active' : ''}`}
-    >
+    <g transform={`translate(${x},${y})`} className={classNameList}>
       <foreignObject width={width} height={height}>
         {children}
       </foreignObject>

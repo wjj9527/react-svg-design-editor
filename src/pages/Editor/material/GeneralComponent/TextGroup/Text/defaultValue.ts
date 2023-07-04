@@ -7,6 +7,8 @@ export default {
   type: 'Text',
   label: '文本',
   icon: 'icon-wenben1',
+  lock: false,
+  visible: true,
   data: {
     attribute: {
       text: '文本',

@@ -16,6 +16,8 @@ export default {
   type: 'PipeLine',
   label: '管道',
   icon: 'icon-guandao',
+  lock: false,
+  visible: true,
   data: {
     line: {
       type: 'dashed',

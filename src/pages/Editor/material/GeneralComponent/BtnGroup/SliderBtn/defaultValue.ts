@@ -7,6 +7,8 @@ export default {
   type: 'SliderBtn',
   label: '划块按钮',
   icon: 'icon-huakuaianniu',
+  lock: false,
+  visible: true,
   data: {
     attribute: {
       text: '文本',

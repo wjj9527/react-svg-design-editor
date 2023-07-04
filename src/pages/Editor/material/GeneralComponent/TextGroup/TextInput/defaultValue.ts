@@ -7,6 +7,8 @@ export default {
   type: 'TextInput',
   label: '输入框',
   icon: 'icon-shurukuang',
+  lock: false,
+  visible: true,
   data: {
     attribute: {
       text: '输入框',

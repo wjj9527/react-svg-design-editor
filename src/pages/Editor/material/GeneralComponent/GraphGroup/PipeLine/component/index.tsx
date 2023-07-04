@@ -15,6 +15,7 @@ interface Props {
   x: number;
   y: number;
   id: string;
+  visible: boolean;
   data: {
     line: any;
     animation: any;
@@ -74,7 +75,7 @@ const isPointOnLine = (
   // 判断点是否在直线上
   return Math.abs(y3 - (k * x3 + b)) < Number.EPSILON;
 };
-const PipeLine: React.FC<Props> = ({ path, stokeWidth, id, data }) => {
+const PipeLine: React.FC<Props> = ({ path, stokeWidth, id, data, visible }) => {
   const { state, dispatch } = useContext(StoreContext);
   const { schema, activeKey } = state;
   const { line, animation, pipe, background } = data;
@@ -142,11 +143,15 @@ const PipeLine: React.FC<Props> = ({ path, stokeWidth, id, data }) => {
         maxY = y;
       }
     });
-    // @ts-ignore
+
     const [x, y, width, height] = [
+      // @ts-ignore
       minX - stokeWidth,
+      // @ts-ignore
       minY - stokeWidth,
+      // @ts-ignore
       maxX - minX + 2 * stokeWidth,
+      // @ts-ignore
       maxY - minY + 2 * stokeWidth,
     ];
     dispatch({
@@ -156,7 +161,7 @@ const PipeLine: React.FC<Props> = ({ path, stokeWidth, id, data }) => {
   }, [schema]);
 
   return (
-    <g style={{ border: '1px solid red' }}>
+    <g style={{ border: '1px solid red', display: visible ? '' : 'none' }}>
       <defs>
         <filter
           className="blurs-filter"

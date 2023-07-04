@@ -38,8 +38,9 @@ const EditorView: React.FC = () => {
     isKeydownCtrlKey,
     isPipeLineMove,
     isPipeLineNodePaste,
-    copyNodeCache,
     activeKey,
+    isPipeLineLock,
+    isPipeLineVisible,
   } = state;
   const nodes = state.schema.itemNodes;
   const [isCanMove, setIsCanMove] = useState(false);
@@ -195,16 +196,21 @@ const EditorView: React.FC = () => {
       id: null,
       type: null,
       path: [],
+      visible: true,
+      lock: false,
       stokeWidth: 10,
     };
     for (let i = itemNodes.length - 1; i >= 0; i--) {
-      const { x, y, width, height, id, type, path, stokeWidth } = itemNodes[i];
+      const { x, y, width, height, id, type, path, stokeWidth, lock, visible } =
+        itemNodes[i];
       if (baseX > x && baseX < x + width && baseY > y && baseY < y + height) {
         blockConfig = {
           id,
           type,
           path,
           stokeWidth,
+          lock,
+          visible,
         };
         isEmptyBlock = false;
         break;
@@ -217,7 +223,13 @@ const EditorView: React.FC = () => {
       dispatch({ type: TYPES.RELIEVE_DEFAULT_BLOCK_ELEMENT_GROUP });
     }
     //判断当前区域是否有管道
-    if (!isEmptyBlock && blockConfig.type === 'PipeLine') {
+    if (
+      !isEmptyBlock &&
+      blockConfig.type === 'PipeLine' &&
+      blockConfig.visible &&
+      !blockConfig.lock
+    ) {
+      console.log(111);
       // signMask区域不做打点操作，避免重复
       let isSignMaskDotBlock = false;
       maskArray.forEach((item) => {
@@ -393,15 +405,30 @@ const EditorView: React.FC = () => {
     };
   }, [pageSelectionVisible, nodeSelectionVisible]);
   useEffect(() => {
-    if (isPipeLineMove || isPipeLineNodePaste) {
+    if (
+      isPipeLineMove ||
+      isPipeLineNodePaste ||
+      isPipeLineLock ||
+      isPipeLineVisible
+    ) {
       const paths = nodes
-        .filter((item: any) => item.type === 'PipeLine')
+        .filter(
+          (item: any) => item.type === 'PipeLine' && !item.lock && item.visible,
+        )
         .map((item: any) => item.path)
         .flat();
       setMaskArray(paths);
       dispatch({ type: TYPES.STOP_PIPE_LINE_PASTE });
+      dispatch({ type: TYPES.SET_PIPE_LINE_VISIBLE_LISTENER_STATUS });
+      dispatch({ type: TYPES.SET_PIPE_LINE_LOCK_LISTENER_STATUS });
     }
-  }, [isPipeLineMove, nodes, isPipeLineNodePaste]);
+  }, [
+    isPipeLineMove,
+    nodes,
+    isPipeLineNodePaste,
+    isPipeLineLock,
+    isPipeLineVisible,
+  ]);
   //单独做处理，全局事件无法获取hooks内部属性，但是可以更改，使用全局变量
   useEffect(() => {
     activeKeyCache = activeKey;

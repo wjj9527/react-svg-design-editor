@@ -214,7 +214,9 @@ const actions: ActionsType = {
         ((y > rectMinY && y < rectMaxY) ||
           (y + height > rectMinY && y + height < rectMaxY)) &&
         item.type !== 'BLOCK_GROUP' &&
-        item.type !== 'PipeLine'
+        item.type !== 'PipeLine' &&
+        item.visible &&
+        !item.lock
       );
     });
     if (passNodes.length > 1) {
@@ -224,6 +226,8 @@ const actions: ActionsType = {
         label: '组合',
         isGroup: false,
         itemNodes: passNodes,
+        visible: true,
+        lock: false,
       };
       for (let i = 0; i < passNodes.length; i++) {
         const deleteIndex = schema.itemNodes.findIndex(
@@ -568,6 +572,36 @@ const actions: ActionsType = {
         });
         break;
     }
+  },
+  [TYPES.SET_NODE_VISIBLE]: (state, action) => {
+    const { schema } = state;
+    const { id } = action.value;
+    const { element } = findElementById(id, schema);
+    element.visible = !element.visible;
+    if (element.type === 'PipeLine') {
+      state.isPipeLineVisible = true;
+    }
+  },
+  [TYPES.SET_NODE_LOCK]: (state, action) => {
+    const { schema } = state;
+    const { id } = action.value;
+    const { element } = findElementById(id, schema);
+    element.lock = !element.lock;
+    if (element.type === 'PipeLine') {
+      state.isPipeLineLock = true;
+    }
+  },
+  [TYPES.SET_NODE_LABEL]: (state, action) => {
+    const { schema } = state;
+    const { id, label } = action.value;
+    const { element } = findElementById(id, schema);
+    element.label = label;
+  },
+  [TYPES.SET_PIPE_LINE_VISIBLE_LISTENER_STATUS]: (state) => {
+    state.isPipeLineVisible = false;
+  },
+  [TYPES.SET_PIPE_LINE_LOCK_LISTENER_STATUS]: (state) => {
+    state.isPipeLineLock = false;
   },
 };
 export default actions;

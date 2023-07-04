@@ -58,6 +58,7 @@
   .selection-menu-text {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 44px;
     cursor: pointer;
     line-height: 44px;
@@ -68,6 +69,9 @@
     transition: 0.3s ease color;
     &:hover {
       color: #1677ff;
+      .btn-group {
+        display: flex;
+      }
     }
     .iconfont {
       font-size: 16px;
@@ -76,6 +80,24 @@
       &.arrow {
         &.hidden {
           transform: rotate(-90deg);
+        }
+      }
+    }
+    .name-group {
+      display: flex;
+      align-items: center;
+    }
+    .btn-group {
+      display: none;
+      align-items: center;
+      .iconfont {
+        color: #7f7e7e;
+        font-size: 16px;
+        &:hover {
+          color: #1677ff;
+        }
+        &.sa {
+          font-size: 14px;
         }
       }
     }

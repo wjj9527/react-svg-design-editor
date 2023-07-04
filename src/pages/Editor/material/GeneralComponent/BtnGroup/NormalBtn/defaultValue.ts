@@ -7,6 +7,8 @@ export default {
   type: 'NormalBtn',
   label: '按钮',
   icon: 'icon-anniu',
+  lock: false,
+  visible: true,
   data: {
     attribute: {
       text: '文本',

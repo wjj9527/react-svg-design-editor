@@ -7,6 +7,8 @@ export default {
   type: 'SwitchBtn',
   label: '开关按钮',
   icon: 'icon-kaiguananniu',
+  lock: false,
+  visible: true,
   data: {
     attribute: {
       text: '文本',
