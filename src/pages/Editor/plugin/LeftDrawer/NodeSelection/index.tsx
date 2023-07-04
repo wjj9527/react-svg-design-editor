@@ -26,8 +26,14 @@ const SelectionItem: React.FC<SelectionItemProps> = ({ item }) => {
         value: { id: item.id },
       })}
     >
-      <i className={`iconfont ${item.icon}`} />
-      <span className="text">{item.label}</span>
+      <div className="name-group">
+        <i className={`iconfont ${item.icon}`} />
+        <span className="text">{item.label}</span>
+      </div>
+      <div className="btn-group">
+        <i className="iconfont icon-unlock sa" />
+        <i className="iconfont icon-kejian1" />
+      </div>
     </div>
   );
 };

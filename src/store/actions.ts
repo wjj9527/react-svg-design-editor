@@ -43,10 +43,7 @@ const actions: ActionsType = {
           targetNode = schema.itemNodes[i];
         }
       }
-      let height;
-      let width;
-      let y;
-      let x;
+      let height, width, y, x;
       const setValue = (value: number) => {
         const floatNumber = value % MINIMUM_DISPLACEMENT;
         const intNumber = parseInt(String(value / MINIMUM_DISPLACEMENT));
@@ -132,6 +129,7 @@ const actions: ActionsType = {
           (item: any) => item.id === id,
         ).itemNodes;
         const { itemOffsetArray } = currentAction;
+        // console.log(svgOffset)
         //根据偏移量计算实际需要偏差值
         for (let i = 0; i < node.length; i++) {
           for (let j = 0; j < itemOffsetArray.length; j++) {
@@ -207,13 +205,16 @@ const actions: ActionsType = {
     const rectMaxX = x + width;
     const rectMinY = y;
     const rectMaxY = y + height;
+    //过滤当前区域，组与管道不入组
     const passNodes = schema.itemNodes.filter((item: any) => {
       const { width, height, y, x } = item;
       return (
         ((x > rectMinX && x < rectMaxX) ||
           (x + width > rectMinX && x + width < rectMaxX)) &&
         ((y > rectMinY && y < rectMaxY) ||
-          (y + height > rectMinY && y + height < rectMaxY))
+          (y + height > rectMinY && y + height < rectMaxY)) &&
+        item.type !== 'BLOCK_GROUP' &&
+        item.type !== 'PipeLine'
       );
     });
     if (passNodes.length > 1) {
@@ -383,7 +384,6 @@ const actions: ActionsType = {
       state.isPipeLineNodePaste = true;
       state.activeKey = copyNodeCache.id;
     }
-
     copyNodeCache.x = isExistXY ? x : copyNodeCache.x + 20;
     copyNodeCache.y = isExistXY ? y : copyNodeCache.y + 20;
     schema.itemNodes.push({ ...copyNodeCache });
@@ -445,7 +445,6 @@ const actions: ActionsType = {
           state.activeKey = id;
           itemNodes.push(insertNode);
           itemNodes.splice(targetIndex, 1);
-          console.log(insertNode, itemNodes);
         }
         break;
       case 'bottom':
@@ -456,6 +455,118 @@ const actions: ActionsType = {
           itemNodes.unshift(insertNode);
           itemNodes.splice(targetIndex + 1, 1);
         }
+    }
+  },
+  [TYPES.SET_GROUP_NODES_ALIGN]: (state, action) => {
+    const { schema, activeKey } = state;
+    const { type } = action.value;
+    const { element } = findElementById(activeKey, schema);
+    const { itemNodes } = element;
+    let [
+      baseTop,
+      baseBottom,
+      baseLeft,
+      baseRight,
+      baseHorizontally,
+      baseVertical,
+      xSpace,
+      ySpace,
+      xBlockAll,
+      yBlockAll,
+    ] = [null, null, null, null, null, null, null, null, 0, 0];
+    itemNodes.forEach((item: any) => {
+      const { x, y, height, width } = item;
+      if (baseTop === null || y < baseTop) {
+        baseTop = y;
+      }
+      if (baseLeft === null || x < baseLeft) {
+        baseLeft = x;
+      }
+      if (baseRight === null || x + width > baseRight) {
+        baseRight = x + width;
+      }
+      if (baseBottom === null || y + height > baseBottom) {
+        baseBottom = y + height;
+      }
+      xBlockAll += width;
+      yBlockAll += height;
+    });
+
+    //@ts-ignore
+    xSpace = (baseRight - baseLeft - xBlockAll) / (itemNodes.length - 1);
+    //@ts-ignore
+    ySpace = (baseBottom - baseTop - yBlockAll) / (itemNodes.length - 1);
+    //@ts-ignore
+    baseHorizontally = (baseTop + baseBottom) / 2;
+    //@ts-ignore
+    baseVertical = (baseLeft + baseRight) / 2;
+    switch (type) {
+      case 'left':
+        element.itemNodes = itemNodes.map((item: any) => {
+          item.x = baseLeft;
+          return item;
+        });
+        break;
+      case 'right':
+        element.itemNodes = itemNodes.map((item: any) => {
+          // @ts-ignore
+          item.x = baseRight - item.width;
+          return item;
+        });
+        break;
+      case 'centerVertical':
+        element.itemNodes = itemNodes.map((item: any) => {
+          // @ts-ignore
+          item.x = baseVertical - item.width / 2;
+          return item;
+        });
+        break;
+      case 'top':
+        element.itemNodes = itemNodes.map((item: any) => {
+          item.y = baseTop;
+          return item;
+        });
+        break;
+      case 'bottom':
+        element.itemNodes = itemNodes.map((item: any) => {
+          // @ts-ignore
+          item.y = baseBottom - item.height;
+          return item;
+        });
+        break;
+      case 'centerHorizontally':
+        element.itemNodes = itemNodes.map((item: any) => {
+          // @ts-ignore
+          item.y = baseHorizontally - item.height / 2;
+          return item;
+        });
+        break;
+      case 'horizontallyFlex':
+        const arr = element.itemNodes.sort((i1: any, i2: any) => i1.x - i2.x);
+        const [f1] = arr;
+        const startBaseX = f1.x;
+        let startX = 0;
+        element.itemNodes = arr.map((item: any) => {
+          item.x = startBaseX + startX;
+          startX = startX + item.width + xSpace;
+          // @ts-ignore
+          item.y = baseHorizontally - item.height / 2;
+          return item;
+        });
+        break;
+      case 'verticalFlex':
+        const arr1 = element.itemNodes.sort((i1: any, i2: any) => i1.y - i2.y);
+        const [j1] = arr1;
+        const startBaseY = j1.y;
+        let startY = 0;
+        element.itemNodes = arr1.map((item: any) => {
+          item.y = startBaseY + startY;
+          startY = startY + item.height + ySpace;
+          // @ts-ignore
+          item.x = baseVertical - item.width / 2;
+          return item;
+        });
+        break;
     }
   },
 };

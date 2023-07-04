@@ -159,6 +159,7 @@ const EditorView: React.FC = () => {
   const handleMouseDown = (event: React.MouseEvent) => {
     event.preventDefault();
     setIsCanMove(true);
+    // svgCanvasSetting()
     if (SVGContainerRef.current) {
       //@ts-ignore
       //计算svg在页面中的偏移量

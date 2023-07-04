@@ -11,6 +11,7 @@ const HeaderBar: React.FC = () => {
   const [messageApi, messageHolder] = message.useMessage();
   const { element } = findElementById(activeKey, schema);
   const { type, isGroup } = element;
+  // console.log(type)
   //成组，取消成组操作
   const elementGroupConfigSetting = () => {
     dispatch({ type: TYPES.SET_GROUP_BLOCK, value: { id: activeKey } });
@@ -35,6 +36,20 @@ const HeaderBar: React.FC = () => {
     actionType: 'moveUp' | 'moveDown' | 'top' | 'bottom',
   ) => {
     dispatch({ type: TYPES.ELEMENT_INDEX_CHANGE, value: { actionType } });
+  };
+  //nodes align-item设置
+  const elementAlignItemSetting = (
+    type:
+      | 'left'
+      | 'centerVertical'
+      | 'right'
+      | 'top'
+      | 'centerHorizontally'
+      | 'bottom'
+      | 'horizontallyFlex'
+      | 'verticalFlex',
+  ) => {
+    dispatch({ type: TYPES.SET_GROUP_NODES_ALIGN, value: { type } });
   };
   return (
     <div className="header-bar">
@@ -73,11 +88,13 @@ const HeaderBar: React.FC = () => {
           <IconBtn
             iconText="icon-zhiding"
             text="置顶"
+            disabled={activeKey === '0'}
             onClick={elementIndexChange.bind(this, 'top')}
           />
           <IconBtn
             iconText="icon-zhidi"
             text="置底"
+            disabled={activeKey === '0'}
             onClick={elementIndexChange.bind(this, 'bottom')}
           />
         </div>
@@ -85,11 +102,13 @@ const HeaderBar: React.FC = () => {
           <IconBtn
             iconText="icon-shangyiyiceng"
             text="上移一层"
+            disabled={activeKey === '0'}
             onClick={elementIndexChange.bind(this, 'moveUp')}
           />
           <IconBtn
             iconText="icon-xiayiyiceng"
             text="下移一层"
+            disabled={activeKey === '0'}
             onClick={elementIndexChange.bind(this, 'moveDown')}
           />
         </div>
@@ -108,18 +127,58 @@ const HeaderBar: React.FC = () => {
           />
         </div>
         <div className="btn-group">
-          <IconBtn iconText="icon-zuoduiqi" text="左对齐" />
-          <IconBtn iconText="icon-chuizhijuzhongduiqi" text="垂直居中" />
-          <IconBtn iconText="icon-youduiqi" text="右对齐" />
+          <IconBtn
+            iconText="icon-zuoduiqi"
+            text="左对齐"
+            disabled={type !== 'BLOCK_GROUP'}
+            onClick={elementAlignItemSetting.bind(this, 'left')}
+          />
+          <IconBtn
+            iconText="icon-chuizhijuzhongduiqi"
+            text="垂直居中"
+            disabled={type !== 'BLOCK_GROUP'}
+            onClick={elementAlignItemSetting.bind(this, 'centerVertical')}
+          />
+          <IconBtn
+            iconText="icon-youduiqi"
+            text="右对齐"
+            disabled={type !== 'BLOCK_GROUP'}
+            onClick={elementAlignItemSetting.bind(this, 'right')}
+          />
         </div>
         <div className="btn-group">
-          <IconBtn iconText="icon-shangduiqi" text="上对齐" />
-          <IconBtn iconText="icon-shuipingjuzhongduiqi" text="水平对齐" />
-          <IconBtn iconText="icon-xiaduiqi" text="下对齐" />
+          <IconBtn
+            iconText="icon-shangduiqi"
+            text="上对齐"
+            disabled={type !== 'BLOCK_GROUP'}
+            onClick={elementAlignItemSetting.bind(this, 'top')}
+          />
+          <IconBtn
+            iconText="icon-shuipingjuzhongduiqi"
+            text="水平对齐"
+            disabled={type !== 'BLOCK_GROUP'}
+            onClick={elementAlignItemSetting.bind(this, 'centerHorizontally')}
+          />
+          <IconBtn
+            iconText="icon-xiaduiqi"
+            text="下对齐"
+            disabled={type !== 'BLOCK_GROUP'}
+            onClick={elementAlignItemSetting.bind(this, 'bottom')}
+          />
         </div>
         <div className="btn-group">
-          <IconBtn iconText="icon-chuizhijunfen" text="水平对齐" />
-          <IconBtn iconText="icon-shuipingjunfen" text="居中对齐" />
+          <IconBtn
+            iconText="icon-chuizhijunfen"
+            text="水平分布对齐"
+            disabled={type !== 'BLOCK_GROUP'}
+            onClick={elementAlignItemSetting.bind(this, 'horizontallyFlex')}
+          />
+          <IconBtn
+            iconText="icon-shuipingjunfen"
+            text="居中分布对齐"
+            disabled={type !== 'BLOCK_GROUP'}
+            onClick={elementAlignItemSetting.bind(this, 'verticalFlex')}
+          />
         </div>
       </div>
       <div className="right-content">
