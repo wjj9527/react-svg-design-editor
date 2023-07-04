@@ -223,13 +223,7 @@ const EditorView: React.FC = () => {
       dispatch({ type: TYPES.RELIEVE_DEFAULT_BLOCK_ELEMENT_GROUP });
     }
     //判断当前区域是否有管道
-    if (
-      !isEmptyBlock &&
-      blockConfig.type === 'PipeLine' &&
-      blockConfig.visible &&
-      !blockConfig.lock
-    ) {
-      console.log(111);
+    if (!isEmptyBlock && blockConfig.type === 'PipeLine') {
       // signMask区域不做打点操作，避免重复
       let isSignMaskDotBlock = false;
       maskArray.forEach((item) => {
@@ -240,25 +234,29 @@ const EditorView: React.FC = () => {
         }
       });
       if (!isSignMaskDotBlock) {
-        const checkHandle = dispatch.bind(this, {
-          type: TYPES.SET_ACTIVE_KEY,
-          value: { id: blockConfig.id },
-        });
-        const activeHandle = dispatch.bind(this, {
-          type: TYPES.SET_CURRENT_ACTION,
-          value: {
-            currentAction: {
-              target: 'PIPE_LINE',
-              type: 'MOVE',
-              id: blockConfig.id,
-              pageX,
-              pageY,
-              baseX,
-              baseY,
-              cachePath: JSON.parse(JSON.stringify(blockConfig.path)),
+        const checkHandle = (id: string) => {
+          dispatch({
+            type: TYPES.SET_ACTIVE_KEY,
+            value: { id },
+          });
+        };
+        const activeHandle = (id: string, path: any) => {
+          dispatch({
+            type: TYPES.SET_CURRENT_ACTION,
+            value: {
+              currentAction: {
+                target: 'PIPE_LINE',
+                type: 'MOVE',
+                id: id,
+                pageX,
+                pageY,
+                baseX,
+                baseY,
+                cachePath: path,
+              },
             },
-          },
-        });
+          });
+        };
         setMaskArray(
           signPipeLineDot(
             nodes,

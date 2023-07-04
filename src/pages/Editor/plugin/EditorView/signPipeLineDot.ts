@@ -13,13 +13,13 @@ const signPipeLineDot = (
 ) => {
   let dot = [...maskArray];
   //获取所有管道
-  const allPipeLineNodes = nodes.filter(
-    (item: any) => item.type === 'PipeLine',
-  );
+  const allPipeLineNodes = nodes
+    .filter((item: any) => item.type === 'PipeLine')
+    .reverse();
   let x = null;
   let y = null;
   for (let item of allPipeLineNodes) {
-    const { path, stokeWidth, id } = item;
+    const { path, stokeWidth, id, visible, lock } = item;
     let startId = null;
     for (let i = 0; i < path.length - 1; i++) {
       const [x1, y1] = [path[i].x, path[i].y];
@@ -80,9 +80,9 @@ const signPipeLineDot = (
         dot.push(node);
       }
       //选中移动操作
-      if (!isKeydownCtrlKey) {
-        activeHandle();
-        checkHandle();
+      if (!isKeydownCtrlKey && visible && !lock) {
+        activeHandle(id, JSON.parse(JSON.stringify(path)));
+        checkHandle(id);
       }
       break;
     }
