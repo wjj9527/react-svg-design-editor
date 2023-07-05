@@ -427,7 +427,7 @@ const actions: ActionsType = {
     );
     switch (actionType) {
       case 'moveUp':
-        if (targetIndex !== itemNodes.index) {
+        if (targetIndex !== itemNodes.length - 1) {
           [itemNodes[targetIndex], itemNodes[targetIndex + 1]] = [
             itemNodes[targetIndex + 1],
             itemNodes[targetIndex],
@@ -443,7 +443,7 @@ const actions: ActionsType = {
         }
         break;
       case 'top':
-        if (targetIndex !== itemNodes.index) {
+        if (targetIndex !== itemNodes.length - 1) {
           const id = createUUID();
           const insertNode = { ...itemNodes[targetIndex], id };
           state.activeKey = id;
