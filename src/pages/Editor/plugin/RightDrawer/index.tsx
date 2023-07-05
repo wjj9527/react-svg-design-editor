@@ -3,7 +3,7 @@ import './style.less';
 import { StoreContext } from '@/store';
 import { findElementById } from '@/utils/findElementById';
 import { elementSetting } from '@/pages/Editor/material';
-
+import NodalSelection from '@/pages/Editor/components/NodalSelection';
 const RightDrawer: React.FC = () => {
   const { state } = useContext(StoreContext);
   const { rightDrawerVisible, schema, activeKey } = state;

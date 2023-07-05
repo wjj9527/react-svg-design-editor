@@ -11,7 +11,6 @@ const HeaderBar: React.FC = () => {
   const [messageApi, messageHolder] = message.useMessage();
   const { element } = findElementById(activeKey, schema);
   const { type, isGroup } = element;
-  // console.log(type)
   //成组，取消成组操作
   const elementGroupConfigSetting = () => {
     dispatch({ type: TYPES.SET_GROUP_BLOCK, value: { id: activeKey } });
