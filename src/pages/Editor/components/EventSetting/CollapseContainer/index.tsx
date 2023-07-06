@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import EventTypeChange from '@/pages/Editor/components/EventSetting/EventTypeChange';
-import EventActionChange from '@/pages/Editor/components/EventSetting/EventActionChange';
-const CollapseContainer: React.FC = () => {
+
+const CollapseContainer: React.FC = ({ children }) => {
   const [collapseStatus, setCollapseStatus] = useState(false);
   const arrowClassName = classNames(`iconfont icon-arrowdown arrow`, {
     active: collapseStatus,
@@ -19,12 +18,7 @@ const CollapseContainer: React.FC = () => {
           <i className={arrowClassName} />
         </div>
       </div>
-      {collapseStatus && (
-        <div className="collapse-content">
-          <EventTypeChange />
-          <EventActionChange />
-        </div>
-      )}
+      {collapseStatus && <div className="collapse-content">{children}</div>}
     </div>
   );
 };

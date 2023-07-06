@@ -1,6 +1,7 @@
 import React from 'react';
 import { Select } from 'antd';
 import * as Actions from './Actions';
+import StyleSetting from '@/pages/Editor/components/StyleSetting';
 const eventActionOptions = [
   {
     value: '打开新窗口',
@@ -31,7 +32,12 @@ const eventActionOptions = [
     key: 'StyleSetting',
   },
 ];
-const EventActionChange: React.FC = () => {
+interface EventActionChangeProps {
+  changeStyleConfig: any;
+}
+const EventActionChange: React.FC<EventActionChangeProps> = ({
+  changeStyleConfig,
+}) => {
   return (
     <div className="event-action-change-block">
       <div className="inline-block-item">
@@ -50,6 +56,7 @@ const EventActionChange: React.FC = () => {
       <Actions.SetVisible />
       <Actions.SwitchoverBlock />
       <Actions.ValuePost />
+      <StyleSetting config={changeStyleConfig} change />
     </div>
   );
 };

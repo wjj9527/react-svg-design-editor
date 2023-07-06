@@ -603,5 +603,18 @@ const actions: ActionsType = {
   [TYPES.SET_PIPE_LINE_LOCK_LISTENER_STATUS]: (state) => {
     state.isPipeLineLock = false;
   },
+  [TYPES.CREATE_NEW_NODE_EVENT]: (state) => {
+    const { schema, activeKey } = state;
+    const { element } = findElementById(activeKey, schema);
+    const newEventAttr = {
+      id: createUUID(),
+      eventType: 'click',
+    };
+    if (!element.event) {
+      element.event = [newEventAttr];
+    } else {
+      element.event.push(newEventAttr);
+    }
+  },
 };
 export default actions;

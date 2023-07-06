@@ -3,7 +3,7 @@ import './style.less';
 type Config = {
   key: string;
   label: string;
-  component: React.FC;
+  component: React.ReactNode;
 };
 interface SettingWrapperProps {
   config: Config[];
@@ -19,7 +19,7 @@ const SettingWrapper: React.FC<SettingWrapperProps> = ({ config }) => {
     //@ts-ignore
     const active = config.find((item) => item.key === activeMenuKey);
     const Component = active?.component;
-    return Component ? <Component /> : <></>;
+    return Component ? Component : <></>;
   };
   //
   return (
@@ -37,9 +37,7 @@ const SettingWrapper: React.FC<SettingWrapperProps> = ({ config }) => {
           </div>
         ))}
       </div>
-      <div className="setting-content">
-        <RenderComponent />
-      </div>
+      <div className="setting-content">{RenderComponent()}</div>
     </div>
   );
 };
