@@ -2,7 +2,10 @@ import React from 'react';
 import { Button } from 'antd';
 import CollapseContainer from './CollapseContainer';
 import './style.less';
-const EventSetting: React.FC = () => {
+interface EventSettingProps {
+  StyleBlock: React.ReactNode;
+}
+const EventSetting: React.FC<any> = ({ StyleBlock }) => {
   return (
     <div className="event-setting-block setting-container">
       <div className="handle">
@@ -12,6 +15,7 @@ const EventSetting: React.FC = () => {
       </div>
       <div className="event-content">
         <CollapseContainer />
+        {StyleBlock}
       </div>
     </div>
   );

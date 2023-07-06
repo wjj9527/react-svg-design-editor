@@ -12,6 +12,36 @@
     overflow: auto;
     padding-right: 16px;
   }
+  .inline-block-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    .fill {
+      width: 100%;
+      &.ant-radio-group {
+        display: flex;
+        .ant-radio-button-wrapper {
+          flex: 1;
+          text-align: center;
+        }
+      }
+    }
+    .label {
+      flex: 0 0 64px;
+    }
+    .content {
+      flex: 1;
+
+      &.line {
+        display: flex;
+        .pr {
+          width: 80px;
+          flex: 0 0 80px;
+          margin-right: 12px;
+        }
+      }
+    }
+  }
 }
 .collapse-container {
   .collapse-title {
@@ -47,4 +77,13 @@
       }
     }
   }
+}
+
+.event-type-change-block {
+  padding: 24px;
+}
+.event-action-change-block {
+  padding: 12px 23px;
+  border: 1px dashed #1677ff;
+  border-radius: 2px;
 }
