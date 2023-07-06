@@ -1,43 +1,50 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Select } from 'antd';
 import * as Actions from './Actions';
 import StyleSetting from '@/pages/Editor/components/StyleSetting';
+import { StoreContext, TYPES } from '@/store';
+// import {findElementById} from "@/utils/findElementById";
 const eventActionOptions = [
   {
-    value: '打开新窗口',
-    key: 'OpenNewWindow',
+    label: '打开新窗口',
+    value: 'OpenNewWindow',
   },
   {
-    value: '切换页面',
-    key: 'SwitchoverPage',
+    label: '切换页面',
+    value: 'SwitchoverPage',
   },
   {
-    value: '打开弹窗',
-    key: 'OpenDialog',
+    label: '打开弹窗',
+    value: 'OpenDialog',
   },
   {
-    value: '显示/隐藏',
-    key: 'SetVisible',
+    label: '显示/隐藏',
+    value: 'SetVisible',
   },
   {
-    value: '切换动态面板',
-    key: 'SwitchoverBlock',
+    label: '切换动态面板',
+    value: 'SwitchoverBlock',
   },
   {
-    value: '数值下发',
-    key: 'ValuePost',
+    label: '数值下发',
+    value: 'ValuePost',
   },
   {
-    value: '设置外观',
-    key: 'StyleSetting',
+    label: '设置外观',
+    value: 'StyleSetting',
   },
 ];
 interface EventActionChangeProps {
   changeStyleConfig: any;
+  eventProps: any;
 }
 const EventActionChange: React.FC<EventActionChangeProps> = ({
   changeStyleConfig,
+  eventProps,
 }) => {
+  const { dispatch } = useContext(StoreContext);
+  const { id, eventAction } = eventProps;
+  console.log(eventProps);
   return (
     <div className="event-action-change-block">
       <div className="inline-block-item">
@@ -47,16 +54,35 @@ const EventActionChange: React.FC<EventActionChangeProps> = ({
             className="fill"
             options={eventActionOptions}
             placeholder="请选择"
+            value={eventProps.eventAction}
+            onChange={(data) =>
+              dispatch({
+                type: TYPES.SET_EVENT_ATTRIBUTE_BY_EVENT_ID,
+                value: { id, key: 'eventAction', data },
+              })
+            }
           />
         </div>
       </div>
-      <Actions.OpenNewWindow />
-      <Actions.SwitchoverPage />
-      <Actions.OpenDialog />
-      <Actions.SetVisible />
-      <Actions.SwitchoverBlock />
-      <Actions.ValuePost />
-      <StyleSetting config={changeStyleConfig} change />
+      {eventAction === 'OpenNewWindow' && (
+        <Actions.OpenNewWindow eventProps={eventProps} />
+      )}
+      {eventAction === 'SwitchoverPage' && (
+        <Actions.SwitchoverPage eventProps={eventProps} />
+      )}
+      {eventAction === 'OpenDialog' && <Actions.OpenDialog />}
+      {eventAction === 'SetVisible' && (
+        <Actions.SetVisible eventProps={eventProps} />
+      )}
+      {eventAction === 'SwitchoverBlock' && <Actions.SwitchoverBlock />}
+      {eventAction === 'ValuePost' && <Actions.ValuePost />}
+      {eventAction === 'StyleSetting' && (
+        <StyleSetting
+          config={changeStyleConfig}
+          change
+          eventProps={eventProps}
+        />
+      )}
     </div>
   );
 };

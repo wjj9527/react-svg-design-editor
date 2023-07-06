@@ -2,7 +2,9 @@ import { Select } from 'antd';
 import { StoreContext, TYPES } from '@/store';
 import React, { useContext } from 'react';
 interface IProps {
+  change?: boolean;
   element: {
+    id: string;
     data: {
       style: {
         fontWeight: string;
@@ -29,7 +31,7 @@ export const fontWeightOptions = [
     label: 'lighter',
   },
 ];
-const FontWeight: React.FC<IProps> = ({ element }) => {
+const FontWeight: React.FC<IProps> = ({ element, change = false }) => {
   const { dispatch } = useContext(StoreContext);
   const { style } = element.data;
   const setNodeAttribute = (
@@ -37,10 +39,13 @@ const FontWeight: React.FC<IProps> = ({ element }) => {
     module: string,
     key: string,
   ) => {
+    const type = change
+      ? TYPES.SET_CHANGE_STYLE_BY_EVENT_ID
+      : TYPES.SET_ATTRIBUTE_BY_MODULE;
     let data: { [key: string]: string | number } = {};
     // @ts-ignore
     data[key] = val;
-    dispatch({ type: TYPES.SET_ATTRIBUTE_BY_MODULE, value: { data, module } });
+    dispatch({ type, value: { data, module, id: element.id } });
   };
   return (
     <>

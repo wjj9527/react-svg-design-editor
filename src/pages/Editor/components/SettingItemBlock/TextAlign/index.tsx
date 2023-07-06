@@ -2,7 +2,9 @@ import { StoreContext, TYPES } from '@/store';
 import React, { useContext } from 'react';
 import { Select } from 'antd';
 interface IProps {
+  change?: boolean;
   element: {
+    id: string;
     data: {
       style: {
         textAlign: string;
@@ -24,7 +26,7 @@ export const textAlignOption = [
     label: '右对齐',
   },
 ];
-const TextAlign: React.FC<IProps> = ({ element }) => {
+const TextAlign: React.FC<IProps> = ({ element, change = false }) => {
   const { dispatch } = useContext(StoreContext);
   const { style } = element.data;
   const setNodeAttribute = (
@@ -32,10 +34,16 @@ const TextAlign: React.FC<IProps> = ({ element }) => {
     module: string,
     key: string,
   ) => {
+    const type = change
+      ? TYPES.SET_CHANGE_STYLE_BY_EVENT_ID
+      : TYPES.SET_ATTRIBUTE_BY_MODULE;
     let data: { [key: string]: string | number } = {};
     // @ts-ignore
     data[key] = val;
-    dispatch({ type: TYPES.SET_ATTRIBUTE_BY_MODULE, value: { data, module } });
+    dispatch({
+      type: TYPES.SET_ATTRIBUTE_BY_MODULE,
+      value: { data, module, id: element.id },
+    });
   };
   return (
     <>

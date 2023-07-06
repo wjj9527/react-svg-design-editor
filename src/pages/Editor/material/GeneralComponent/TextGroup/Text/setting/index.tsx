@@ -1,6 +1,5 @@
 import AttributeBlock from './AttributeBlock';
 import StyleBlock from './StyleBlock';
-import DataSourceBlock from './DataSourceBlock';
 import SettingWrapper from '@/pages/Editor/components/SettingWrapper';
 import StyleSetting from '@/pages/Editor/components/StyleSetting';
 import EventSetting from '@/pages/Editor/components/EventSetting';
@@ -16,6 +15,7 @@ const styleConfig: any = [
   'LineHeight',
   'BackgroundColor',
 ];
+
 const config = [
   {
     label: '样式',

@@ -1,0 +1,104 @@
+{
+  "success": 1,
+  "errorCode": null,
+  "message": "成功",
+  "data": [
+    {
+      "deviceGroupId": 1,
+      "deviceGroupName": "mytest空调",
+      "deviceInfoList": [
+        {
+          "deviceId": 1,
+          "deviceName": "空调1",
+          "deviceParmValueList": [
+            {
+              "itemsName": "运行",
+              "pointId": 23
+            },
+            {
+              "itemsName": "故障",
+              "pointId": 23
+            },
+            {
+              "itemsName": "手自动",
+              "pointId": null
+            },
+            {
+              "itemsName": "本次运行时间",
+              "pointId": null
+            },
+            {
+              "itemsName": "累积运行时间",
+              "pointId": null
+            },
+            {
+              "itemsName": "当前温度",
+              "pointId": null
+            },
+            {
+              "itemsName": "当前模式",
+              "pointId": null
+            },
+            {
+              "itemsName": "当前风速",
+              "pointId": null
+            },
+            {
+              "itemsName": "启停",
+              "pointId": null
+            },
+            {
+              "itemsName": "温度设定",
+              "pointId": null
+            },
+            {
+              "itemsName": "模式设定",
+              "pointId": null
+            },
+            {
+              "itemsName": "频率设定",
+              "pointId": null
+            },
+            {
+              "itemsName": "风速设定",
+              "pointId": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "deviceGroupId": 2,
+      "deviceGroupName": "照明",
+      "deviceInfoList": [
+        {
+          "deviceId": 2,
+          "deviceName": "照明1",
+          "deviceParmValueList": [
+            {
+              "itemsName": "运行",
+              "pointId": 2
+            },
+            {
+              "itemsName": "故障",
+              "pointId": 2
+            },
+            {
+              "itemsName": "手自动",
+              "pointId": null
+            },
+            {
+              "itemsName": "本次运行时间",
+              "pointId": null
+            },
+            {
+              "itemsName": "累积运行时间",
+              "pointId": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "timestamp": 1688614864902
+}

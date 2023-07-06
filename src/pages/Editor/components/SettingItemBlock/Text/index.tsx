@@ -2,7 +2,9 @@ import { Input } from 'antd';
 import { StoreContext, TYPES } from '@/store';
 import React, { useContext } from 'react';
 interface IProps {
+  change: boolean;
   element: {
+    id: string;
     data: {
       attribute: {
         text: string;
@@ -10,7 +12,7 @@ interface IProps {
     };
   };
 }
-const Size: React.FC<IProps> = ({ element }) => {
+const Size: React.FC<IProps> = ({ element, change }) => {
   const { dispatch } = useContext(StoreContext);
   const { attribute } = element.data;
   const setNodeAttribute = (
@@ -18,10 +20,13 @@ const Size: React.FC<IProps> = ({ element }) => {
     key: string,
     module: string,
   ) => {
+    const type = change
+      ? TYPES.SET_CHANGE_STYLE_BY_EVENT_ID
+      : TYPES.SET_ATTRIBUTE_BY_MODULE;
     let data: { [key: string]: string | number } = {};
     // @ts-ignore
     data[key] = val;
-    dispatch({ type: TYPES.SET_ATTRIBUTE_BY_MODULE, value: { data, module } });
+    dispatch({ type, value: { data, module, id: element.id } });
   };
   return (
     <>

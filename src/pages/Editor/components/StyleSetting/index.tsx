@@ -9,27 +9,36 @@ import TitleBlock from '@/pages/Editor/components/TitleBlock';
 //   config: ConfigItem[]
 // }
 
-const StyleSetting: ({
+const StyleSetting: React.FC<any> = ({
   config,
-  change,
-}: {
-  config: any;
-  change?: any;
-}) => JSX.Element[] | JSX.Element = ({ config, change = false }) => {
+  change = false,
+  eventProps,
+}) => {
   const { state } = useContext(StoreContext);
   const { schema, activeKey } = state;
-  const { element } = findElementById(activeKey, schema);
+  // const { element } = findElementById(activeKey, schema);
+  const element = change
+    ? eventProps
+    : findElementById(activeKey, schema).element;
+  console.log(element);
   const renderNodes = config.map((item: any) => {
     if (toString.call(item) === '[object Object]') {
       //@ts-ignore
       return (
-        <TitleBlock title={item?.label}>
+        <TitleBlock title={item?.label} key={item.label}>
           {
             //@ts-ignore
             item.items.map((i) => {
               // @ts-ignore
               const Node = SettingItemBlock[i];
-              return <Node element={element} />;
+              return (
+                <Node
+                  element={element}
+                  key={i}
+                  change={change}
+                  eventProps={eventProps}
+                />
+              );
             })
           }
         </TitleBlock>
@@ -37,7 +46,7 @@ const StyleSetting: ({
     } else {
       // @ts-ignore
       const Node = SettingItemBlock[item];
-      return <Node element={element} />;
+      return <Node element={element} key={item} change={change} />;
     }
   });
   return change ? (

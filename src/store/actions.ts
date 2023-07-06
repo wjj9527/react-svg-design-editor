@@ -606,14 +606,42 @@ const actions: ActionsType = {
   [TYPES.CREATE_NEW_NODE_EVENT]: (state) => {
     const { schema, activeKey } = state;
     const { element } = findElementById(activeKey, schema);
+    const { data, width, height, x, y } = element;
     const newEventAttr = {
       id: createUUID(),
       eventType: 'click',
+      eventAction: 'OpenNewWindow',
+      openWindowAction: 'link',
+      openWindowPath: '',
+      data: JSON.parse(JSON.stringify(data)),
+      width,
+      height,
+      x,
+      y,
     };
     if (!element.event) {
       element.event = [newEventAttr];
     } else {
       element.event.push(newEventAttr);
+    }
+  },
+  [TYPES.SET_EVENT_ATTRIBUTE_BY_EVENT_ID]: (state, action) => {
+    const { schema, activeKey } = state;
+    const { id, key, data } = action.value;
+    const { element } = findElementById(activeKey, schema);
+    const { event } = element;
+    const eventTarget = event.find((item: any) => item.id === id);
+    eventTarget[key] = data;
+  },
+  [TYPES.SET_CHANGE_STYLE_BY_EVENT_ID]: (state, action) => {
+    const { schema, activeKey } = state;
+    const { module, data, id } = action.value;
+    const { element } = findElementById(activeKey, schema);
+    const targetItem = element.event.find((item: any) => item.id === id);
+    if (module) {
+      Object.assign(targetItem.data[module], data);
+    } else {
+      Object.assign(targetItem, data);
     }
   },
 };

@@ -3,7 +3,7 @@ import './style.less';
 type Config = {
   key: string;
   label: string;
-  component: React.ReactNode;
+  component: React.ReactNode | any;
 };
 interface SettingWrapperProps {
   config: Config[];

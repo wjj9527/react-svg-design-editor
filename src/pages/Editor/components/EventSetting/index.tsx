@@ -29,9 +29,12 @@ const EventSetting: React.FC<EventSettingProps> = ({ changeStyleConfig }) => {
       </div>
       <div className="event-content">
         {event?.map((item: any) => (
-          <CollapseContainer>
-            <EventTypeChange />
-            <EventActionChange changeStyleConfig={changeStyleConfig} />
+          <CollapseContainer key={item.id} eventProps={item}>
+            <EventTypeChange eventProps={item} />
+            <EventActionChange
+              eventProps={item}
+              changeStyleConfig={changeStyleConfig}
+            />
           </CollapseContainer>
         ))}
       </div>

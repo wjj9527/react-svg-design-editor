@@ -1,49 +1,49 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Select, Input } from 'antd';
+import { StoreContext, TYPES } from '@/store';
 const eventTypeOptions = [
   {
-    value: '单击',
-    key: 'click',
+    label: '单击',
+    value: 'click',
   },
   {
-    value: '悬停',
-    key: 'hover',
+    label: '悬停',
+    value: 'hover',
   },
   {
-    value: '值变化',
-    key: 'valueChange',
+    label: '值变化',
+    value: 'valueChange',
   },
 ];
 const valueRuleOptions = [
   {
-    value: '==',
-    key: '0',
+    label: '==',
+    value: '0',
   },
   {
-    value: '!=',
-    key: '1',
+    label: '!=',
+    value: '1',
   },
   {
-    value: '<',
-    key: '2',
+    label: '<',
+    value: '2',
   },
   {
-    value: '>',
-    key: '3',
+    label: '>',
+    value: '3',
   },
   {
-    value: '<=',
-    key: '4',
+    label: '<=',
+    value: '4',
   },
   {
-    value: '>=',
-    key: '5',
+    label: '>=',
+    value: '5',
   },
 ];
-const EventTypeChange: React.FC = () => {
-  const nodalSelect = () => {
-    console.log(11);
-  };
+const EventTypeChange: React.FC<any> = ({ eventProps }) => {
+  const { dispatch } = useContext(StoreContext);
+  const { id } = eventProps;
   return (
     <div className="event-type-change-block">
       <div className="inline-block-item">
@@ -52,32 +52,42 @@ const EventTypeChange: React.FC = () => {
           <Select
             className="fill"
             options={eventTypeOptions}
+            value={eventProps.eventType}
             placeholder="请选择"
+            onChange={(data) =>
+              dispatch({
+                type: TYPES.SET_EVENT_ATTRIBUTE_BY_EVENT_ID,
+                value: { id, key: 'eventType', data },
+              })
+            }
           />
         </div>
       </div>
-      <div className="inline-block-item">
-        <div className="label">设备参数</div>
-        <div className="content">
-          <Input
-            readOnly
-            placeholder="请选择点位"
-            prefix={<i className="iconfont icon-lianjie" />}
-            onClick={nodalSelect}
-          />
-        </div>
-      </div>
-      <div className="inline-block-item">
-        <div className="label">判定值</div>
-        <div className="content line">
-          <Select
-            className="pr"
-            options={valueRuleOptions}
-            placeholder="请选择"
-          />
-          <Input placeholder="请选择点位" onClick={nodalSelect} />
-        </div>
-      </div>
+      {eventProps.eventType === 'valueChange' && (
+        <>
+          <div className="inline-block-item">
+            <div className="label">设备参数</div>
+            <div className="content">
+              <Input
+                readOnly
+                placeholder="请选择点位"
+                prefix={<i className="iconfont icon-lianjie" />}
+              />
+            </div>
+          </div>
+          <div className="inline-block-item">
+            <div className="label">判定值</div>
+            <div className="content line">
+              <Select
+                className="pr"
+                options={valueRuleOptions}
+                placeholder="请选择"
+              />
+              <Input placeholder="请选择点位" />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
