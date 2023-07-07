@@ -3,11 +3,6 @@ import { StoreContext } from '@/store';
 import { findElementById } from '@/utils/findElementById';
 import SettingItemBlock from '@/pages/Editor/components/SettingItemBlock';
 import TitleBlock from '@/pages/Editor/components/TitleBlock';
-// type ConfigItem = (keyof typeof SettingItemBlock | { label: string, items: (keyof typeof SettingItemBlock)[] })
-// interface StyleSettingProps {
-//   change?: boolean,
-//   config: ConfigItem[]
-// }
 
 const StyleSetting: React.FC<any> = ({
   config,
@@ -16,11 +11,9 @@ const StyleSetting: React.FC<any> = ({
 }) => {
   const { state } = useContext(StoreContext);
   const { schema, activeKey } = state;
-  // const { element } = findElementById(activeKey, schema);
   const element = change
     ? eventProps
     : findElementById(activeKey, schema).element;
-  console.log(element);
   const renderNodes = config.map((item: any) => {
     if (toString.call(item) === '[object Object]') {
       //@ts-ignore

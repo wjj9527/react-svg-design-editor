@@ -1,13 +1,43 @@
-.bottom-bar{
+.bottom-bar {
   display: flex;
+  align-items: center;
   height: 44px;
   padding-left: 40px;
-  .check-group{
+  .bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 40px;
+    box-sizing: border-box;
+  }
+  .check-group {
     display: flex;
     align-items: center;
     justify-content: center;
-    .check-text{
+    .check-text {
       color: #ffffff;
+    }
+  }
+
+  .handle-group {
+    display: flex;
+    align-items: center;
+    .number {
+      padding-left: 12px;
+      color: #ffffff;
+      width: 40px;
+      text-align: right;
+    }
+    .slider-wrapper {
+      width: 120px;
+    }
+    .iconfont {
+      color: #ffffff;
+      cursor: pointer;
+      margin-right: 24px;
+      &.active {
+        color: #1677ff;
+      }
     }
   }
 }

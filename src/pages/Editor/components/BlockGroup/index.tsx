@@ -112,6 +112,7 @@ const BlockGroup: React.FC<BlockGroupProps> = ({
   const renderNodes = () => {
     return itemNodes.map((item) => {
       const { type } = item;
+      console.log(item);
       // @ts-ignore
       const Element = elementComponents[type];
       return <Element key={item.id} {...item} />;

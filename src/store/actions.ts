@@ -50,7 +50,7 @@ const actions: ActionsType = {
         const settingValue =
           intNumber +
           (floatNumber > MINIMUM_DISPLACEMENT / 2 ? MINIMUM_DISPLACEMENT : 0);
-        return settingValue > 0 ? settingValue : 0;
+        return settingValue;
       };
       if (type === 'RESIZE') {
         switch (target) {
@@ -119,48 +119,85 @@ const actions: ActionsType = {
             targetNode.height = height;
             break;
         }
-      } else if (type === 'MOVE' && target === 'MOVE_CONTENT') {
-        x = setValue(pageX - offsetX - svgOffset.x);
-        y = setValue(pageY - offsetY - svgOffset.y);
-        targetNode.x = x;
-        targetNode.y = y;
-      } else if (type === 'MOVE' && target === 'GROUP_RECT') {
-        const node = schema.itemNodes.find(
-          (item: any) => item.id === id,
-        ).itemNodes;
-        const { itemOffsetArray } = currentAction;
-        // console.log(svgOffset)
-        //根据偏移量计算实际需要偏差值
-        for (let i = 0; i < node.length; i++) {
-          for (let j = 0; j < itemOffsetArray.length; j++) {
-            if (itemOffsetArray[j].id === node[i].id) {
-              const { x, y } = itemOffsetArray[j];
-              node[i].x = setValue(pageX - svgOffset.x + x);
-              node[i].y = setValue(pageY - svgOffset.y + y);
-              break;
+      } else if (type === 'MOVE') {
+        if (target === 'MOVE_CONTENT') {
+          //组件移动
+          x = setValue(pageX - offsetX - svgOffset.x);
+          y = setValue(pageY - offsetY - svgOffset.y);
+          targetNode.x = x;
+          targetNode.y = y;
+        } else if (target === 'GROUP_RECT') {
+          //组移动
+          const node = schema.itemNodes.find(
+            (item: any) => item.id === id,
+          ).itemNodes;
+          const { itemOffsetArray } = currentAction;
+          //根据偏移量计算实际需要偏差值
+          for (let i = 0; i < node.length; i++) {
+            for (let j = 0; j < itemOffsetArray.length; j++) {
+              if (itemOffsetArray[j].id === node[i].id) {
+                const { x, y } = itemOffsetArray[j];
+                node[i].x = setValue(pageX - svgOffset.x + x);
+                node[i].y = setValue(pageY - svgOffset.y + y);
+                break;
+              }
             }
           }
+        } else if (target === 'SIGN_MASK_DOT') {
+          //管道标记点移动(管道变形)
+          const { offsetX, offsetY } = currentAction;
+          const { path } = targetNode;
+          const node = path.find(
+            (item: any) => item.dotId === currentAction.dotId,
+          );
+          node.x = pageX - svgOffset.x - offsetX;
+          node.y = pageY - svgOffset.y - offsetY;
+        } else if (target === 'PIPE_LINE') {
+          //管道移动
+          const { baseX, baseY, cachePath } = currentAction;
+          const offsetX = pageX - baseX - svgOffset.x;
+          const offsetY = pageY - baseY - svgOffset.y;
+          let path = JSON.parse(JSON.stringify(cachePath));
+          path = path.map((item: any) => {
+            item.x = item.x + offsetX;
+            item.y = item.y + offsetY;
+            return item;
+          });
+          targetNode.path = path;
+          state.isPipeLineMove = true;
+        } else if (target === 'MOVE_ALL_RECT') {
+          //全局组件移动
+          const { cacheSchema } = currentAction;
+          const offsetX = pageX - currentAction.pageX;
+          const offsetY = pageY - currentAction.pageY;
+          const cache = JSON.parse(JSON.stringify(cacheSchema));
+          state.isPipeLineMove = true;
+          state.schema.offset = {
+            offsetX,
+            offsetY,
+          };
+          state.schema.itemNodes = cache.map((item: any) => {
+            item.x = offsetX + item.x;
+            item.y = offsetY + item.y;
+            if (item.type === 'BLOCK_GROUP') {
+              console.log(item);
+              item.itemNodes = item.itemNodes.map((i: any) => {
+                i.x = offsetX + i.x;
+                i.y = offsetY + i.y;
+                return i;
+              });
+            }
+            if (item.type === 'PipeLine') {
+              item.path = item.path.map((i: any) => {
+                i.x = offsetX + i.x;
+                i.y = offsetY + i.y;
+                return i;
+              });
+            }
+            return item;
+          });
+          return;
         }
-      } else if (type === 'MOVE' && target === 'SIGN_MASK_DOT') {
-        const { offsetX, offsetY } = currentAction;
-        const { path } = targetNode;
-        const node = path.find(
-          (item: any) => item.dotId === currentAction.dotId,
-        );
-        node.x = pageX - svgOffset.x - offsetX;
-        node.y = pageY - svgOffset.y - offsetY;
-      } else if (type === 'MOVE' && target === 'PIPE_LINE') {
-        const { baseX, baseY, cachePath } = currentAction;
-        const offsetX = pageX - baseX - svgOffset.x;
-        const offsetY = pageY - baseY - svgOffset.y;
-        let path = JSON.parse(JSON.stringify(cachePath));
-        path = path.map((item: any) => {
-          item.x = item.x + offsetX;
-          item.y = item.y + offsetY;
-          return item;
-        });
-        targetNode.path = path;
-        state.isPipeLineMove = true;
       }
       state.schema = JSON.parse(JSON.stringify(state.schema));
     }
@@ -643,6 +680,12 @@ const actions: ActionsType = {
     } else {
       Object.assign(targetItem, data);
     }
+  },
+  [TYPES.SET_CANVAS_MOVE_STATUS]: (state, action) => {
+    state.canvasMoveStatus = action.value.status;
+  },
+  [TYPES.SET_CANVAS_SCALE]: (state, action) => {
+    state.schema.scale = action.value.scale;
   },
 };
 export default actions;

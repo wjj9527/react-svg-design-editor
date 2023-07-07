@@ -14,6 +14,7 @@ import {
 } from '@/pages/Editor/material';
 import { useDrop } from 'react-dnd';
 import createUUID from '@/utils/UUID';
+import classNames from 'classnames';
 
 type SvgBlockContainerConfig = {
   x: number;
@@ -43,6 +44,7 @@ const EditorView: React.FC = () => {
     isPipeLineVisible,
   } = state;
   const nodes = state.schema.itemNodes;
+  const { canvasMoveStatus } = state;
   const [isCanMove, setIsCanMove] = useState(false);
   const SVGContainerRef = useRef(null);
   const [maskArray, setMaskArray] = useState([]);
@@ -71,7 +73,6 @@ const EditorView: React.FC = () => {
         type: TYPES.SET_NODE_RESIZE_MOVE_ATTRIBUTE,
         value: { event },
       });
-      // console.log(currentAction)
       const { dotId, target, offsetX, offsetY } = currentAction;
       if (target === 'SIGN_MASK_DOT') {
         const maskArr = [...maskArray];
@@ -391,6 +392,22 @@ const EditorView: React.FC = () => {
       }
     }
   };
+  const setCanvasMoveCurrentAction = (e: React.MouseEvent) => {
+    const { pageX, pageY } = e;
+    dispatch({
+      type: TYPES.SET_CURRENT_ACTION,
+      value: {
+        currentAction: {
+          target: 'MOVE_ALL_RECT',
+          type: 'MOVE',
+          pageX,
+          pageY,
+          cacheSchema: JSON.parse(JSON.stringify(nodes)), //保存缓存数据用于计算
+          id: createUUID(),
+        },
+      },
+    });
+  };
   useEffect(() => {
     svgCanvasSetting();
     window.addEventListener('resize', svgCanvasSetting);
@@ -445,6 +462,7 @@ const EditorView: React.FC = () => {
               onMouseMove={handleMouseMove}
               onMouseDown={handleMouseDown}
               onMouseUp={handleMouseUp}
+              className="svg-canvas"
               onContextMenu={(e) => e.preventDefault()}
             >
               {/*<PipeLine/>*/}
@@ -464,25 +482,34 @@ const EditorView: React.FC = () => {
               <rect width="100%" height="100%" fill="url(#pattern_grid)" />
               {/*scale基线*/}
               <SVGScaleLineGroup />
-              {/*element物料*/}
-              {renderNodes()}
-              <g className="svg-block-container">
-                <rect
-                  {...svgBlockContainerConfig}
-                  fill="rgba(176, 91, 252, 0.2)"
-                />
-              </g>
-              {/*区间划块(选中，非操作)*/}
-              {!isPipeLineMove &&
-                maskArray.map((item: any, index) => (
-                  <SignMaskDot
-                    key={index}
-                    x={item.x}
-                    y={item.y}
-                    id={item.groupId}
-                    dotId={item.dotId}
+
+              <g>
+                {/*element物料*/}
+                {renderNodes()}
+                <g className="svg-block-container">
+                  <rect
+                    {...svgBlockContainerConfig}
+                    fill="rgba(176, 91, 252, 0.2)"
                   />
-                ))}
+                </g>
+                {/*区间划块(选中，非操作)*/}
+                {!isPipeLineMove &&
+                  maskArray.map((item: any, index) => (
+                    <SignMaskDot
+                      key={index}
+                      x={item.x}
+                      y={item.y}
+                      id={item.groupId}
+                      dotId={item.dotId}
+                    />
+                  ))}
+              </g>
+              <rect
+                onMouseDown={setCanvasMoveCurrentAction}
+                className={classNames('move-all-rect', {
+                  'is-move': canvasMoveStatus,
+                })}
+              />
             </svg>
           </div>
         </div>

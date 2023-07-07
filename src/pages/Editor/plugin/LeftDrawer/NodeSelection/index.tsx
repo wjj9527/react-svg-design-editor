@@ -132,7 +132,6 @@ const NodeSelection: React.FC = () => {
   const [updateLabel, setUpdateLabel] = useState('');
   const [messageApi, messageHolder] = message.useMessage();
   const showModal = ({ id, label }: { id: string; label: string }) => {
-    console.log({ id, label });
     updateId = id;
     setUpdateLabel(label);
     form.setFieldsValue({ label });

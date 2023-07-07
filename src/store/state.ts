@@ -3,6 +3,7 @@ const state: StateType = {
   schema: {
     type: 'root',
     id: '0',
+    scale: 50,
     itemNodes: [],
   },
   //当前选中节点信息(resize drag)
@@ -54,5 +55,6 @@ const state: StateType = {
   isPipeLineNodePaste: false,
   isPipeLineVisible: false,
   isPipeLineLock: false,
+  canvasMoveStatus: false,
 };
 export default state;
