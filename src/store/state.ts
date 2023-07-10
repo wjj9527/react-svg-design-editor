@@ -56,5 +56,6 @@ const state: StateType = {
   isPipeLineVisible: false,
   isPipeLineLock: false,
   canvasMoveStatus: false,
+  canvasScale: 1,
 };
 export default state;

@@ -25,7 +25,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
   children,
 }) => {
   const { state, dispatch } = useContext(StoreContext);
-  const { activeKey } = state;
+  const { activeKey, canvasScale } = state;
   //选中需要移动的节点操作
   const handleEvent = (
     e: React.MouseEvent,
@@ -74,16 +74,31 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
     hidden: !visible,
     lock,
   });
+  const zoomSize = (value: number) => value * canvasScale;
   return (
-    <g transform={`translate(${x},${y})`} className={classNameList}>
-      <foreignObject width={width} height={height}>
+    <g
+      transform={`translate(${zoomSize(x)},${zoomSize(y)})`}
+      className={classNameList}
+    >
+      <foreignObject
+        width={zoomSize(width)}
+        height={zoomSize(height)}
+        style={{
+          transform: `scale(${canvasScale})`,
+          transformOrigin: 'left top',
+        }}
+      >
         {children}
       </foreignObject>
       <g className="resize-draggable-group">
         <rect
           x="0"
           y="0"
-          style={{ cursor: 'move' }}
+          style={{
+            cursor: 'move',
+            transform: `scale(${canvasScale})`,
+            transformOrigin: 'left top',
+          }}
           className={`resize-draggable-container `}
           onContextMenu={handleContextMenu}
           onMouseDown={(e) =>
@@ -108,7 +123,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
         <rect
           className="resize-left-center resize-rect"
           x={-4}
-          y={height / 2 - 4}
+          y={zoomSize(height) / 2 - 4}
           width="8"
           height="8"
           fill="#1677ff"
@@ -120,7 +135,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
         <rect
           className="resize-left-bottom resize-rect"
           x="-4"
-          y={height - 4}
+          y={zoomSize(height) - 4}
           width="8"
           height="8"
           fill="#1677ff"
@@ -131,7 +146,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
         />
         <rect
           className="resize-center-top resize-rect"
-          x={width / 2 - 4}
+          x={zoomSize(width) / 2 - 4}
           y={-4}
           width="8"
           height="8"
@@ -143,8 +158,8 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
         />
         <rect
           className="resize-center-bottom resize-rect"
-          x={width / 2 - 4}
-          y={height - 4}
+          x={zoomSize(width) / 2 - 4}
+          y={zoomSize(height) - 4}
           width="8"
           height="8"
           fill="#1677ff"
@@ -155,7 +170,7 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
         />
         <rect
           className="resize-right-top resize-rect"
-          x={width - 4}
+          x={zoomSize(width) - 4}
           y={-4}
           width="8"
           height="8"
@@ -167,8 +182,8 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
         />
         <rect
           className="resize-right-center resize-rect"
-          x={width - 4}
-          y={height / 2 - 4}
+          x={zoomSize(width) - 4}
+          y={zoomSize(height) / 2 - 4}
           width="8"
           height="8"
           fill="#1677ff"
@@ -179,8 +194,8 @@ const ZoomDraggable: React.FC<ZoomDraggableProps> = ({
         />
         <rect
           className="resize-right-bottom resize-rect"
-          x={width - 4}
-          y={height - 4}
+          x={zoomSize(width) - 4}
+          y={zoomSize(height) - 4}
           width="8"
           height="8"
           fill="#1677ff"
