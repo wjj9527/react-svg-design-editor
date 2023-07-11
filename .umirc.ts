@@ -1,10 +1,6 @@
 import { defineConfig } from 'umi';
-// const path = require('path')
-// console.log(path.resolve(__dirname,'src/image'))
+
 export default defineConfig({
-  // alias:{
-  //   '@image':path.resolve(__dirname,'src/image')
-  // },
   nodeModulesTransform: {
     type: 'none',
   },
@@ -17,4 +13,8 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 3000,
   },
+  // publicPath:'./',
+  // history:{
+  //   type:'hash'
+  // }
 });

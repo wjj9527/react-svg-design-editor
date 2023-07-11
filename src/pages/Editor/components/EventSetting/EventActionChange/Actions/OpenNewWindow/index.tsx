@@ -33,9 +33,9 @@ export const OpenNewWindow: React.FC<any> = ({ eventProps }) => {
               placeholder="请输入链接地址"
               value={openWindowPath}
               onInput={(e) =>
-                //@ts-ignore
                 dispatch({
                   type: TYPES.SET_EVENT_ATTRIBUTE_BY_EVENT_ID,
+                  //@ts-ignore
                   value: { id, key: 'openWindowPath', data: e.target.value },
                 })
               }

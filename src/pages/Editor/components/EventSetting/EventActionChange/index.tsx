@@ -75,7 +75,9 @@ const EventActionChange: React.FC<EventActionChangeProps> = ({
         <Actions.SetVisible eventProps={eventProps} />
       )}
       {eventAction === 'SwitchoverBlock' && <Actions.SwitchoverBlock />}
-      {eventAction === 'ValuePost' && <Actions.ValuePost />}
+      {eventAction === 'ValuePost' && (
+        <Actions.ValuePost eventProps={eventProps} />
+      )}
       {eventAction === 'StyleSetting' && (
         <StyleSetting
           config={changeStyleConfig}

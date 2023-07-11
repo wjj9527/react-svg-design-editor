@@ -668,6 +668,7 @@ const actions: ActionsType = {
       openWindowAction: 'link',
       openWindowPath: '',
       data: JSON.parse(JSON.stringify(data)),
+      valuePostType: 'post',
       width,
       height,
       x,

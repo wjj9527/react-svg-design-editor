@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Modal, Input } from 'antd';
+import { Modal, Input, message } from 'antd';
 import TreeItem from './TreeItem';
 import './style.less';
 import { StoreContext } from '@/store';
@@ -49,6 +49,17 @@ const NodalSelection: React.FC<NodalSelectionProps> = ({
     setSearchText('');
     onClose();
   };
+  const handleConfirm = () => {
+    if (checkedOptions.length === 0) {
+      message.error('请选择点位');
+      return;
+    }
+    if (multiple) {
+      onConfirm(checkedOptions);
+    } else {
+      onConfirm(checkedOptions[0] || []);
+    }
+  };
   return (
     <Modal
       title="选择点位"
@@ -58,7 +69,7 @@ const NodalSelection: React.FC<NodalSelectionProps> = ({
       width={640}
       open={visible}
       onCancel={handleClose}
-      onOk={onConfirm.bind(this, checkedOptions[0] || [])}
+      onOk={handleConfirm}
     >
       <div className="nodal-selection-content">
         <div className="search-handle">
