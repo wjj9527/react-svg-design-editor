@@ -707,5 +707,11 @@ const actions: ActionsType = {
     schema.scale = scale;
     state.canvasScale = (1 / 0.5) * (scale / 100);
   },
+  [TYPES.SET_DEVICE_LIST]: (state, action) => {
+    state.deviceList = action.value;
+  },
+  [TYPES.SET_DEVICE_LIST_REQUEST_LOADING_STATUS]: (state, action) => {
+    state.SET_DEVICE_LIST_REQUEST_LOADING_STATUS = action.value.status;
+  },
 };
 export default actions;

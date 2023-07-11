@@ -1,0 +1,39 @@
+.tree-item {
+  .tree-item-label {
+    display: flex;
+    align-items: center;
+    line-height: 32px;
+    height: 32px;
+    margin-left: 6px;
+    padding-left: 6px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+    .text {
+      padding-left: 6px;
+      .sign {
+        background: #1677ff;
+      }
+    }
+    .iconfont {
+      font-size: 12px;
+      margin-right: 6px;
+      transform: rotate(0deg);
+      transition: 0.3s ease transform;
+      &.active {
+        transform: rotate(-90deg);
+      }
+    }
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #1677ff;
+      .sign {
+        color: #ffffff;
+      }
+    }
+  }
+  .tree-item-content {
+    padding-left: 24px;
+    //border-left: 1px solid #ffffff;
+  }
+}

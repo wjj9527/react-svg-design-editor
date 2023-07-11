@@ -8,8 +8,8 @@ import RightDrawer from '@/pages/Editor/plugin/RightDrawer';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Store, StoreContext, TYPES } from '@/store';
-import { ConfigProvider, Modal, message } from 'antd';
-
+import { ConfigProvider } from 'antd';
+import { deviceParamsList } from '@/utils/http/device';
 const Editor: React.FC = () => {
   const { state, dispatch } = useContext(StoreContext);
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -28,7 +28,48 @@ const Editor: React.FC = () => {
       });
     }
   };
-
+  //由于线上点位数据会比较多，因此在初始化的时候获取所有点位，最终由前端筛选
+  const getAllDeviceParams = () => {
+    dispatch({
+      type: TYPES.SET_DEVICE_LIST_REQUEST_LOADING_STATUS,
+      value: { status: true },
+    });
+    deviceParamsList()
+      .then((res) => {
+        const { data } = res;
+        const value = data?.map((item: any) => {
+          const { deviceGroupId, deviceGroupName, deviceInfoList } = item;
+          return {
+            groupId: deviceGroupId,
+            label: deviceGroupName,
+            type: 'group',
+            children: deviceInfoList?.map((item: any) => {
+              const { deviceId, deviceName, deviceParamValueList } = item;
+              return {
+                deviceId,
+                label: deviceName,
+                type: 'device',
+                children: deviceParamValueList?.map((item: any) => {
+                  const { devicePointConfigId, itemsName } = item;
+                  return {
+                    id: devicePointConfigId,
+                    type: 'item',
+                    label: itemsName,
+                  };
+                }),
+              };
+            }),
+          };
+        });
+        dispatch({ type: TYPES.SET_DEVICE_LIST, value });
+      })
+      .finally(() => {
+        dispatch({
+          type: TYPES.SET_DEVICE_LIST_REQUEST_LOADING_STATUS,
+          value: { status: false },
+        });
+      });
+  };
   // console.log(theme)
   useEffect(() => {
     //批量添加键盘输入事件，随组件销毁
@@ -36,6 +77,7 @@ const Editor: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
     // @ts-ignore
     window.addEventListener('keyup', handleKeyUp);
+    getAllDeviceParams();
     return () => {
       // @ts-ignore
       window.removeEventListener('keydown', handleKeyDown);

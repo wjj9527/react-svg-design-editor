@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Select, Input } from 'antd';
 import { StoreContext, TYPES } from '@/store';
+import NodalSelection from '@/pages/Editor/components/NodalSelection';
 const eventTypeOptions = [
   {
     label: '单击',
@@ -43,7 +44,15 @@ const valueRuleOptions = [
 ];
 const EventTypeChange: React.FC<any> = ({ eventProps }) => {
   const { dispatch } = useContext(StoreContext);
+  const [visible, setVisible] = useState(false);
   const { id } = eventProps;
+  const nodalSelect = (options: any) => {
+    dispatch({
+      type: TYPES.SET_EVENT_ATTRIBUTE_BY_EVENT_ID,
+      value: { id, key: 'nodalParams', data: options },
+    });
+    setVisible(false);
+  };
   return (
     <div className="event-type-change-block">
       <div className="inline-block-item">
@@ -71,10 +80,21 @@ const EventTypeChange: React.FC<any> = ({ eventProps }) => {
               <Input
                 readOnly
                 placeholder="请选择点位"
+                value={
+                  eventProps?.nodalParams
+                    ?.map((item: any) => item.label)
+                    .join('/') || ''
+                }
+                onClick={setVisible.bind(this, true)}
                 prefix={<i className="iconfont icon-lianjie" />}
               />
             </div>
           </div>
+          <NodalSelection
+            visible={visible}
+            onClose={setVisible.bind(this, false)}
+            onConfirm={nodalSelect}
+          />
           <div className="inline-block-item">
             <div className="label">判定值</div>
             <div className="content line">
@@ -82,8 +102,22 @@ const EventTypeChange: React.FC<any> = ({ eventProps }) => {
                 className="pr"
                 options={valueRuleOptions}
                 placeholder="请选择"
+                onChange={(data) =>
+                  dispatch({
+                    type: TYPES.SET_EVENT_ATTRIBUTE_BY_EVENT_ID,
+                    value: { id, key: 'valueChangeRule', data },
+                  })
+                }
               />
-              <Input placeholder="请选择点位" />
+              <Input
+                placeholder="请输入"
+                onChange={(e) =>
+                  dispatch({
+                    type: TYPES.SET_EVENT_ATTRIBUTE_BY_EVENT_ID,
+                    value: { id, key: 'valueChangeData', data: e.target.value },
+                  })
+                }
+              />
             </div>
           </div>
         </>

@@ -57,5 +57,7 @@ const state: StateType = {
   isPipeLineLock: false,
   canvasMoveStatus: false,
   canvasScale: 1,
+  deviceList: [],
+  deviceListRequestLoadingStatus: false,
 };
 export default state;

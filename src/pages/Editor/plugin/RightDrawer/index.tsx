@@ -14,7 +14,11 @@ const RightDrawer: React.FC = () => {
     return elementSetting[type];
   };
   const renderElement = (
-    <div className="right-drawer">{getActiveElementSource()}</div>
+    <div className="right-drawer">
+      {' '}
+      <NodalSelection />
+      {getActiveElementSource()}
+    </div>
   );
   return rightDrawerVisible ? renderElement : <></>;
 };
